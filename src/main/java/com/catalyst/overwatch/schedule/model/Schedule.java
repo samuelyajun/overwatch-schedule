@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +18,7 @@ public class Schedule implements Serializable {
     private static final long serialVersionUID = -4951321295232200246L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NotNull(message = "Start date cannot be null")
@@ -27,6 +26,19 @@ public class Schedule implements Serializable {
 
     private Date endDate;
 
+    @ElementCollection(targetClass = Days.class)
+    @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id"))
+    @Column(name = "daysOfWeek", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<Days> daysOfWeek = new HashSet<Days>();
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public Set<Days> getDaysOfWeek() {
         return daysOfWeek;
@@ -51,20 +63,4 @@ public class Schedule implements Serializable {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-    @ElementCollection(targetClass = Days.class)
-    @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id"))
-    @Column(name = "daysOfWeek", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<Days> daysOfWeek = new HashSet<Days>();
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-
 }
