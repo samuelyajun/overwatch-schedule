@@ -2,13 +2,13 @@ package com.catalyst.overwatch.schedule.model;
 
 import org.hibernate.envers.Audited;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by bpyl on 6/14/2016.
@@ -27,6 +27,37 @@ public class Schedule implements Serializable {
 
     private Date endDate;
 
+
+    public Set<Days> getDaysOfWeek() {
+        return daysOfWeek;
+    }
+
+    public void setDaysOfWeek(Set<Days> daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    @ElementCollection(targetClass = Days.class)
+    @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id"))
+    @Column(name = "daysOfWeek", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<Days> daysOfWeek = new HashSet<Days>();
+
     public long getId() {
         return id;
     }
@@ -34,4 +65,6 @@ public class Schedule implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
+
+
 }
