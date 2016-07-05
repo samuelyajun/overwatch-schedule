@@ -5,7 +5,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,13 +22,15 @@ public class Schedule implements Serializable {
     private long id;
 
     @NotNull(message = "Start date cannot be null")
-    private Date startDate;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    private Date endDate;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @ElementCollection(targetClass = Days.class)
     @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id"))
-    @Column(name = "daysOfWeek", nullable = false)
+    @Column(name = "days_of_week", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Days> daysOfWeek = new HashSet<Days>();
 
@@ -48,19 +50,19 @@ public class Schedule implements Serializable {
         this.daysOfWeek = daysOfWeek;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 }
