@@ -14,6 +14,7 @@ import java.util.Set;
  */
 @Entity
 @Audited
+@Table(name = "schedule")
 public class Schedule implements Serializable {
     private static final long serialVersionUID = -4951321295232200246L;
 
@@ -33,6 +34,23 @@ public class Schedule implements Serializable {
     @Column(name = "days_of_week", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Days> daysOfWeek = new HashSet<Days>();
+    
+    @ElementCollection(targetClass = Frequency.class)   
+    @Column(name = "frequency", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Frequency frequency;
+    
+    @NotNull(message = "Username cannot be null")
+    @Column(name = "username")
+    private String username;
+    
+    @NotNull(message = "Survey cannot be null")
+    @Column(name = "survey")
+    private String survey;    
+    
+    @NotNull(message = "Attributes cannot be null")   
+    @Column(name = "attributes")
+    private ScheduleAttributes attributes;    
 
     public long getId() {
         return id;
@@ -49,7 +67,7 @@ public class Schedule implements Serializable {
     public void setDaysOfWeek(Set<Days> daysOfWeek) {
         this.daysOfWeek = daysOfWeek;
     }
-
+    
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -65,4 +83,37 @@ public class Schedule implements Serializable {
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
+    
+    public Frequency getFrequency() {
+      return frequency;
+    }
+
+    public void setFrequency(Frequency frequency) {
+      this.frequency = frequency;
+    }
+
+    public String getUsername() {
+      return username;
+    }
+
+    public void setUsername(String username) {
+      this.username = username;
+    }
+
+    public String getSurvey() {
+      return survey;
+    }
+
+    public void setSurvey(String survey) {
+      this.survey = survey;
+    }
+
+    public ScheduleAttributes getAttributes() {
+      return attributes;
+    }
+
+    public void setAttributes(ScheduleAttributes attributes) {
+      this.attributes = attributes;
+    }
+
 }
