@@ -1,5 +1,9 @@
 package com.catalyst.overwatch.schedule.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -21,10 +25,15 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @NotNull(message = "Start date cannot be null")
     @Column(name = "start_date")
     private LocalDate startDate;
-
+    
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @Column(name = "end_date")
     private LocalDate endDate;
 
@@ -33,6 +42,16 @@ public class Schedule implements Serializable {
     @Column(name = "days_of_week", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Days> daysOfWeek = new HashSet<Days>();
+
+    public Schedule(){
+
+    };
+
+    public Schedule(Set<Days> daysOfWeek, LocalDate endDate, LocalDate startDate) {
+        this.daysOfWeek = daysOfWeek;
+        this.endDate = endDate;
+        this.startDate = startDate;
+    }
 
     public long getId() {
         return id;
