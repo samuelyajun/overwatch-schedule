@@ -14,7 +14,6 @@ import java.util.Set;
  */
 @Entity
 @Audited
-@Table(name = "schedule")
 public class Schedule implements Serializable {
     private static final long serialVersionUID = -4951321295232200246L;
 
@@ -33,9 +32,8 @@ public class Schedule implements Serializable {
     @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id"))
     @Column(name = "days_of_week", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Set<Days> daysOfWeek = new HashSet<Days>();
-    
-    @ElementCollection(targetClass = Frequency.class)   
+    private Set<Days> daysOfWeek = new HashSet<Days>();    
+     
     @Column(name = "frequency", nullable = false)
     @Enumerated(EnumType.STRING)
     private Frequency frequency;
