@@ -42,8 +42,5 @@ INSERT INTO occurrence (id, schedule_id, email, create_date, occurrence_number, 
 /*INSERT INTO scheduleattributes(id, schedule_id, attribute_id, type_id)
                                 VALUES (1, 1, 1, 1);
 INSERT INTO scheduleattributes(id, schedule_id, attribute_id, type_id)
-                                VALUES (2, 2, 2, 2);*/
-
-/*INSERT INTO schedule  (id, end_date, start_date, survey) VALUES (1, '2016-05-15', '2016-04-30', 'surveyURL'); 
-INSERT INTO schedule  (id, end_date, start_date, survey) VALUES (2, '2016-07-31', '2016-07-01', 'surveyURL');*/                       
+                                VALUES (2, 2, 2, 2);*/          
 
