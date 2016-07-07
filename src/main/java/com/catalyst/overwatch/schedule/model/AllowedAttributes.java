@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 
 import org.hibernate.envers.Audited;
@@ -23,10 +24,34 @@ public class AllowedAttributes implements Serializable {
   private long id;
 
   @ManyToMany
-  //@JoinColumn(name = "id")  
+  @JoinColumn(name = "type_id")  
   private Collection<AttributeTypes> attributeTypes;
   
-  @Column(name = "value")
+  @Column(name = "attribute_value")
   private String value;
+
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public Collection<AttributeTypes> getAttributeTypes() {
+    return attributeTypes;
+  }
+
+  public void setAttributeTypes(Collection<AttributeTypes> attributeTypes) {
+    this.attributeTypes = attributeTypes;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
 
 }

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,23 +33,22 @@ public class Schedule implements Serializable {
     @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id"))
     @Column(name = "days_of_week", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Set<Days> daysOfWeek = new HashSet<Days>();    
-     
-    @Column(name = "frequency", nullable = false)
+    private Set<Days> daysOfWeek = new HashSet<Days>();   
+    
+    @Column(name = "frequency")
     @Enumerated(EnumType.STRING)
     private Frequency frequency;
-    
-    @NotNull(message = "Username cannot be null")
-    @Column(name = "username")
-    private String username;
-    
-    @NotNull(message = "Survey cannot be null")
+   
     @Column(name = "survey")
     private String survey;    
     
-    @NotNull(message = "Attributes cannot be null")   
-    @Column(name = "attributes")
-    private ScheduleAttributes attributes;    
+    @ManyToOne     
+    @JoinColumn(name = "attributes")
+    private ScheduleAttributes attributes;
+    
+    @ManyToMany
+    @JoinColumn(name = "email")
+    private Collection<Users> users;
 
     public long getId() {
         return id;
@@ -90,12 +90,12 @@ public class Schedule implements Serializable {
       this.frequency = frequency;
     }
 
-    public String getUsername() {
-      return username;
+    public Collection<Users> getUsers() {
+      return users;
     }
 
-    public void setUsername(String username) {
-      this.username = username;
+    public void setUsername(Collection<Users> users) {
+      this.users = users;
     }
 
     public String getSurvey() {

@@ -11,6 +11,7 @@
     <properties>
         <spring.boot.version>1.3.5.RELEASE</spring.boot.version>
         <hibernate.version>5.2.1.Final</hibernate.version>
+        <spring.version>4.3.1.RELEASE</spring.version>
     </properties>
 
     <parent>
@@ -70,6 +71,12 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>2.8.0.rc1</version>
+        </dependency>
+        <!-- Adds support for Java8 Date & Time -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.4.0</version>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>

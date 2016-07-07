@@ -18,11 +18,25 @@ public class AttributeTypes implements Serializable  {
   
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
-
-  //@Column(name = "id")
-  //private long id;
+  @Column(name = "attribute_type_id")
+  private long attributeTypeId;  
   
   @Column(name = "name")
   private String name;
+
+  public long getAttributeTypeId() {
+    return attributeTypeId;
+  }
+
+  public void setAttributeTypeId(long attributeTypeId) {
+    this.attributeTypeId = attributeTypeId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }

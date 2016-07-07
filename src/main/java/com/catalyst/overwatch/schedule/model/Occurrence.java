@@ -1,6 +1,7 @@
 package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
@@ -22,14 +24,18 @@ public class Occurrence implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
-  @ManyToOne 
+  @ManyToOne
+  @JoinColumn(name = "schedule_id")
   private Schedule schedule;
   
   @Column(name = "email")
   private String email;
   
-  @Column(name = "time_stamp")
-  private LocalDateTime timeStamp;
+  @Column(name = "create_date")
+  private LocalDate createDate;
+  
+  @Column(name = "time_to_live")
+  private LocalDateTime timeToLive;
   
   @Column(name = "occurrence_number")
   private long occurrenceNumber;
@@ -58,12 +64,12 @@ public class Occurrence implements Serializable {
     this.email = email;
   }
 
-  public LocalDateTime getTimeStamp() {
-    return timeStamp;
+  public LocalDateTime getTimeToLive() {
+    return timeToLive;
   }
 
-  public void setTimeStamp(LocalDateTime timeStamp) {
-    this.timeStamp = timeStamp;
+  public void setTimeToLive(LocalDateTime timeToLive) {
+    this.timeToLive = timeToLive;
   }
 
   public long getOccurrenceNumber() {
