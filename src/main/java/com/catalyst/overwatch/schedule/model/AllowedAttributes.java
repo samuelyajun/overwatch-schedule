@@ -1,7 +1,6 @@
 package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
 
@@ -23,9 +22,9 @@ public class AllowedAttributes implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
-  @ManyToMany
-  @JoinColumn(name = "type_id")  
-  private Collection<AttributeTypes> attributeTypes;
+  @ManyToOne
+  @JoinColumn(name = "id")  
+  private AttributeTypes attributeTypes;
   
   @Column(name = "attribute_value")
   private String value;
@@ -38,11 +37,11 @@ public class AllowedAttributes implements Serializable {
     this.id = id;
   }
 
-  public Collection<AttributeTypes> getAttributeTypes() {
+  public AttributeTypes getAttributeTypes() {
     return attributeTypes;
   }
 
-  public void setAttributeTypes(Collection<AttributeTypes> attributeTypes) {
+  public void setAttributeTypes(AttributeTypes attributeTypes) {
     this.attributeTypes = attributeTypes;
   }
 

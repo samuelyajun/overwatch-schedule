@@ -37,8 +37,9 @@ public class Occurrence implements Serializable {
   @Column(name = "time_to_live")
   private LocalDateTime timeToLive;
   
-  @Column(name = "occurrence_number")
-  private long occurrenceNumber;
+  // may not need occurrence number
+  //@Column(name = "occurrence_number")
+  //private long occurrenceNumber;
 
   public long getId() {
     return id;
@@ -72,12 +73,12 @@ public class Occurrence implements Serializable {
     this.timeToLive = timeToLive;
   }
 
-  public long getOccurrenceNumber() {
+  /*public long getOccurrenceNumber() {
     return occurrenceNumber;
   }
 
   public void setOccurrenceNumber(long occurrenceNumber) {
     this.occurrenceNumber = occurrenceNumber;
-  }
+  }*/
  
 }

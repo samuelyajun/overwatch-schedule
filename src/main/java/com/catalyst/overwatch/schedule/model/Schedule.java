@@ -42,9 +42,7 @@ public class Schedule implements Serializable {
     @Column(name = "survey")
     private String survey;    
     
-    @ManyToOne     
-    @JoinColumn(name = "attributes")
-    private ScheduleAttributes attributes;
+    
     
     @ManyToMany
     @JoinColumn(name = "email")
@@ -104,14 +102,6 @@ public class Schedule implements Serializable {
 
     public void setSurvey(String survey) {
       this.survey = survey;
-    }
-
-    public ScheduleAttributes getAttributes() {
-      return attributes;
-    }
-
-    public void setAttributes(ScheduleAttributes attributes) {
-      this.attributes = attributes;
-    }
+    } 
 
 }
