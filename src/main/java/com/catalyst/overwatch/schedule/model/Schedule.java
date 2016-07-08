@@ -9,11 +9,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by bpyl on 6/14/2016.
- */
 @Entity
-@Audited
+//@Audited
 public class Schedule implements Serializable {
     private static final long serialVersionUID = -4951321295232200246L;
 
@@ -34,20 +31,20 @@ public class Schedule implements Serializable {
     @Enumerated(EnumType.STRING)
     private Set<Days> daysOfWeek = new HashSet<Days>();
 
+    @Column(table = "respondents")
+    @ManyToMany
+    private Set<Respondent> respondents;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Set<Days> getDaysOfWeek() {
-        return daysOfWeek;
-    }
-
-    public void setDaysOfWeek(Set<Days> daysOfWeek) {
-        this.daysOfWeek = daysOfWeek;
     }
 
     public LocalDate getStartDate() {
@@ -64,5 +61,21 @@ public class Schedule implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Set<Days> getDaysOfWeek() {
+        return daysOfWeek;
+    }
+
+    public void setDaysOfWeek(Set<Days> daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
+    }
+
+    public Set<Respondent> getRespondents() {
+        return respondents;
+    }
+
+    public void setRespondents(Set<Respondent> respondents) {
+        this.respondents = respondents;
     }
 }
