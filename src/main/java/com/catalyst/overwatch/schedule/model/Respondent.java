@@ -1,19 +1,20 @@
 package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 @Entity
-@Audited
+@Audited(targetAuditMode = NOT_AUDITED)
 public class Respondent implements Serializable {
   
   private static final long serialVersionUID = -4951321295232200246L;
@@ -22,14 +23,11 @@ public class Respondent implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;  
   
-  @OneToMany
-  private Collection<AllowedAttributes> allowedAttributes;
+  @ManyToMany
+  private Set<AllowedAttribute> allowedAttributes; 
   
   @ManyToOne
-  private Schedule schedule;
-  
-  @OneToMany
-  private Collection<Users> users;
+  private User user;
 
   public long getId() {
     return id;
@@ -39,28 +37,19 @@ public class Respondent implements Serializable {
     this.id = id;
   }
  
-  public Collection<AllowedAttributes> getAllowedAttributes() {
+  public Set<AllowedAttribute> getAllowedAttributes() {
     return allowedAttributes;
   }
 
-  public void setAllowedAttributes(Collection<AllowedAttributes> allowedAttributes) {
+  public void setAllowedAttributes(Set<AllowedAttribute> allowedAttributes) {
     this.allowedAttributes = allowedAttributes;
+  }  
+
+  public User getUser() {
+    return user;
   }
 
-  public Schedule getSchedule() {
-    return schedule;
+  public void setUser(User user) {
+    this.user = user;
   }
-
-  public void setSchedule(Schedule schedule) {
-    this.schedule = schedule;
-  }
-
-  public Collection<Users> getUsers() {
-    return users;
-  }
-
-  public void setUsers(Collection<Users> users) {
-    this.users = users;
-  }
-
 }

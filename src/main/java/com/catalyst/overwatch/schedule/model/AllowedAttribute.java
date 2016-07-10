@@ -2,7 +2,6 @@ package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,10 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 @Entity
-@Audited
-public class AllowedAttributes implements Serializable {
+@Audited(targetAuditMode = NOT_AUDITED)
+public class AllowedAttribute implements Serializable {
   
   private static final long serialVersionUID = -4951321295232200246L;
   
@@ -24,9 +24,8 @@ public class AllowedAttributes implements Serializable {
 
   @ManyToOne
   @JoinColumn(name = "id")  
-  private AttributeTypes attributeTypes;
+  private AttributeType attributeType;  
   
-  @Column(name = "attribute_value")
   private String value;
 
   public long getId() {
@@ -37,12 +36,12 @@ public class AllowedAttributes implements Serializable {
     this.id = id;
   }
 
-  public AttributeTypes getAttributeTypes() {
-    return attributeTypes;
+  public AttributeType getAttributeTypes() {
+    return attributeType;
   }
 
-  public void setAttributeTypes(AttributeTypes attributeTypes) {
-    this.attributeTypes = attributeTypes;
+  public void setAttributeTypes(AttributeType attributeType) {
+    this.attributeType = attributeType;
   }
 
   public String getValue() {

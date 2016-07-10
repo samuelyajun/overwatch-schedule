@@ -9,27 +9,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.envers.Audited;
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 @Entity
-@Audited
-public class AttributeTypes implements Serializable  {
+@Audited(targetAuditMode = NOT_AUDITED)
+public class AttributeType implements Serializable  {
   
   private static final long serialVersionUID = -4951321295232200246L;
   
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "attribute_type_id")
-  private long attributeTypeId;  
+  @GeneratedValue(strategy = GenerationType.AUTO)  
+  private long id;  
   
   @Column(name = "name")
   private String name;
 
-  public long getAttributeTypeId() {
-    return attributeTypeId;
+  public long getid() {
+    return id;
   }
 
-  public void setAttributeTypeId(long attributeTypeId) {
-    this.attributeTypeId = attributeTypeId;
+  public void setAttributeTypeId(long id) {
+    this.id = id;
   }
 
   public String getName() {
