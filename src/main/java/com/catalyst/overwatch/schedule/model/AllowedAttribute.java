@@ -2,6 +2,7 @@ package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,9 +24,9 @@ public class AllowedAttribute implements Serializable {
   private long id;
 
   @ManyToOne
-  @JoinColumn(name = "id")  
   private AttributeType attributeType;  
   
+  @Column(name = "attribute_value")
   private String value;
 
   public long getId() {

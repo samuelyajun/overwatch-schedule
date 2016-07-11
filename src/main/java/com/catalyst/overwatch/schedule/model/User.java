@@ -7,12 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
 import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 @Entity
 @Audited(targetAuditMode = NOT_AUDITED)
+@Table(name = "users")
 public class User implements Serializable {
   
   private static final long serialVersionUID = -4951321295232200246L;
@@ -22,7 +24,16 @@ public class User implements Serializable {
   private long id;
   
   @Column(name = "username")
-  private String username;
+  private String username;  
+
+  @Column(name = "email")
+  private String email;
+  
+  @Column(name = "first_name")
+  private String firstName;
+  
+  @Column(name = "last_name")
+  private String lastName;
   
   public long getId() {
     return id;
@@ -39,15 +50,6 @@ public class User implements Serializable {
   public void setUsername(String username) {
     this.username = username;
   }
-
-  @Column(name = "email")
-  private String email;
-  
-  @Column(name = "first_name")
-  private String firstName;
-  
-  @Column(name = "last_name")
-  private String lastName;
 
   public String getEmail() {
     return email;
