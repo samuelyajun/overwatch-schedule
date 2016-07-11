@@ -3,6 +3,7 @@ package com.catalyst.overwatch.schedule.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ public class Occurrence implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id; 
   
-  @ManyToOne
+  @ManyToOne (cascade = {CascadeType.ALL})
   private Respondent respondent;
   
   @Column(name = "generation_date")

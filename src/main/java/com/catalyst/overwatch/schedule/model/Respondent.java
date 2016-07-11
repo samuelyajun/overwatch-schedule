@@ -3,6 +3,7 @@ package com.catalyst.overwatch.schedule.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,10 +24,10 @@ public class Respondent implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;  
   
-  @ManyToMany
+  @ManyToMany (cascade = {CascadeType.ALL})
   private Set<AllowedAttribute> allowedAttributes; 
   
-  @ManyToOne
+  @ManyToOne (cascade = {CascadeType.ALL})
   private User user;
 
   public long getId() {
