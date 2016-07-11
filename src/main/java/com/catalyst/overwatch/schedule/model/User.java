@@ -1,16 +1,29 @@
 package com.catalyst.overwatch.schedule.model;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
-@MappedSuperclass
-public abstract class User {
+@Entity
+@Table(name = "users")
+public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     @Column(name = "first_name")
     protected String firstName;
     @Column(name = "last_name")
     protected String lastName;
     protected String email;
+
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
 
     public String getFirstName() {
