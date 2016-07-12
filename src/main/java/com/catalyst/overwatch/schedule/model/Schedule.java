@@ -32,115 +32,115 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 @Entity
 @Audited
 public class Schedule implements Serializable {
-    private static final long serialVersionUID = -4951321295232200246L;
+  private static final long serialVersionUID = -4951321295232200246L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
 
 
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @NotNull(message = "Start date cannot be null")
-    @Column(name = "start_date")
-    private LocalDate startDate;
-    
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @Column(name = "end_date")
-    private LocalDate endDate;
+  @JsonSerialize(using = LocalDateSerializer.class)
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  @NotNull(message = "Start date cannot be null")
+  @Column(name = "start_date")
+  private LocalDate startDate;
 
-    @ElementCollection(targetClass = Days.class)
-    @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id"))
-    @Column(name = "days_of_week", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<Days> daysOfWeek = new HashSet<Days>();   
-    
-    @Column(name = "frequency")
-    @Enumerated(EnumType.STRING)
-    private Frequency frequency;
-    
-    @Column(name = "interval")
-    private String interval;
-   
-    @Column(name = "survey")
-    private String survey;
-    
-    @OneToMany(cascade = {CascadeType.ALL})
-    @JoinColumn(name="schedule_id")
-    private Set<Respondent> respondents;
+  @JsonSerialize(using = LocalDateSerializer.class)
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  @Column(name = "end_date")
+  private LocalDate endDate;
 
-    public Schedule(){
+  @ElementCollection(targetClass = Days.class)
+  @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id") )
+  @Column(name = "days_of_week", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private Set<Days> daysOfWeek = new HashSet<Days>();
 
-    };
+  @Column(name = "frequency")
+  @Enumerated(EnumType.STRING)
+  private Frequency frequency;
 
-    public Schedule(Set<Days> daysOfWeek, LocalDate endDate, LocalDate startDate) {
-        this.daysOfWeek = daysOfWeek;
-        this.endDate = endDate;
-        this.startDate = startDate;
-    }
+  @Column(name = "interval")
+  private String interval;
 
-    public long getId() {
-        return id;
-    }
+  @Column(name = "survey")
+  private String survey;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  @OneToMany(cascade = {CascadeType.ALL})
+  @JoinColumn(name = "schedule_id")
+  private Set<Respondent> respondents;
 
-    public Set<Days> getDaysOfWeek() {
-        return daysOfWeek;
-    }
+  public Schedule() {
 
-    public void setDaysOfWeek(Set<Days> daysOfWeek) {
-        this.daysOfWeek = daysOfWeek;
-    }
-    
-    public LocalDate getStartDate() {
-        return startDate;
-    }
+  };
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
+  public Schedule(Set<Days> daysOfWeek, LocalDate endDate, LocalDate startDate) {
+    this.daysOfWeek = daysOfWeek;
+    this.endDate = endDate;
+    this.startDate = startDate;
+  }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-    
-    public Frequency getFrequency() {
-      return frequency;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setFrequency(Frequency frequency) {
-      this.frequency = frequency;
-    }   
+  public Set<Days> getDaysOfWeek() {
+    return daysOfWeek;
+  }
 
-    public String getSurvey() {
-      return survey;
-    }
+  public void setDaysOfWeek(Set<Days> daysOfWeek) {
+    this.daysOfWeek = daysOfWeek;
+  }
 
-    public void setSurvey(String survey) {
-      this.survey = survey;
-    }
+  public LocalDate getStartDate() {
+    return startDate;
+  }
 
-    public String getInterval() {
-      return interval;
-    }
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
 
-    public void setInterval(String interval) {
-      this.interval = interval;
-    }
+  public LocalDate getEndDate() {
+    return endDate;
+  }
 
-    public Set<Respondent> getRespondents() {
-      return respondents;
-    }
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
 
-    public void setRespondents(Set<Respondent> respondents) {
-      this.respondents = respondents;
-    }
+  public Frequency getFrequency() {
+    return frequency;
+  }
+
+  public void setFrequency(Frequency frequency) {
+    this.frequency = frequency;
+  }
+
+  public String getSurvey() {
+    return survey;
+  }
+
+  public void setSurvey(String survey) {
+    this.survey = survey;
+  }
+
+  public String getInterval() {
+    return interval;
+  }
+
+  public void setInterval(String interval) {
+    this.interval = interval;
+  }
+
+  public Set<Respondent> getRespondents() {
+    return respondents;
+  }
+
+  public void setRespondents(Set<Respondent> respondents) {
+    this.respondents = respondents;
+  }
 }

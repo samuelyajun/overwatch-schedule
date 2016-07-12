@@ -1,5 +1,7 @@
 package com.catalyst.overwatch.schedule.model;
 
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -9,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.envers.Audited;
-import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 @Entity
 @Audited(targetAuditMode = NOT_AUDITED)

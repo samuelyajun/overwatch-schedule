@@ -3,13 +3,7 @@ INSERT INTO schedule  (id, end_date, start_date, survey, frequency) VALUES (2, '
 
 INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'MONDAY');
 INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'FRIDAY');
-INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'MONDAY');
-INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'TUESDAY');
 INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'WEDNESDAY');
-INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'THURSDAY');
-INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'SATURDAY');
-INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'SUNDAY');
-
 
 INSERT INTO attributetype (id, name) VALUES (1, 'ROLE');
 INSERT INTO attributetype (id, name) VALUES (2, 'OFFICE');

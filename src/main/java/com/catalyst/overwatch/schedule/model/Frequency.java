@@ -7,11 +7,7 @@ package com.catalyst.overwatch.schedule.model;
  */
 
 public enum Frequency {
-  
-  ONE_TIME,
-  ONE_WEEK,
-  TWO_WEEKS,
-  THREE_WEEKS,
-  MONTHLY
+
+  ONE_TIME, ONE_WEEK, TWO_WEEKS, THREE_WEEKS, MONTHLY
 
 }

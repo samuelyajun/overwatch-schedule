@@ -1,5 +1,7 @@
 package com.catalyst.overwatch.schedule.model;
 
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -12,27 +14,26 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
-import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 @Entity
 @Audited(targetAuditMode = NOT_AUDITED)
 public class Occurrence implements Serializable {
-  
+
   private static final long serialVersionUID = -4951321295232200246L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id; 
-  
-  @ManyToOne (cascade = {CascadeType.ALL})
+  private long id;
+
+  @ManyToOne(cascade = {CascadeType.ALL})
   private Respondent respondent;
-  
+
   @Column(name = "generation_date")
   private LocalDateTime generationDate;
-  
+
   @Column(name = "is_complete")
   private boolean isComplete;
-  
+
   public long getId() {
     return id;
   }
