@@ -1,7 +1,5 @@
 package com.catalyst.overwatch.schedule.model;
 
-import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
-
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -14,7 +12,7 @@ import javax.persistence.Table;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Audited(targetAuditMode = NOT_AUDITED)
+@Audited
 @Table(name = "users")
 public class User implements Serializable {
 

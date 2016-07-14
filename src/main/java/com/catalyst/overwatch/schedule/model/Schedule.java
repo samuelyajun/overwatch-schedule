@@ -56,19 +56,19 @@ public class Schedule implements Serializable {
   @Enumerated(EnumType.STRING)
   private Set<Days> daysOfWeek = new HashSet<Days>();
 
-  @Column(name = "frequency")
+  @Column
   @Enumerated(EnumType.STRING)
   private Frequency frequency;
 
-  @Column(name = "interval")
+  @Column
   private String interval;
 
-  @Column(name = "survey")
+  @Column
   private String survey;
 
   @OneToMany(cascade = {CascadeType.ALL})
   @JoinColumn(name = "schedule_id")
-  private Set<Respondent> respondents;
+  private Set<Respondent> respondents;  
 
   public Schedule() {
 
