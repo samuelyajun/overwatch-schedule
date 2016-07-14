@@ -19,7 +19,7 @@ public class AllowedAttribute implements Serializable {
   private static final long serialVersionUID = -4951321295232200246L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @ManyToOne(cascade = {CascadeType.ALL})

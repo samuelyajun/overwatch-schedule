@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
 
@@ -21,7 +20,7 @@ public class Respondent implements Serializable {
   private static final long serialVersionUID = -4951321295232200246L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @ManyToMany(cascade = {CascadeType.ALL})
