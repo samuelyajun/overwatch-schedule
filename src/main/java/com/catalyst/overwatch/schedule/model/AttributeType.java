@@ -1,7 +1,5 @@
 package com.catalyst.overwatch.schedule.model;
 
-import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
-
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -13,16 +11,16 @@ import javax.persistence.Id;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Audited(targetAuditMode = NOT_AUDITED)
+@Audited
 public class AttributeType implements Serializable  {
   
   private static final long serialVersionUID = -4951321295232200246L;
   
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)  
+  @GeneratedValue(strategy = GenerationType.IDENTITY)  
   private long id;  
   
-  @Column(name = "name")
+  @Column
   private String name;
 
   public long getid() {
