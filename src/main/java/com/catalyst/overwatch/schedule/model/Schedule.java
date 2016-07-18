@@ -65,6 +65,10 @@ public class Schedule implements Serializable {
   @Column
   private String survey;
 
+  @OneToMany(cascade = {CascadeType.ALL})
+  @JoinColumn(name = "schedule_id")
+  private Set<Respondent> respondents;  
+
   public Schedule() {
 
   };
@@ -131,4 +135,11 @@ public class Schedule implements Serializable {
     this.interval = interval;
   }
 
+  public Set<Respondent> getRespondents() {
+    return respondents;
+  }
+
+  public void setRespondents(Set<Respondent> respondents) {
+    this.respondents = respondents;
+  }
 }

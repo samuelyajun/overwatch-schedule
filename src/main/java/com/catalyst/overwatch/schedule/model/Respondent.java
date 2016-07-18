@@ -3,7 +3,13 @@ package com.catalyst.overwatch.schedule.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
 
@@ -21,10 +27,7 @@ public class Respondent implements Serializable {
   private Set<AllowedAttribute> allowedAttributes;
 
   @ManyToOne(cascade = {CascadeType.ALL})
-  private User user;
-
-  @ManyToOne(cascade = {CascadeType.ALL})
-  private Schedule schedule;
+  private User user;  
 
   public long getId() {
     return id;
@@ -48,13 +51,5 @@ public class Respondent implements Serializable {
 
   public void setUser(User user) {
     this.user = user;
-  }
-
-  public Schedule getSchedule() {
-    return schedule;
-  }
-
-  public void setSchedules(Schedule schedule) {
-    this.schedule = schedule;
   }
 }
