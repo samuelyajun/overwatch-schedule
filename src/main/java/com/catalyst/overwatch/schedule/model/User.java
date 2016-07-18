@@ -1,52 +1,66 @@
 package com.catalyst.overwatch.schedule.model;
 
-import javax.persistence.*;
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    @Column(name = "first_name")
-    protected String firstName;
-    @Column(name = "last_name")
-    protected String lastName;
-    protected String email;
+  private static final long serialVersionUID = -4951321295232200246L;
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
+  @Column(name = "email")
+  private String email;
 
-    public long getId() {
-        return id;
-    }
+  @Column(name = "first_name")
+  private String firstName;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  @Column(name = "last_name")
+  private String lastName;
 
+  public long getId() {
+    return id;
+  }
 
-    public String getFirstName() {
-        return firstName;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
 }

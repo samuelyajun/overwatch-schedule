@@ -1,41 +1,55 @@
 package com.catalyst.overwatch.schedule.model;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.envers.Audited;
+
 @Entity
-@Table(name = "respondents")
-public class Respondent {
+@Audited
+public class Respondent implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    @ManyToOne
-    private User user;
-    @ManyToMany
-    private Set<AllowedAttribute> attributes;
+  private static final long serialVersionUID = -4951321295232200246L;
 
-    public long getId() {
-        return id;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  @ManyToMany(cascade = {CascadeType.ALL})
+  private Set<AllowedAttribute> allowedAttributes;
 
-    public User getUser() {
-        return user;
-    }
+  @ManyToOne(cascade = {CascadeType.ALL})
+  private User user;  
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public Set<AllowedAttribute> getAttributes() {
-        return attributes;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setAttributes(Set<AllowedAttribute> attributes) {
-        this.attributes = attributes;
-    }
+  public Set<AllowedAttribute> getAllowedAttributes() {
+    return allowedAttributes;
+  }
+
+  public void setAllowedAttributes(Set<AllowedAttribute> allowedAttributes) {
+    this.allowedAttributes = allowedAttributes;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
 }

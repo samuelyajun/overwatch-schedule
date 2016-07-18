@@ -1,6 +1,7 @@
 package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +15,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class AllowedAttribute implements Serializable {
+public class Occurrence implements Serializable {
 
   private static final long serialVersionUID = -4951321295232200246L;
 
@@ -23,10 +24,13 @@ public class AllowedAttribute implements Serializable {
   private long id;
 
   @ManyToOne(cascade = {CascadeType.ALL})
-  private AttributeType attributeType;
+  private Respondent respondent;
 
-  @Column(name = "attribute_value")
-  private String value;
+  @Column
+  private LocalDateTime generationDate;
+
+  @Column(name = "is_complete")
+  private boolean isComplete;
 
   public long getId() {
     return id;
@@ -36,20 +40,27 @@ public class AllowedAttribute implements Serializable {
     this.id = id;
   }
 
-  public AttributeType getAttributeTypes() {
-    return attributeType;
+  public Respondent getRespondent() {
+    return respondent;
   }
 
-  public void setAttributeTypes(AttributeType attributeType) {
-    this.attributeType = attributeType;
+  public void setRespondent(Respondent respondent) {
+    this.respondent = respondent;
   }
 
-  public String getValue() {
-    return value;
+  public LocalDateTime getGenerationDate() {
+    return generationDate;
   }
 
-  public void setValue(String value) {
-    this.value = value;
+  public void setGenerationDate(LocalDateTime generationDate) {
+    this.generationDate = generationDate;
   }
 
+  public boolean isComplete() {
+    return isComplete;
+  }
+
+  public void setComplete(boolean isComplete) {
+    this.isComplete = isComplete;
+  }
 }
