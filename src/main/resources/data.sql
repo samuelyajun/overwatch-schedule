@@ -1,5 +1,5 @@
-INSERT INTO schedule  (end_date, start_date, survey, frequency) VALUES ('2016-05-15', '2016-04-30', 'surveyURL1', 'ONE_WEEK'); 
-INSERT INTO schedule  (end_date, start_date, survey, frequency) VALUES ('2016-07-31', '2016-07-01', 'surveyURL2', 'TWO_WEEKS');  
+INSERT INTO schedule  (end_date, start_date, survey, frequency) VALUES ('2016-05-15', '2016-04-30', 'SC', 'ONE_WEEK'); 
+INSERT INTO schedule  (end_date, start_date, survey, frequency) VALUES ('2016-07-31', '2016-07-01', 'ST', 'TWO_WEEKS');  
 
 INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'MONDAY');
 INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'FRIDAY');
@@ -10,13 +10,13 @@ INSERT INTO attributetype (name) VALUES ('OFFICE');
 INSERT INTO attributetype (name) VALUES ('CLIENT');
 INSERT INTO attributetype (name) VALUES ('PROJECT');
 
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'DEV');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'ANALYST');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'ENGAGEMENT MANAGER');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'TECH LEAD');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Engagement Manager');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Tech Lead');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Business Analayst');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Developer');
 
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'BALTIMORE');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'BEAVERTON');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'Beaverton');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'Baltimore');
 
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'CHOICE');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'CAMBIA');
