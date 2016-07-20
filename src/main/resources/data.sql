@@ -48,9 +48,9 @@ INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'PMS
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'VACATION_RENTALS');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'DB1');
 
-INSERT INTO users (email, first_name, last_name) VALUES ('user1@test.com', 'Test1', 'User1');
-INSERT INTO users (email, first_name, last_name) VALUES ('user2@test.com', 'Test2', 'User2');
-INSERT INTO users (email, first_name, last_name) VALUES ('user3@test.com', 'Test3', 'User3');
+--INSERT INTO users (email, first_name, last_name) VALUES ('user1@test.com', 'Test1', 'User1');
+--INSERT INTO users (email, first_name, last_name) VALUES ('user2@test.com', 'Test2', 'User2');
+--INSERT INTO users (email, first_name, last_name) VALUES ('user3@test.com', 'Test3', 'User3');
 
 INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
 INSERT INTO respondent (schedule_id, user_id) VALUES (2, 2);
