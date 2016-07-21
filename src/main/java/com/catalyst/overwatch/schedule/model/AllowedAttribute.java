@@ -2,7 +2,6 @@ package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,12 +25,10 @@ public class AllowedAttribute implements Serializable {
 
   @ManyToOne(cascade = {CascadeType.ALL})
   @OrderColumn  
-  @Basic
   private AttributeType attributeType;
 
   @Column(name = "attribute_value")
   @OrderColumn  
-  @Basic
   private String attributeValue;
 
   public long getId() {
