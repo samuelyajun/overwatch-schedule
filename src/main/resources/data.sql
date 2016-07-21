@@ -5,25 +5,25 @@ INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'MONDAY');
 INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'FRIDAY');
 INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'WEDNESDAY');
 
-INSERT INTO attributetype (name) VALUES ('ROLE');
-INSERT INTO attributetype (name) VALUES ('OFFICE');
-INSERT INTO attributetype (name) VALUES ('CLIENT');
-INSERT INTO attributetype (name) VALUES ('PROJECT');
+INSERT INTO attributetype (name) VALUES ('Role');
+INSERT INTO attributetype (name) VALUES ('Office');
+INSERT INTO attributetype (name) VALUES ('Client');
+INSERT INTO attributetype (name) VALUES ('Project');
 
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Engagement Manager');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Tech Lead');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Business Analayst');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Business Analyst');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Developer');
 
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'Beaverton');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'Baltimore');
 
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'CHOICE');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'CAMBIA');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'NIKE');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Choice');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Cambia');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Nike');
 
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'PMSI');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'VACATION_RENTALS');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Vacation Rentals');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'DB1');
 
 INSERT INTO users (email, first_name, last_name) VALUES ('user1@test.com', 'Test1', 'User1');
@@ -37,3 +37,8 @@ INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VA
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 5);
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 7);
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
+
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 3);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 6);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 7);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 11);
