@@ -28,7 +28,7 @@ public class HttpClient {
      * Empty constructor
      */
     public HttpClient() {
-        //empty constructor
+
     }
 
     /**
@@ -55,7 +55,7 @@ public class HttpClient {
         String entity = getEntity(request);
 
         if (entity == null) {
-            //should probably do something else besides return null
+            //TODO: Improve null handling
             return null;
         }
 
@@ -130,7 +130,7 @@ public class HttpClient {
             request.setEntity(new StringEntity(parser.toJson(body)));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            //should probably be handled better
+            //TODO: Improve error handling
             return null;
         }
 
@@ -172,13 +172,13 @@ public class HttpClient {
             request.setEntity(new StringEntity(parser.toJson(body)));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            //should probably be handled better
+            //TODO: Improve error handling
             return null;
         }
 
         String entity = getEntity(request);
         if (entity == null) {
-            //should probably do something else besides return null
+        	//TODO: Improve null handling
             return null;
         }
 
@@ -249,7 +249,7 @@ public class HttpClient {
             response = httpclient.execute(request);
         } catch (IOException e) {
             e.printStackTrace();
-            //should probably be handled better
+            //TODO: Improve error handling
             return null;
         }
 
@@ -258,7 +258,7 @@ public class HttpClient {
             throw new HttpException("Error: " + responseCode + ", message: " + response.getStatusLine().getReasonPhrase());
         }
 
-        //have to manually get the data from post/puts since it doesn't return with the response
+        //Have to manually get the data from post/puts since it doesn't return with the response
         //Should only apply to ATA's Data API, if not this will need refactored
         Header locHeader = response.getFirstHeader("Location");
         if (locHeader != null) {
@@ -267,8 +267,8 @@ public class HttpClient {
                 httpclient.close();
                 response.close();
             } catch (IOException e) {
-                //should probably be handled better
-                e.printStackTrace();
+            	//TODO: Improve error handling
+            	e.printStackTrace();
             }
             return getEntity(get);
         }
@@ -279,8 +279,8 @@ public class HttpClient {
             httpclient.close();
             response.close();
         } catch (IOException e) {
-            //should probably be handled better
-            e.printStackTrace();
+        	//TODO: Improve error handling
+        	e.printStackTrace();
         }
 
         return entity;
