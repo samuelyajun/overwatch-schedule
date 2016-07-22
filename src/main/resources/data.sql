@@ -1,22 +1,18 @@
 INSERT INTO schedule  (end_date, start_date, survey, frequency) VALUES ('2016-05-15', '2016-04-30', 'SC', 'ONE_WEEK'); 
 INSERT INTO schedule  (end_date, start_date, survey, frequency) VALUES ('2016-07-31', '2016-07-01', 'ST', 'TWO_WEEKS');  
 
-INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'MONDAY');
-INSERT INTO days (schedule_id, days_of_week) VALUES (1, 'FRIDAY');
-INSERT INTO days (schedule_id, days_of_week) VALUES (2, 'WEDNESDAY');
-
 INSERT INTO attributetype (name) VALUES ('Role');
 INSERT INTO attributetype (name) VALUES ('Office');
 INSERT INTO attributetype (name) VALUES ('Client');
 INSERT INTO attributetype (name) VALUES ('Project');
 
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Engagement Manager');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Tech Lead');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Business Analyst');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 1, 'Developer');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Engagement Manager');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Tech Lead');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Business Analyst');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Developer');
 
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'Beaverton');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES ( 2, 'Baltimore');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (2, 'Beaverton');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (2, 'Baltimore');
 
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Choice');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Cambia');
