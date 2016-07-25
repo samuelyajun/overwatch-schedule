@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 
 import org.hibernate.envers.Audited;
 
@@ -23,10 +24,12 @@ public class AllowedAttribute implements Serializable {
   private long id;
 
   @ManyToOne(cascade = {CascadeType.ALL})
+  @OrderColumn  
   private AttributeType attributeType;
 
   @Column(name = "attribute_value")
-  private String value;
+  @OrderColumn  
+  private String attributeValue;
 
   public long getId() {
     return id;
@@ -44,12 +47,12 @@ public class AllowedAttribute implements Serializable {
     this.attributeType = attributeType;
   }
 
-  public String getValue() {
-    return value;
+  public String getAttributeValue() {
+    return attributeValue;
   }
 
-  public void setValue(String value) {
-    this.value = value;
+  public void setAttributeValue(String attributeValue) {
+    this.attributeValue = attributeValue;
   }
 
 }

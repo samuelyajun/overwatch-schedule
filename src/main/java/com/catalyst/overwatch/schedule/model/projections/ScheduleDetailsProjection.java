@@ -21,9 +21,6 @@ public interface ScheduleDetailsProjection {
     @JsonSerialize(using = LocalDateSerializer.class)
     LocalDate getEndDate();
 
-    @Enumerated(EnumType.STRING)
-    Set<Days> getDaysOfWeek();
-
     Frequency getFrequency();
 
     String getInterval();
