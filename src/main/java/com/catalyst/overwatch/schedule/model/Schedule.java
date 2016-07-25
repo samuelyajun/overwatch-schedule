@@ -1,30 +1,16 @@
 package com.catalyst.overwatch.schedule.model;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.envers.Audited;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * Created by bpyl on 6/14/2016.
@@ -49,12 +35,6 @@ public class Schedule implements Serializable {
   @Column(name = "end_date")
   private LocalDate endDate;
 
-  @ElementCollection(targetClass = Days.class)
-  @CollectionTable(name = "days", joinColumns = @JoinColumn(name = "schedule_id") )
-  @Column(name = "days_of_week", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Set<Days> daysOfWeek = new HashSet<Days>();
-
   @Column
   @Enumerated(EnumType.STRING)
   private Frequency frequency;
@@ -73,26 +53,12 @@ public class Schedule implements Serializable {
 
   };
 
-  public Schedule(Set<Days> daysOfWeek, LocalDate endDate, LocalDate startDate) {
-    this.daysOfWeek = daysOfWeek;
-    this.endDate = endDate;
-    this.startDate = startDate;
-  }
-
   public long getId() {
     return id;
   }
 
   public void setId(long id) {
     this.id = id;
-  }
-
-  public Set<Days> getDaysOfWeek() {
-    return daysOfWeek;
-  }
-
-  public void setDaysOfWeek(Set<Days> daysOfWeek) {
-    this.daysOfWeek = daysOfWeek;
   }
 
   public LocalDate getStartDate() {
