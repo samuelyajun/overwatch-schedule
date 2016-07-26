@@ -1,15 +1,13 @@
 package com.catalyst.overwatch.schedule.quartzjobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
-import com.catalyst.overwatch.schedule.httpclient.HttpClient;
-import com.catalyst.overwatch.schedule.httpclient.jsonparser.JsonParser;
 import com.catalyst.overwatch.schedule.model.Notification;
-import org.apache.http.HttpException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
  */
 public class CreateOccurrencesJob implements Job{
 
-    HttpClient client = new HttpClient(new JsonParser());
+    RestTemplate template = new RestTemplate();
     Notification notification;
     Logger logger = LogManager.getLogger();
 
@@ -34,12 +32,8 @@ public class CreateOccurrencesJob implements Job{
         String body = "Bros and dudettes, our survey linkage magic would go in here.";
 
         notification = new Notification(toList, subject, body);
-        try{
-            client.post(NotificationConstants.NOTIFICATION_ENDPOINT, notification, Notification.class);
-            logger.info("sending notification");
-        } catch (HttpException e){
-            e.printStackTrace();
-        }
+        template.postForEntity(NotificationConstants.NOTIFICATION_ENDPOINT, notification, Notification.class);
+        logger.info("sending notification");
     }
 
 }
