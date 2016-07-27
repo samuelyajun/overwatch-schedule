@@ -2,6 +2,8 @@ package com.catalyst.overwatch.schedule.model;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 /**
  * Created by hmccardell on 7/18/2016.
  */
@@ -41,5 +43,14 @@ public class Notification {
 
     public void setRecipientAddresses(String[] recipientAddresses) {
         this.recipientAddresses = recipientAddresses;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "recipientAddresses=" + Arrays.toString(recipientAddresses) +
+                ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
+                '}';
     }
 }
