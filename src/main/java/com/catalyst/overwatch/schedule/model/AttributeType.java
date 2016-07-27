@@ -38,4 +38,12 @@ public class AttributeType implements Serializable  {
   public void setName(String name) {
     this.name = name;
   }
+
+  @Override
+  public String toString() {
+    return "AttributeType{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            '}';
+  }
 }

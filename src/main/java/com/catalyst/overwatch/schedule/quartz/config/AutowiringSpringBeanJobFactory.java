@@ -1,4 +1,4 @@
-package com.catalyst.overwatch.schedule.quartzjobs;
+package com.catalyst.overwatch.schedule.quartz.config;
 
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;

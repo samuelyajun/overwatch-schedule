@@ -1,10 +1,10 @@
-package com.catalyst.overwatch.schedule.quartzjobs;
+package com.catalyst.overwatch.schedule.quartz.config;
 
+import com.catalyst.overwatch.schedule.quartz.jobs.DailyJob;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.quartz.spi.JobFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -32,19 +32,21 @@ public class SchedulerConfig {
 
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory,
-                                                     @Qualifier("sampleJobTrigger") Trigger sampleJobTrigger) throws IOException {
+                                                     @Qualifier("dailyJobTrigger") Trigger dailyJobTrigger) throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setJobFactory(jobFactory);
         factory.setQuartzProperties(quartzProperties());
-        factory.setTriggers(sampleJobTrigger);
+        factory.setTriggers(dailyJobTrigger);
 
         return factory;
     }
 
-    @Bean(name = "sampleJobTrigger")
-    public CronTriggerFactoryBean sampleJobTrigger(@Qualifier("sampleJobDetail") JobDetail jobDetail,
-                                                     @Value("${samplejob.frequency}") long frequency) {
-        return createTrigger(jobDetail, frequency);
+    @Bean(name = "dailyJobTrigger")
+    public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail){
+        String beanName = "Daily Process";
+        String group = "Group 1";
+        String cronExpression = "0/15 * * * * ?";
+        return createTrigger(jobDetail, beanName, group, cronExpression);
     }
 
     private static JobDetailFactoryBean createJobDetail(Class jobClass) {
@@ -54,19 +56,19 @@ public class SchedulerConfig {
         return factoryBean;
     }
 
-    private static CronTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs) {
+    private static CronTriggerFactoryBean createTrigger(JobDetail jobDetail, String beanName, String group, String cronExpression) {
         CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
-        factoryBean.setBeanName("Daily Process");
-        factoryBean.setGroup("Group 1");
-        factoryBean.setCronExpression("0/5 * * * * ?");
+        factoryBean.setBeanName(beanName);
+        factoryBean.setGroup(group);
+        factoryBean.setCronExpression(cronExpression);
         factoryBean.setJobDetail(jobDetail);
 
         return factoryBean;
     }
 
     @Bean
-    public JobDetailFactoryBean sampleJobDetail() {
-        return createJobDetail(CreateOccurrencesJob.class);
+    public JobDetailFactoryBean dailyJobDetail() {
+        return createJobDetail(DailyJob.class);
     }
 
     @Bean

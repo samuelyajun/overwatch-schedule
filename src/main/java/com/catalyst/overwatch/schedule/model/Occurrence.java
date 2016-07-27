@@ -1,6 +1,7 @@
 package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
@@ -32,6 +33,14 @@ public class Occurrence implements Serializable {
   @Column(name = "is_complete")
   private boolean isComplete;
 
+  public Occurrence(){}
+
+  public Occurrence(Respondent respondent) {
+    isComplete = false;
+    this.respondent = respondent;
+    this.generationDate = LocalDateTime.now();
+  }
+
   public long getId() {
     return id;
   }
@@ -62,5 +71,15 @@ public class Occurrence implements Serializable {
 
   public void setComplete(boolean isComplete) {
     this.isComplete = isComplete;
+  }
+
+  @Override
+  public String toString() {
+    return "Occurrence{" +
+            "id=" + id +
+            ", respondent=" + respondent +
+            ", generationDate=" + generationDate +
+            ", isComplete=" + isComplete +
+            '}';
   }
 }
