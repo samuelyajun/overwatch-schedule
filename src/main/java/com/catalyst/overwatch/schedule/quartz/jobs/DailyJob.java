@@ -1,15 +1,14 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
-import com.catalyst.overwatch.schedule.httpclient.HttpClient;
-import com.catalyst.overwatch.schedule.httpclient.jsonparser.JsonParser;
-import com.catalyst.overwatch.schedule.model.*;
+import com.catalyst.overwatch.schedule.model.Notification;
+import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.Respondent;
+import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
-import org.apache.http.HttpException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -24,6 +23,12 @@ import java.util.List;
 
 /**
  * Created by hmccardell on 7/18/2016.
+ *
+ * This daily job will run every day on a schedule designated in the SchedulerConfig.  In the alpha build,
+ * schedules are checked to see if the current date falls on their frequency. If it does, occurrences will
+ * be generated for each respondent on each schedule.  These occurrences are posted to the database, and
+ * their ids are used to construct hyperlinks which are then packaged into a restful call to the notification
+ * service, which generates an email to the respondent with their survey link.
  */
 public class DailyJob implements Job{
 
@@ -35,33 +40,37 @@ public class DailyJob implements Job{
 
     RestTemplate restTemplate = new RestTemplate();
     Logger logger = LogManager.getRootLogger();
-    List<Occurrence> occurrencesToPost = new ArrayList<>();
 
+    /**
+     * The main function of the DailyJob, which executes the needed tasks.
+     *
+     * @param context A context bundle containing handles to various environment information, that
+     * is given to a quartz JobDetail instance as it is executed, and to a Trigger instance
+     * after the execution completes.
+     *
+     * @throws JobExecutionException
+     */
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
         List<Schedule> cleanedSchedules = new ArrayList<>();
         cleanedSchedules = getSchedulesFromRepositoryAndProcess();
-        occurrencesToPost = generateOccurrencesForToday(cleanedSchedules);
-        occurrenceRepository.save(occurrencesToPost);
+        generateOccurrencesForToday(cleanedSchedules);
 
     }
 
     /**
-     * Retrieves a list of schedules from the schedule repository that have today's date.
-     * Schedules with null respondents are removed from the list, then the list is iterated
-     * over and an occurrence is constructed for each respondent in each schedule.  These
-     * occurrences are added to a list and returned.
+     * Takes a list of schedules and iterates over them.  For each respondent in each schedule, an
+     * occurrence is generated and saved to the database.  The id is captured and used to build an
+     * http link, which is sent to the respondent by a restful call to the notification service.
      *
-     * @return a list of occurrences for schedule respondents with a start date before or equal to today.
+     * @param scheduleList a list of schedules that are ready for occurrence generation.
      */
-    protected List<Occurrence> generateOccurrencesForToday(List<Schedule> passedListOfSchedules){
+    protected void generateOccurrencesForToday(List<Schedule> scheduleList){
 
         String surveyLinkForThisRespondent = "";
 
-        //Construct occurrences for each respondent, add them to a list to post.
-        for(Schedule schedule : passedListOfSchedules){
-
+        for(Schedule schedule : scheduleList){
             for(Respondent respondent : schedule.getRespondents()){
                 Occurrence occurrenceToPost = new Occurrence(respondent);
                 Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
@@ -71,8 +80,6 @@ public class DailyJob implements Job{
                 logger.info(respondent.getUser());
             }
         }
-
-        return occurrencesToPost;
     }
 
     /**
@@ -83,7 +90,7 @@ public class DailyJob implements Job{
      * @param schedule the schedule to check.
      * @return boolean true when today's date falls on the schedule's frequency, else false.
      */
-    protected Boolean isTodayOnScheduleFrequency(Schedule schedule){
+    protected boolean isTodayOnScheduleFrequency(Schedule schedule){
 
         LocalDate todaysDate = LocalDate.now();
         boolean isOnFrequency = false;
@@ -150,10 +157,9 @@ public class DailyJob implements Job{
     protected String buildSurveyLink(String surveySuid, long originatorId){
 
         String base = NotificationConstants.FRONT_END_BASE_URL;
-        String surveysSuidParam = NotificationConstants.SURVEYS_SUID_PARAM;
         String surveysOriginatorParam = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
 
-        String link = base + surveysSuidParam + surveySuid;
+        String link = base + surveySuid;
         link += "&?";
         link += surveysOriginatorParam + originatorId;
 

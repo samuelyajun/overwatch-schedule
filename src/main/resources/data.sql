@@ -1,13 +1,13 @@
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-05-15', '2016-04-30', '1234', 'ONE_WEEK', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-09-01', '2016-07-27', '2345', 'TWO_WEEKS', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-10-31', '2016-07-27', '2345', 'THREE_WEEKS', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2017-12-31', '2016-07-27', '2345', 'TWO_WEEKS', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2015-01-01', '2016-07-27', '2345', 'TWO_WEEKS', 'false');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-06', '2345', 'THREE_WEEKS', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-13', '2345', 'TWO_WEEKS', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-20', '2345', 'ONE_WEEK', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '2345', 'ONE_WEEK', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '2345', 'ONE_TIME', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-05-15', '2016-04-30', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-09-01', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-10-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'THREE_WEEKS', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2017-12-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2015-01-01', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'false');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-06', '/surveys?suid=SKKE-2778954', 'THREE_WEEKS', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-13', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-20', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '/surveys?suid=SKKE-2778954', 'ONE_TIME', 'true');
 
 INSERT INTO attributetype (name) VALUES ('Role');
 INSERT INTO attributetype (name) VALUES ('Office');
