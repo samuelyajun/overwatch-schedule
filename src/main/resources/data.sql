@@ -9,10 +9,31 @@ INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) 
 INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
 INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '/surveys?suid=SKKE-2778954', 'ONE_TIME', 'true');
 
-INSERT INTO attributetype (name) VALUES ('Role');
-INSERT INTO attributetype (name) VALUES ('Office');
-INSERT INTO attributetype (name) VALUES ('Client');
-INSERT INTO attributetype (name) VALUES ('Project');
+INSERT INTO users (first_name, last_name, email) VALUES ('Brenton', 'Pyl', 'bpyl@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Travis', 'Hoffman', 'thoffman@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Brett', 'Futral', 'bfutral@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Steven', 'Smith', 'ssmith@catalystdevworks.com');
+
+INSERT INTO users (first_name, last_name, email) VALUES ('Abigail', 'Edwards', 'aedwards@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Joshua', 'Jacobson', 'jjacobson@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Sivagami', 'Annamalai', 'sannamalai@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Hayes', 'McCardell II', 'hmccardell@catalystdevworks.com');
+
+INSERT INTO users (first_name, last_name, email) VALUES ('Pros', 'Seng', 'pseng@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Kathryn', 'LaFrance', 'klafrance@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Andrew', 'Rajigah', 'arajigah@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Alexandra', 'Moss', 'amoss@catalystdevworks.com');
+
+INSERT INTO users (first_name, last_name, email) VALUES ('Thomas', 'Getzoyan', 'tgetzoyan@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('James', 'Blair', 'jblair@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Bradley', 'Larsen', 'blarsen@catalystdevworks.com');
+INSERT INTO users (first_name, last_name, email) VALUES ('Jordan', 'Barroga', 'jbarroga@catalystdevworks.com');
+
+
+INSERT INTO attributetype (name) VALUES ('ROLE');
+INSERT INTO attributetype (name) VALUES ('OFFICE');
+INSERT INTO attributetype (name) VALUES ('CLIENT');
+INSERT INTO attributetype (name) VALUES ('PROJECT');
 
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Engagement Manager');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Tech Lead');
