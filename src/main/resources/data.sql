@@ -1,5 +1,5 @@
 INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-05-15', '2016-04-30', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-09-01', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-09-01', '2016-07-28', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
 INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-10-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'THREE_WEEKS', 'true');
 INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2017-12-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
 INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2015-01-01', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'false');

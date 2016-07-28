@@ -6,7 +6,8 @@ package com.catalyst.overwatch.schedule.constants;
 public class NotificationConstants {
 
     public static final String NOTIFICATION_ENDPOINT = "http://localhost:8080/notify";
-    public static final String FRONT_END_BASE_URL = "http://localhost:3000";
+    public static final String FRONT_END_BASE_URL = "http://localhost:9000";
+
     public static final String SURVEYS_ORIGINATOR_PARAM = "originatorId=";
 
     public static final String SURVEY_WAITING_SUBJECT = "Project Overwatch Notification:  Survey Waiting";
