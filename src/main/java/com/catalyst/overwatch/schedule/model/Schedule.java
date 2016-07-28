@@ -43,7 +43,7 @@ public class Schedule implements Serializable {
     @Column(name = "template_uri")
     private String templateuri;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "schedule_id")
     private Set<Respondent> respondents;
 

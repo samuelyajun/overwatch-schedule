@@ -24,7 +24,7 @@ public class Occurrence implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(cascade = {CascadeType.ALL})
+  @ManyToOne(cascade = {CascadeType.MERGE})
   private Respondent respondent;
 
   @Column

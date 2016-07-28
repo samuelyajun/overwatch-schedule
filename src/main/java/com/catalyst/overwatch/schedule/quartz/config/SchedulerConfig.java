@@ -45,7 +45,7 @@ public class SchedulerConfig {
     public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail){
         String beanName = "Daily Process";
         String group = "Group 1";
-        String cronExpression = "0/15 * * * * ?";
+        String cronExpression = "0/20 * * * * ?";
         return createTrigger(jobDetail, beanName, group, cronExpression);
     }
 

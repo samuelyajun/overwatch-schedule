@@ -16,7 +16,7 @@ public class AllowedAttribute implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER )
+  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER )
   @OrderColumn  
   private AttributeType attributeType;
 
