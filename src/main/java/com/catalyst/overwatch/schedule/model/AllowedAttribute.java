@@ -2,14 +2,7 @@ package com.catalyst.overwatch.schedule.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OrderColumn;
+import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
 
@@ -23,7 +16,7 @@ public class AllowedAttribute implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(cascade = {CascadeType.ALL})
+  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER )
   @OrderColumn  
   private AttributeType attributeType;
 
@@ -55,4 +48,12 @@ public class AllowedAttribute implements Serializable {
     this.attributeValue = attributeValue;
   }
 
+  @Override
+  public String toString() {
+    return "AllowedAttribute{" +
+            "id=" + id +
+            ", attributeType=" + attributeType +
+            ", attributeValue='" + attributeValue + '\'' +
+            '}';
+  }
 }

@@ -18,94 +18,108 @@ import java.util.Set;
 @Entity
 @Audited
 public class Schedule implements Serializable {
-  private static final long serialVersionUID = -4951321295232200246L;
+    private static final long serialVersionUID = -4951321295232200246L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-  @JsonSerialize(using = LocalDateSerializer.class)
-  @JsonDeserialize(using = LocalDateDeserializer.class)
-  @NotNull(message = "Start date cannot be null")
-  @Column(name = "start_date")
-  private LocalDate startDate;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull(message = "Start date cannot be null")
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-  @JsonSerialize(using = LocalDateSerializer.class)
-  @JsonDeserialize(using = LocalDateDeserializer.class)
-  @Column(name = "end_date")
-  private LocalDate endDate;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
-  @Column
-  @Enumerated(EnumType.STRING)
-  private Frequency frequency;
+    @Enumerated(EnumType.STRING)
+    private Frequency frequency;
 
-  @Column
-  private String interval;
+    private String interval;
 
-  @Column
-  private String survey;
+    @Column(name = "template_uri")
+    private String templateuri;
 
-  @OneToMany(cascade = {CascadeType.ALL})
-  @JoinColumn(name = "schedule_id")
-  private Set<Respondent> respondents;  
+    @OneToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "schedule_id")
+    private Set<Respondent> respondents;
 
-  public Schedule() {
+    private Boolean isActive;
 
-  };
+    public Schedule() {}
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public LocalDate getStartDate() {
-    return startDate;
-  }
+    public LocalDate getStartDate() {
+        return startDate;
+    }
 
-  public void setStartDate(LocalDate startDate) {
-    this.startDate = startDate;
-  }
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
 
-  public LocalDate getEndDate() {
-    return endDate;
-  }
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 
-  public void setEndDate(LocalDate endDate) {
-    this.endDate = endDate;
-  }
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 
-  public Frequency getFrequency() {
-    return frequency;
-  }
+    public Frequency getFrequency() {
+        return frequency;
+    }
 
-  public void setFrequency(Frequency frequency) {
-    this.frequency = frequency;
-  }
+    public void setFrequency(Frequency frequency) {
+        this.frequency = frequency;
+    }
 
-  public String getSurvey() {
-    return survey;
-  }
+    public String getInterval() {
+        return interval;
+    }
 
-  public void setSurvey(String survey) {
-    this.survey = survey;
-  }
+    public void setInterval(String interval) {
+        this.interval = interval;
+    }
 
-  public String getInterval() {
-    return interval;
-  }
+    public String getTemplateURI() { return templateuri; }
 
-  public void setInterval(String interval) {
-    this.interval = interval;
-  }
+    public void setTemplateURI(String templateURI) {
+        this.templateuri = templateURI;
+    }
 
-  public Set<Respondent> getRespondents() {
-    return respondents;
-  }
+    public Set<Respondent> getRespondents() {
+        return respondents;
+    }
 
-  public void setRespondents(Set<Respondent> respondents) {
-    this.respondents = respondents;
-  }
+    public void setRespondents(Set<Respondent> respondents) {
+        this.respondents = respondents;
+    }
+
+    public Boolean getActive() { return isActive; }
+
+    public void setActive(Boolean active) { isActive = active; }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "id=" + id +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", frequency=" + frequency +
+                ", interval='" + interval + '\'' +
+                ", templateURI=" + templateuri +
+                ", respondents=" + respondents +
+                ", isActive=" + isActive +
+                '}';
+    }
 }

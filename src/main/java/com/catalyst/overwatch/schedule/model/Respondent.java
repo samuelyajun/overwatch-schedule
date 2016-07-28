@@ -3,13 +3,7 @@ package com.catalyst.overwatch.schedule.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
 
@@ -23,10 +17,10 @@ public class Respondent implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToMany(cascade = {CascadeType.ALL})
+  @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
   private Set<AllowedAttribute> allowedAttributes;
 
-  @ManyToOne(cascade = {CascadeType.ALL})
+  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
   private User user;  
 
   public long getId() {
@@ -51,5 +45,14 @@ public class Respondent implements Serializable {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  @Override
+  public String toString() {
+    return "Respondent{" +
+            "id=" + id +
+            ", allowedAttributes=" + allowedAttributes +
+            ", user=" + user +
+            '}';
   }
 }
