@@ -105,6 +105,7 @@ public class DailyJob implements Job {
     if (schedule.getFrequency().getValue() == 0) {
       isOnFrequency = true;
       logger.info("The start date is today's date, so today is on that schedule's frequency.");
+      logger.info(schedule);
     } else if (daysBetween % weeksValueOfFrequency == 0) {
       isOnFrequency = true;
       logger.info("Today's date lands on the schedule frequency." + schedule.getStartDate() + " " + schedule.getFrequency());
