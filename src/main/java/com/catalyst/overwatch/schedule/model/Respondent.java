@@ -17,10 +17,10 @@ public class Respondent implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
   private Set<AllowedAttribute> allowedAttributes;
 
-  @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
   private User user;  
 
   public long getId() {
