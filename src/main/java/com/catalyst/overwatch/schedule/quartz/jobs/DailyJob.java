@@ -54,7 +54,7 @@ public class DailyJob implements Job{
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
         List<Schedule> cleanedSchedules = new ArrayList<>();
-        cleanedSchedules = getSchedulesFromRepositoryAndProcess();
+        cleanedSchedules.addAll(getSchedulesFromRepositoryAndProcess());
         generateOccurrencesForToday(cleanedSchedules);
 
     }
@@ -68,7 +68,7 @@ public class DailyJob implements Job{
      */
     protected void generateOccurrencesForToday(List<Schedule> scheduleList){
 
-        String surveyLinkForThisRespondent = "";
+        String surveyLinkForThisRespondent;
 
         for(Schedule schedule : scheduleList){
             for(Respondent respondent : schedule.getRespondents()){
@@ -188,13 +188,12 @@ public class DailyJob implements Job{
         String[] recipientAddress = new String[]{emailAddress};
         Notification notification = new Notification(recipientAddress, subject, body);
 
-        if(emailAddress.equals("hmccardell@catalystdevworks.com")){
-            try {
-                restTemplate.postForEntity(NotificationConstants.NOTIFICATION_ENDPOINT, notification, Notification.class);
-                logger.info("Generated email from rest template");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            restTemplate.postForEntity(NotificationConstants.NOTIFICATION_ENDPOINT, notification, Notification.class);
+            logger.info("Generated email from rest template");
+        } catch (Exception e) {
+            logger.error("Quartz DailyJob Error:  exception occurred while calling Notification service", e);
         }
+        
     }
 }

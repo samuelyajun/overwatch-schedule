@@ -1,9 +1,12 @@
 package com.catalyst.overwatch.schedule.quartz.config;
 
 import com.catalyst.overwatch.schedule.quartz.jobs.DailyJob;
+import com.catalyst.overwatch.schedule.quartz.jobs.NagsJob;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.quartz.spi.JobFactory;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
@@ -18,11 +21,23 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Created by hmccardell on 7/25/2016.
+ * This class contains majority of the Schedule service's Quartz configuration.  Job details,
+ * triggers and factory beans are described below.
+ *
+ * See the quartz.jobs package for the actual tasks each job will execute.
+ *
+ * @author hmccardell
  */
 @Configuration
 public class SchedulerConfig {
 
+    /**
+     * A JobFactory is responsible for producing instances of <code>Job</code>
+     * classes.
+     *
+     * @param applicationContext the application's context.
+     * @return a job factory which supports @Autowired services for job execution.
+     */
     @Bean
     public JobFactory jobFactory(ApplicationContext applicationContext) {
         AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
@@ -30,25 +45,27 @@ public class SchedulerConfig {
         return jobFactory;
     }
 
+    /**
+     * Sets the resource path for quartz properties into a bean and returns it.
+     *
+     * @return a properties bean.
+     * @throws IOException
+     */
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory,
-                                                     @Qualifier("dailyJobTrigger") Trigger dailyJobTrigger) throws IOException {
-        SchedulerFactoryBean factory = new SchedulerFactoryBean();
-        factory.setJobFactory(jobFactory);
-        factory.setQuartzProperties(quartzProperties());
-        factory.setTriggers(dailyJobTrigger);
-
-        return factory;
+    public Properties quartzProperties() throws IOException {
+        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
+        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+        propertiesFactoryBean.afterPropertiesSet();
+        return propertiesFactoryBean.getObject();
     }
 
-    @Bean(name = "dailyJobTrigger")
-    public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail){
-        String beanName = "Daily Process";
-        String group = "Group 1";
-        String cronExpression = "0/20 * * * * ?";
-        return createTrigger(jobDetail, beanName, group, cronExpression);
-    }
-
+    /**
+     * A Spring {@link FactoryBean} for creating a Quartz {@link org.quartz.JobDetail}
+     * instance, supporting bean-style usage for JobDetail configuration.
+     *
+     * @param jobClass implementation class of the job.
+     * @return a job detail factory bean with a set job class and durability.
+     */
     private static JobDetailFactoryBean createJobDetail(Class jobClass) {
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
         factoryBean.setJobClass(jobClass);
@@ -56,6 +73,17 @@ public class SchedulerConfig {
         return factoryBean;
     }
 
+    /**
+     * A Spring {@link FactoryBean} for creating a Quartz {@link org.quartz.CronTrigger}
+     * instance, supporting bean-style usage for trigger configuration.
+     *
+     * @param jobDetail Conveys the detail properties of a given <code>Job</code> instance. JobDetails are
+     *                  to be created/defined with {@link JobBuilder}.
+     * @param beanName The name of the job.
+     * @param group An identifier for grouping jobs together.
+     * @param cronExpression The cron expression that determines when this job will be executed.
+     * @return a cron trigger factory bean set with all the details of the job.
+     */
     private static CronTriggerFactoryBean createTrigger(JobDetail jobDetail, String beanName, String group, String cronExpression) {
         CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
         factoryBean.setBeanName(beanName);
@@ -66,17 +94,60 @@ public class SchedulerConfig {
         return factoryBean;
     }
 
+    /**
+     * A Spring {@link FactoryBean} that creates and configures a Quartz {@link org.quartz.Scheduler},
+     * manages its lifecycle as part of the Spring application context, and exposes the
+     * Scheduler as bean reference for dependency injection.
+     *
+     * @param jobFactory responsible for producing an instance of the Job class.
+     * @param dailyJobTrigger the trigger for the Daily Job, which creates occurrences for schedules and calls
+     *                        the notifications service to generate emails to users.
+     * @return a scheduler factory bean set with the job factory and the triggers to execute.
+     * @throws IOException
+     */
+    @Bean
+    public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory,
+                                                     @Qualifier("dailyJobTrigger") Trigger dailyJobTrigger,
+                                                     @Qualifier("nagsJobTrigger") Trigger nagsJobTrigger
+                                                     ) throws IOException {
+        SchedulerFactoryBean factory = new SchedulerFactoryBean();
+        factory.setJobFactory(jobFactory);
+        factory.setQuartzProperties(quartzProperties());
+        factory.setTriggers(dailyJobTrigger, nagsJobTrigger);
+
+        return factory;
+    }
+
+    /**
+     *
+     *  CRON JOB TRIGGERS AND DETAILS BELOW HERE
+     *
+     */
+
+    @Bean(name = "dailyJobTrigger")
+    public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail){
+        String beanName = "Daily Process";
+        String group = "Daily";
+        String cronExpression = "0/20 * * * * ?";
+        return createTrigger(jobDetail, beanName, group, cronExpression);
+    }
+
+    @Bean(name = "nagsJobTrigger")
+    public CronTriggerFactoryBean nagsJobTrigger(@Qualifier("nagsJobDetail") JobDetail jobDetail){
+        String beanName = "Nags Process";
+        String group = "Nags";
+        String cronExpression = "0/20 * * * * ?";
+        return createTrigger(jobDetail, beanName, group, cronExpression);
+    }
+
+
     @Bean
     public JobDetailFactoryBean dailyJobDetail() {
         return createJobDetail(DailyJob.class);
     }
 
     @Bean
-    public Properties quartzProperties() throws IOException {
-        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
-        propertiesFactoryBean.afterPropertiesSet();
-        return propertiesFactoryBean.getObject();
-
+    public JobDetailFactoryBean nagsJobDetail() {
+        return createJobDetail(NagsJob.class);
     }
 }
