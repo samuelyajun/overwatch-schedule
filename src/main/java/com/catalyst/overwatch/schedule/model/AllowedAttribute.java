@@ -1,10 +1,9 @@
 package com.catalyst.overwatch.schedule.model;
 
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
-
-import org.hibernate.envers.Audited;
+import java.io.Serializable;
 
 @Entity
 @Audited
@@ -16,12 +15,12 @@ public class AllowedAttribute implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER )
-  @OrderColumn  
+  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+  @OrderColumn
   private AttributeType attributeType;
 
   @Column(name = "attribute_value")
-  @OrderColumn  
+  @OrderColumn
   private String attributeValue;
 
   public long getId() {
@@ -55,5 +54,24 @@ public class AllowedAttribute implements Serializable {
             ", attributeType=" + attributeType +
             ", attributeValue='" + attributeValue + '\'' +
             '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    AllowedAttribute that = (AllowedAttribute) o;
+
+    if (!attributeType.equals(that.attributeType)) return false;
+    return attributeValue.equals(that.attributeValue);
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = attributeType.hashCode();
+    result = 31 * result + attributeValue.hashCode();
+    return result;
   }
 }

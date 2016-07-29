@@ -10,47 +10,66 @@ import java.util.Arrays;
 @Component
 public class Notification {
 
-    private String[] recipientAddresses;
-    private String subject, body;
+  private String[] recipientAddresses;
+  private String subject, body;
 
-    public Notification(){};
+  public Notification() {
+  }
 
-    public Notification(String[] recipientAddresses, String subject, String body) {
-        this.recipientAddresses = recipientAddresses;
-        this.subject = subject;
-        this.body = body;
-    }
+  ;
 
-    public String getBody() {
-        return body;
-    }
+  public Notification(String[] recipientAddresses, String subject, String body) {
+    this.recipientAddresses = recipientAddresses;
+    this.subject = subject;
+    this.body = body;
+  }
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+  public String getBody() {
+    return body;
+  }
 
-    public String getSubject() {
-        return subject;
-    }
+  public void setBody(String body) {
+    this.body = body;
+  }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+  public String getSubject() {
+    return subject;
+  }
 
-    public String[] getRecipientAddresses() {
-        return recipientAddresses;
-    }
+  public void setSubject(String subject) {
+    this.subject = subject;
+  }
 
-    public void setRecipientAddresses(String[] recipientAddresses) {
-        this.recipientAddresses = recipientAddresses;
-    }
+  public String[] getRecipientAddresses() {
+    return recipientAddresses;
+  }
 
-    @Override
-    public String toString() {
-        return "Notification{" +
-                "recipientAddresses=" + Arrays.toString(recipientAddresses) +
-                ", subject='" + subject + '\'' +
-                ", body='" + body + '\'' +
-                '}';
-    }
+  public void setRecipientAddresses(String[] recipientAddresses) {
+    this.recipientAddresses = recipientAddresses;
+  }
+
+  @Override
+  public String toString() {
+    return "Notification{" +
+            "recipientAddresses=" + Arrays.toString(recipientAddresses) +
+            ", subject='" + subject + '\'' +
+            ", body='" + body + '\'' +
+            '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Notification that = (Notification) o;
+
+    // Probably incorrect - comparing Object[] arrays with Arrays.equals
+    if (!Arrays.equals(recipientAddresses, that.recipientAddresses)) return false;
+    if (!subject.equals(that.subject)) return false;
+    return body.equals(that.body);
+
+  }
+
+
 }

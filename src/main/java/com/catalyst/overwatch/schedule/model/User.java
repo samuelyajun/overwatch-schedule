@@ -1,15 +1,9 @@
 package com.catalyst.overwatch.schedule.model;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Audited
@@ -71,5 +65,26 @@ public class User implements Serializable {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    User user = (User) o;
+
+    if (!email.equals(user.email)) return false;
+    if (!firstName.equals(user.firstName)) return false;
+    return lastName.equals(user.lastName);
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = email.hashCode();
+    result = 31 * result + firstName.hashCode();
+    result = 31 * result + lastName.hashCode();
+    return result;
   }
 }

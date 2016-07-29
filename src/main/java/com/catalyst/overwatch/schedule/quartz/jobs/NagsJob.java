@@ -11,12 +11,12 @@ import org.quartz.JobExecutionException;
  */
 public class NagsJob implements Job {
 
-    Logger logger = LogManager.getRootLogger();
+  Logger logger = LogManager.getRootLogger();
 
-    @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+  @Override
+  public void execute(JobExecutionContext context) throws JobExecutionException {
 
-        logger.info("Nags job");
+    logger.info("Nags job");
 
-    }
+  }
 }
