@@ -1,25 +1,20 @@
 package com.catalyst.overwatch.schedule.model;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Audited
-public class AttributeType implements Serializable  {
-  
+public class AttributeType implements Serializable {
+
   private static final long serialVersionUID = -4951321295232200246L;
-  
+
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)  
-  private long id;  
-  
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
+
   @Column
   private String name;
 
@@ -45,5 +40,21 @@ public class AttributeType implements Serializable  {
             "id=" + id +
             ", name='" + name + '\'' +
             '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    AttributeType that = (AttributeType) o;
+
+    return name.equals(that.name);
+
+  }
+
+  @Override
+  public int hashCode() {
+    return name.hashCode();
   }
 }

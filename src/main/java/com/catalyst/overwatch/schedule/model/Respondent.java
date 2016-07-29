@@ -1,11 +1,10 @@
 package com.catalyst.overwatch.schedule.model;
 
-import java.io.Serializable;
-import java.util.Set;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
-
-import org.hibernate.envers.Audited;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Audited
@@ -21,7 +20,7 @@ public class Respondent implements Serializable {
   private Set<AllowedAttribute> allowedAttributes;
 
   @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
-  private User user;  
+  private User user;
 
   public long getId() {
     return id;
@@ -54,5 +53,24 @@ public class Respondent implements Serializable {
             ", allowedAttributes=" + allowedAttributes +
             ", user=" + user +
             '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Respondent that = (Respondent) o;
+
+    if (!allowedAttributes.equals(that.allowedAttributes)) return false;
+    return user.equals(that.user);
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = allowedAttributes.hashCode();
+    result = 31 * result + user.hashCode();
+    return result;
   }
 }

@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {
 
-    Occurrence findById(@Param(value = "id")long id);
+  Occurrence findById(@Param(value = "id") long id);
 
-    List<Occurrence> findAllByGenerationDate(@Param(value = "generationDate")LocalDateTime date);
+  List<Occurrence> findAllByGenerationDate(@Param(value = "generationDate") LocalDateTime date);
 
 }

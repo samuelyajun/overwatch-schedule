@@ -1,18 +1,10 @@
 package com.catalyst.overwatch.schedule.model;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Audited
@@ -33,7 +25,8 @@ public class Occurrence implements Serializable {
   @Column(name = "is_complete")
   private boolean isComplete;
 
-  public Occurrence(){}
+  public Occurrence() {
+  }
 
   public Occurrence(Respondent respondent) {
     isComplete = false;
@@ -81,5 +74,26 @@ public class Occurrence implements Serializable {
             ", generationDate=" + generationDate +
             ", isComplete=" + isComplete +
             '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Occurrence that = (Occurrence) o;
+
+    if (isComplete != that.isComplete) return false;
+    if (!respondent.equals(that.respondent)) return false;
+    return generationDate.equals(that.generationDate);
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = respondent.hashCode();
+    result = 31 * result + generationDate.hashCode();
+    result = 31 * result + (isComplete ? 1 : 0);
+    return result;
   }
 }
