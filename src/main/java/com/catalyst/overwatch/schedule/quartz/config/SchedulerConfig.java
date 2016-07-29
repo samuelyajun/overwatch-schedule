@@ -26,6 +26,7 @@ import java.util.Properties;
  *
  * See the quartz.jobs package for the actual tasks each job will execute.
  *
+ * @author hmccardell
  */
 @Configuration
 public class SchedulerConfig {
