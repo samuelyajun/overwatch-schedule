@@ -20,13 +20,13 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by hmccardell on 7/18/2016.
- * <p>
  * This daily job will run every day on a schedule designated in the SchedulerConfig.  In the alpha build,
  * schedules are checked to see if the current date falls on their frequency. If it does, occurrences will
  * be generated for each respondent on each schedule.  These occurrences are posted to the database, and
  * their ids are used to construct hyperlinks which are then packaged into a restful call to the notification
  * service, which generates an email to the respondent with their survey link.
+ *
+ * @author hmccardell
  */
 public class DailyJob extends SchedulerBaseJob implements Job {
 
@@ -146,5 +146,4 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 
     return processedSchedules;
   }
-
 }

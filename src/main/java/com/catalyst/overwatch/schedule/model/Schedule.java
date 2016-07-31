@@ -114,6 +114,20 @@ public class Schedule implements Serializable {
   }
 
   @Override
+  public String toString() {
+    return "Schedule{" +
+            "id=" + id +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", frequency=" + frequency +
+            ", templateUri='" + templateUri + '\'' +
+            ", templateName='" + templateName + '\'' +
+            ", respondents=" + respondents +
+            ", isActive=" + isActive +
+            '}';
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
