@@ -1,4 +1,4 @@
-INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-29', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, template_name, frequency, isActive) VALUES (null, '2016-07-30', '/surveys?suid=SKKE-2778954', 'EOD Survey', 'ONE_WEEK', 'true');
 --INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-09-01', '2016-07-28', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
 --INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-10-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'THREE_WEEKS', 'true');
 --INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2017-12-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
@@ -52,6 +52,7 @@ INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gma
 INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Hayes', 'McCardell II');
 
 INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
+INSERT INTO respondent (schedule_id, user_id) VALUES (1, 2);
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 1);
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 2);
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 3);

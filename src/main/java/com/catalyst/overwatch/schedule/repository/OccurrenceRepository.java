@@ -4,7 +4,7 @@ import com.catalyst.overwatch.schedule.model.Occurrence;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,7 +14,7 @@ public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {
 
   Occurrence findById(@Param(value = "id") long id);
 
-  List<Occurrence> findByGenerationDateAndIsComplete(@Param(value = "generationDate") LocalDateTime date,
+  List<Occurrence> findByGenerationDateAndIsComplete(@Param(value = "generationDate") LocalDate date,
                                                      @Param(value = "isComplete") boolean isComplete);
 
 }
