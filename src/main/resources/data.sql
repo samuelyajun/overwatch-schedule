@@ -1,4 +1,4 @@
-INSERT INTO schedule  (end_date, start_date, template_uri, template_name, frequency, isActive) VALUES (null, '2016-07-30', '/surveys?suid=SKKE-2778954', 'EOD Survey', 'ONE_WEEK', 'true');
+INSERT INTO schedule  (end_date, start_date, template_uri, template_name, frequency, isActive) VALUES (null, '2016-08-1', '/surveys?suid=SKKE-2778954', 'EOD Survey', 'ONE_WEEK', 'true');
 --INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-09-01', '2016-07-28', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
 --INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-10-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'THREE_WEEKS', 'true');
 --INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2017-12-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
@@ -79,10 +79,10 @@ INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VA
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 7);
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
 
---INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 3);
---INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 6);
---INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 7);
---INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 11);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 3);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 6);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 7);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 11);
 --
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 3);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 6);

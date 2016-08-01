@@ -23,7 +23,7 @@ public interface ScheduleDetailsProjection {
 
     Frequency getFrequency();
 
-    String getInterval();
+    String getTemplateUri();
 
     Set<RespondentDetailsProjection> getRespondents();
 }
