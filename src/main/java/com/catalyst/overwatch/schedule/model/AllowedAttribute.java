@@ -15,7 +15,7 @@ public class AllowedAttribute implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   @OrderColumn
   private AttributeType attributeType;
 
@@ -66,12 +66,5 @@ public class AllowedAttribute implements Serializable {
     if (!attributeType.equals(that.attributeType)) return false;
     return attributeValue.equals(that.attributeValue);
 
-  }
-
-  @Override
-  public int hashCode() {
-    int result = attributeType.hashCode();
-    result = 31 * result + attributeValue.hashCode();
-    return result;
   }
 }

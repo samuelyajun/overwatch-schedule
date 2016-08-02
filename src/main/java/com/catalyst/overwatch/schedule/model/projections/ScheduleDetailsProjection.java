@@ -23,7 +23,5 @@ public interface ScheduleDetailsProjection {
 
     Frequency getFrequency();
 
-    String getInterval();
-
     Set<RespondentDetailsProjection> getRespondents();
 }
