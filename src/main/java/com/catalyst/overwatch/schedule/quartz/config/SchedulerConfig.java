@@ -126,7 +126,7 @@ public class SchedulerConfig {
   public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail) {
     String beanName = "Daily Process";
     String group = "Daily";
-    String cronExpression = "0/20 * * * * ?";
+    String cronExpression = "0 0 5 1/1 * ? *";  //8:00 AM EST, every day
     return createTrigger(jobDetail, beanName, group, cronExpression);
   }
 
@@ -134,7 +134,7 @@ public class SchedulerConfig {
   public CronTriggerFactoryBean nagsJobTrigger(@Qualifier("nagsJobDetail") JobDetail jobDetail) {
     String beanName = "Nags Process";
     String group = "Nags";
-    String cronExpression = "0/20 * * * * ?";
+    String cronExpression = "0 30 13 1/1 * ? *";  //4:30 PM EST, every day
     return createTrigger(jobDetail, beanName, group, cronExpression);
   }
 
