@@ -1,5 +1,7 @@
 package com.catalyst.overwatch.schedule.configuration;
 
+import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.Respondent;
 import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.model.User;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,8 @@ public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
   public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
     config.exposeIdsFor(Schedule.class);
     config.exposeIdsFor(User.class);
+    config.exposeIdsFor(Respondent.class);
+    config.exposeIdsFor(Occurrence.class);
   }
 }
 
