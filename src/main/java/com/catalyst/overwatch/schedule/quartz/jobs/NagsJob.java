@@ -60,7 +60,7 @@ public class NagsJob extends SchedulerBaseJob implements Job {
    *
    * @param occurrence
    */
-  void nagConstructor(Occurrence occurrence) {
+  void nagConstructor(final Occurrence occurrence) {
 
     Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
     String templateName = schedule.getTemplateName();

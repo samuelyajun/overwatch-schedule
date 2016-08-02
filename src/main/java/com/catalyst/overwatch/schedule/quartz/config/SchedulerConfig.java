@@ -119,7 +119,7 @@ public class SchedulerConfig {
   }
 
   @Bean(name = "dailyJobTrigger")
-  static public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail) {
+  public static CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail) {
     String beanName = "Daily Process";
     String group = "Daily";
     String cronExpression = "0/10 * * * * ?";
@@ -127,7 +127,7 @@ public class SchedulerConfig {
   }
 
   @Bean
-  static public JobDetailFactoryBean dailyJobDetail() {
+  public static JobDetailFactoryBean dailyJobDetail() {
     return SchedulerConfig.createJobDetail(DailyJob.class);
   }
 

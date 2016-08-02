@@ -23,7 +23,7 @@ public abstract class SchedulerBaseJob {
    * @param originatorId the occurrence id to include in the link
    * @return a valid link to a survey for a specific user's occurrence
    */
-  protected String buildSurveyLink(String surveySuid, long originatorId) {
+  protected String buildSurveyLink(final String surveySuid, final long originatorId) {
 
     StringBuilder completedLink = new StringBuilder();
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
@@ -45,7 +45,8 @@ public abstract class SchedulerBaseJob {
    * @param subject        the subject of the email to send.
    * @param errorReference the name of the calling job for error reference.
    */
-  public void generateNotification(String emailAddress, String body, String subject, String errorReference) {
+  public void generateNotification(final String emailAddress, final String body, final String subject,
+                                   final String errorReference) {
 
     String[] recipientAddress = new String[]{emailAddress};
     Notification notification = new Notification(recipientAddress, subject, body);
