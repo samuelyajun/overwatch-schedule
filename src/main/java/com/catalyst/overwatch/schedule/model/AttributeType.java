@@ -52,9 +52,9 @@ public class AttributeType implements Serializable {
     return name.equals(that.name);
 
   }
-
-  @Override
-  public int hashCode() {
-    return name.hashCode();
-  }
+//
+//  @Override
+//  public int hashCode() {
+//    return name.hashCode();
+//  }
 }
