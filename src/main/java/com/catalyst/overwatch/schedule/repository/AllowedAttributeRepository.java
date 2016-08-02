@@ -6,7 +6,9 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 
 /**
- * Created by hmccardell on 8/2/2016.
+ * Exposes a basic RESTFUL endpoint for AllowedAttributes.
+ *
+ * @author hmccardell
  */
 @Repository
 public interface AllowedAttributeRepository  extends JpaRepository<AllowedAttribute, Long> {

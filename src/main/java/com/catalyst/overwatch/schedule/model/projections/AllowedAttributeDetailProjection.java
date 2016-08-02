@@ -5,7 +5,10 @@ import com.catalyst.overwatch.schedule.model.AttributeType;
 import org.springframework.data.rest.core.config.Projection;
 
 /**
- * Created by hmccardell on 8/2/2016.
+ * This projection provides details on attributes, and is used to fill in details needed for front
+ * end consumption that aren't exposed on a normal "GET" request to the repository.
+ *
+ * @author hmccardell
  */
 @Projection(name = "allowedAttributeDetails", types = {AllowedAttribute.class})
 public interface AllowedAttributeDetailProjection {
