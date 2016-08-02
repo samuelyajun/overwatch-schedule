@@ -22,13 +22,14 @@ INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Dev
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (2, 'Beaverton');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (2, 'Baltimore');
 
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Choice');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Cambia');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Nike');
+--INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Choice');
+--INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Cambia');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Catalyst Devworks');
 
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'PMSI');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Vacation Rentals');
-INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'DB1');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Overwatch');
+--INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'PMSI');
+--INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Vacation Rentals');
+--INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'DB1');
 
 INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Abby', 'Edwards');
 INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Shivi', 'Annamalai');
