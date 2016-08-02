@@ -67,10 +67,4 @@ public class Respondent implements Serializable {
 
   }
 
-//  @Override
-//  public int hashCode() {
-//    int result = allowedAttributes.hashCode();
-//    result = 31 * result + user.hashCode();
-//    return result;
-//  }
 }

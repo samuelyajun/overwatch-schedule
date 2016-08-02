@@ -89,11 +89,4 @@ public class Occurrence implements Serializable {
 
   }
 
-  @Override
-  public int hashCode() {
-    int result = respondent.hashCode();
-    result = 31 * result + generationDate.hashCode();
-    result = 31 * result + (isComplete ? 1 : 0);
-    return result;
-  }
 }
