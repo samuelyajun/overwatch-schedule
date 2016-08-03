@@ -23,7 +23,7 @@ import java.util.Properties;
 /**
  * This class contains majority of the Schedule service's Quartz configuration.  Job details,
  * triggers and factory beans are described below.
- *
+ * 
  * See the quartz.jobs package for the actual tasks each job will execute.
  *
  * @author hmccardell
@@ -66,7 +66,7 @@ public class SchedulerConfig {
    * @param jobClass implementation class of the job.
    * @return a job detail factory bean with a set job class and durability.
    */
-  private static JobDetailFactoryBean createJobDetail(Class jobClass) {
+  public static JobDetailFactoryBean createJobDetail(Class jobClass) {
     JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
     factoryBean.setJobClass(jobClass);
     factoryBean.setDurability(true);
@@ -84,7 +84,7 @@ public class SchedulerConfig {
    * @param cronExpression The cron expression that determines when this job will be executed.
    * @return a cron trigger factory bean set with all the details of the job.
    */
-  private static CronTriggerFactoryBean createTrigger(JobDetail jobDetail, String beanName, String group, String cronExpression) {
+  public static CronTriggerFactoryBean createTrigger(JobDetail jobDetail, String beanName, String group, String cronExpression) {
     CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
     factoryBean.setBeanName(beanName);
     factoryBean.setGroup(group);
@@ -117,10 +117,6 @@ public class SchedulerConfig {
 
     return factory;
   }
-
-  /**
-   * CRON JOB TRIGGERS AND DETAILS BELOW HERE
-   */
 
   @Bean(name = "dailyJobTrigger")
   public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail) {

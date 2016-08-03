@@ -22,34 +22,34 @@ INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (1, 'Dev
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (2, 'Beaverton');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (2, 'Baltimore');
 
---INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Choice');
---INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Cambia');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Choice');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Cambia');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (3, 'Catalyst Devworks');
 
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Overwatch');
---INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'PMSI');
---INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Vacation Rentals');
---INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'DB1');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'PMSI');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Vacation Rentals');
+INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'DB1');
 
 INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Abby', 'Edwards');
 INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Shivi', 'Annamalai');
 INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Josh', 'Jacobson');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Michael', 'Derfler');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Pros', 'Seng');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Andrew', 'Rajigah');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Alex', 'Moss');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Katy', 'LaFrance');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Jimmy', 'Blair');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Brad', 'Larsen');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Jordan', 'Barroga');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Brett', 'Futral');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Travis', 'Hoffman');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Peter', 'Por');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Steve', 'Smith');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Adam', 'Fields');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Ken', 'Coomes');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Kate', 'Slott');
---INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Brenton', 'Pyl');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Michael', 'Derfler');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Pros', 'Seng');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Andrew', 'Rajigah');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Alex', 'Moss');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Katy', 'LaFrance');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Jimmy', 'Blair');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Brad', 'Larsen');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Jordan', 'Barroga');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Brett', 'Futral');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Travis', 'Hoffman');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Peter', 'Por');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Steve', 'Smith');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Adam', 'Fields');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Ken', 'Coomes');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Kate', 'Slott');
+INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Brenton', 'Pyl');
 INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gmail.com', 'Hayes', 'McCardell II');
 
 --INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);

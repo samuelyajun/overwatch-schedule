@@ -16,8 +16,6 @@ public class Notification {
   public Notification() {
   }
 
-  ;
-
   public Notification(String[] recipientAddresses, String subject, String body) {
     this.recipientAddresses = recipientAddresses;
     this.subject = subject;

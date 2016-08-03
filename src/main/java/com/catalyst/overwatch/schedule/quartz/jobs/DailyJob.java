@@ -1,7 +1,6 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
-import com.catalyst.overwatch.schedule.model.Notification;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Respondent;
 import com.catalyst.overwatch.schedule.model.Schedule;
@@ -13,7 +12,6 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -22,15 +20,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by hmccardell on 7/18/2016.
- *
  * This daily job will run every day on a schedule designated in the SchedulerConfig.  In the alpha build,
  * schedules are checked to see if the current date falls on their frequency. If it does, occurrences will
  * be generated for each respondent on each schedule.  These occurrences are posted to the database, and
  * their ids are used to construct hyperlinks which are then packaged into a restful call to the notification
  * service, which generates an email to the respondent with their survey link.
+ *
+ * @author hmccardell
  */
-public class DailyJob implements Job {
+public class DailyJob extends SchedulerBaseJob implements Job {
 
   @Autowired
   private ScheduleRepository scheduleRepository;
@@ -38,7 +36,6 @@ public class DailyJob implements Job {
   @Autowired
   private OccurrenceRepository occurrenceRepository;
 
-  RestTemplate restTemplate = new RestTemplate();
   Logger logger = LogManager.getRootLogger();
 
   /**
@@ -52,9 +49,9 @@ public class DailyJob implements Job {
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
 
-        List<Schedule> cleanedSchedules = new ArrayList<>();
-        cleanedSchedules.addAll(getSchedulesFromRepositoryAndProcess());
-        generateOccurrencesForToday(cleanedSchedules);
+    List<Schedule> cleanedSchedules = new ArrayList<>();
+    cleanedSchedules.addAll(getSchedulesFromRepositoryAndProcess());
+    generateOccurrencesForToday(cleanedSchedules);
 
   }
 
@@ -68,13 +65,17 @@ public class DailyJob implements Job {
   protected void generateOccurrencesForToday(List<Schedule> scheduleList) {
 
     String surveyLinkForThisRespondent;
+    String subject = NotificationConstants.SURVEY_WAITING_SUBJECT;
+    StringBuilder body = new StringBuilder();
+    body.append(NotificationConstants.SURVEY_WAITING_BODY + "\n\n");
 
     for (Schedule schedule : scheduleList) {
       for (Respondent respondent : schedule.getRespondents()) {
         Occurrence occurrenceToPost = new Occurrence(respondent);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
-        surveyLinkForThisRespondent = buildSurveyLink(schedule.getTemplateURI(), postedOccurrence.getId());
-        generateNotification(respondent.getUser().getEmail(), surveyLinkForThisRespondent);
+        surveyLinkForThisRespondent = buildSurveyLink(schedule.getTemplateUri(), postedOccurrence.getId());
+        body.append("Link to survey: " + surveyLinkForThisRespondent);
+        generateNotification(respondent.getUser().getEmail(), body.toString(), subject, "Daily Job");
         logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
         logger.info(respondent.getUser());
       }
@@ -105,6 +106,7 @@ public class DailyJob implements Job {
     if (schedule.getFrequency().getValue() == 0) {
       isOnFrequency = true;
       logger.info("The start date is today's date, so today is on that schedule's frequency.");
+      logger.info(schedule);
     } else if (daysBetween % weeksValueOfFrequency == 0) {
       isOnFrequency = true;
       logger.info("Today's date lands on the schedule frequency." + schedule.getStartDate() + " " + schedule.getFrequency());
@@ -144,54 +146,4 @@ public class DailyJob implements Job {
 
     return processedSchedules;
   }
-
-  /**
-   * Utilizes a surveySuid and an occurrence id to build a functional http link to a survey.
-   *
-   * @param surveySuid   the id of the survey to build into the link
-   * @param originatorId the occurrence id to include in the link
-   * @return a valid link to a survey for a specific user's occurrence
-   */
-  protected String buildSurveyLink(String surveySuid, long originatorId) {
-
-    String base = NotificationConstants.FRONT_END_BASE_URL;
-    String surveysOriginatorParam = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
-
-    String link = base + surveySuid;
-    link += "&?";
-    link += surveysOriginatorParam + originatorId;
-
-    logger.info("build survey link: " + link);
-
-    return link;
-  }
-
-  /**
-   * Makes a restful call to the notifications service to generate an email to a user. This email will include
-   * a clickable hyperlink that will take them to a survey they can fill out and submit.
-   *
-   * @param emailAddress the recipient's email address
-   * @param surveyLink   a survey link that includes their surveySuid and their occurrence id.
-   */
-  public void generateNotification(String emailAddress, String surveyLink) {
-
-    String subject = NotificationConstants.SURVEY_WAITING_SUBJECT;
-    String body = NotificationConstants.SURVEY_WAITING_BODY;
-    body += "\n";
-    body += "\n";
-    body += "Link to survey: " + surveyLink;
-
-    logger.info("INSIDE NOTIFICATIONS: " + emailAddress);
-
-    String[] recipientAddress = new String[]{emailAddress};
-    Notification notification = new Notification(recipientAddress, subject, body);
-
-        try {
-            restTemplate.postForEntity(NotificationConstants.NOTIFICATION_ENDPOINT, notification, Notification.class);
-            logger.info("Generated email from rest template");
-        } catch (Exception e) {
-            logger.error("Quartz DailyJob Error:  exception occurred while calling Notification service", e);
-        }
-
-    }
 }
