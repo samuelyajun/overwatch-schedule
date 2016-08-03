@@ -16,7 +16,7 @@ public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {
 
   Occurrence findById(@Param(value = "id") long id);
 
-  List<Occurrence> findByGenerationDateAndIsComplete(@Param(value = "generationDate") LocalDate date,
+  List<Occurrence> findByGenerationDateLessThanEqualAndIsComplete(@Param(value = "generationDate") LocalDate date,
                                                      @Param(value = "isComplete") boolean isComplete);
 
 }
