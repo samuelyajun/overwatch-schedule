@@ -4,7 +4,7 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Audited
@@ -20,7 +20,7 @@ public class Occurrence implements Serializable {
   private Respondent respondent;
 
   @Column
-  private LocalDateTime generationDate;
+  private LocalDate generationDate;
 
   @Column(name = "is_complete")
   private boolean isComplete;
@@ -31,7 +31,7 @@ public class Occurrence implements Serializable {
   public Occurrence(Respondent respondent) {
     isComplete = false;
     this.respondent = respondent;
-    this.generationDate = LocalDateTime.now();
+    this.generationDate = LocalDate.now();
   }
 
   public long getId() {
@@ -50,11 +50,11 @@ public class Occurrence implements Serializable {
     this.respondent = respondent;
   }
 
-  public LocalDateTime getGenerationDate() {
+  public LocalDate getGenerationDate() {
     return generationDate;
   }
 
-  public void setGenerationDate(LocalDateTime generationDate) {
+  public void setGenerationDate(LocalDate generationDate) {
     this.generationDate = generationDate;
   }
 
@@ -89,11 +89,4 @@ public class Occurrence implements Serializable {
 
   }
 
-  @Override
-  public int hashCode() {
-    int result = respondent.hashCode();
-    result = 31 * result + generationDate.hashCode();
-    result = 31 * result + (isComplete ? 1 : 0);
-    return result;
-  }
 }

@@ -38,12 +38,13 @@ public class Schedule implements Serializable {
   @Enumerated(EnumType.STRING)
   private Frequency frequency;
 
-  private String interval;
-
   @Column(name = "template_uri")
-  private String templateuri;
+  private String templateUri;
 
-  @OneToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+  @Column(name = "template_name")
+  private String templateName;
+
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   @JoinColumn(name = "schedule_id")
   private Set<Respondent> respondents;
 
@@ -84,22 +85,6 @@ public class Schedule implements Serializable {
     this.frequency = frequency;
   }
 
-  public String getInterval() {
-    return interval;
-  }
-
-  public void setInterval(String interval) {
-    this.interval = interval;
-  }
-
-  public String getTemplateURI() {
-    return templateuri;
-  }
-
-  public void setTemplateURI(String templateURI) {
-    this.templateuri = templateURI;
-  }
-
   public Set<Respondent> getRespondents() {
     return respondents;
   }
@@ -116,6 +101,18 @@ public class Schedule implements Serializable {
     isActive = active;
   }
 
+  public String getTemplateUri() {
+    return templateUri;
+  }
+
+  public void setTemplateUri(String templateuri) {
+    this.templateUri = templateUri;
+  }
+
+  public String getTemplateName() {
+    return templateName;
+  }
+
   @Override
   public String toString() {
     return "Schedule{" +
@@ -123,8 +120,8 @@ public class Schedule implements Serializable {
             ", startDate=" + startDate +
             ", endDate=" + endDate +
             ", frequency=" + frequency +
-            ", interval='" + interval + '\'' +
-            ", templateURI=" + templateuri +
+            ", templateUri='" + templateUri + '\'' +
+            ", templateName='" + templateName + '\'' +
             ", respondents=" + respondents +
             ", isActive=" + isActive +
             '}';
@@ -140,22 +137,11 @@ public class Schedule implements Serializable {
     if (!startDate.equals(schedule.startDate)) return false;
     if (endDate != null ? !endDate.equals(schedule.endDate) : schedule.endDate != null) return false;
     if (frequency != schedule.frequency) return false;
-    if (!interval.equals(schedule.interval)) return false;
-    if (!templateuri.equals(schedule.templateuri)) return false;
+    if (!templateUri.equals(schedule.templateUri)) return false;
+    if (!templateName.equals(schedule.templateName)) return false;
     if (!respondents.equals(schedule.respondents)) return false;
     return isActive.equals(schedule.isActive);
 
   }
 
-  @Override
-  public int hashCode() {
-    int result = startDate.hashCode();
-    result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-    result = 31 * result + frequency.hashCode();
-    result = 31 * result + interval.hashCode();
-    result = 31 * result + templateuri.hashCode();
-    result = 31 * result + respondents.hashCode();
-    result = 31 * result + isActive.hashCode();
-    return result;
-  }
 }

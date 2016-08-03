@@ -1,12 +1,11 @@
 package com.catalyst.overwatch.schedule.model.projections;
 
-import com.catalyst.overwatch.schedule.model.*;
+import com.catalyst.overwatch.schedule.model.Frequency;
+import com.catalyst.overwatch.schedule.model.Schedule;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.springframework.data.rest.core.config.Projection;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -23,7 +22,7 @@ public interface ScheduleDetailsProjection {
 
     Frequency getFrequency();
 
-    String getInterval();
+    String getTemplateUri();
 
     Set<RespondentDetailsProjection> getRespondents();
 }
