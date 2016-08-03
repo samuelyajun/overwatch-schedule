@@ -15,8 +15,8 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-  public List<Schedule> findAllByStartDate(LocalDate startDate);
+  List<Schedule> findAllByStartDate(LocalDate startDate);
 
-  public Schedule findByRespondentsId(@Param(value = "respondent_id") long id);
+  Schedule findByRespondentsId(@Param(value = "respondent_id") long id);
 
 }

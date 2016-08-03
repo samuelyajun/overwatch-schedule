@@ -16,10 +16,10 @@ public class Respondent implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private Set<AllowedAttribute> allowedAttributes;
 
-  @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private User user;
 
   public long getId() {
@@ -67,10 +67,4 @@ public class Respondent implements Serializable {
 
   }
 
-  @Override
-  public int hashCode() {
-    int result = allowedAttributes.hashCode();
-    result = 31 * result + user.hashCode();
-    return result;
-  }
 }

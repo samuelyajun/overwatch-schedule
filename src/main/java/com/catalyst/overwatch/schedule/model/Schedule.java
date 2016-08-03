@@ -44,7 +44,7 @@ public class Schedule implements Serializable {
   @Column(name = "template_name")
   private String templateName;
 
-  @OneToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   @JoinColumn(name = "schedule_id")
   private Set<Respondent> respondents;
 
@@ -144,19 +144,4 @@ public class Schedule implements Serializable {
 
   }
 
-  @Override
-  public int hashCode() {
-    int result = startDate.hashCode();
-    result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-    result = 31 * result + frequency.hashCode();
-    result = 31 * result + templateUri.hashCode();
-    result = 31 * result + templateName.hashCode();
-    result = 31 * result + respondents.hashCode();
-    result = 31 * result + isActive.hashCode();
-    return result;
-  }
-
-  public void setTemplateName(String templateName) {
-    this.templateName = templateName;
-  }
 }
