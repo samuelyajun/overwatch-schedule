@@ -74,7 +74,7 @@ INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gma
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 19);
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 20);
 
---INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 1);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 1);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 5);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 7);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
@@ -173,3 +173,5 @@ INSERT INTO users (email, first_name, last_name) VALUES ('overwatchtestemail@gma
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 6);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 7);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 11);
+
+INSERT INTO occurrence (generationdate, is_complete, respondent_id) VALUES ('2016-08-04', true, 1);
