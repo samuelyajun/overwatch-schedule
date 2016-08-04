@@ -1,6 +1,7 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.model.Notification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +29,7 @@ public abstract class SchedulerBaseJob {
     StringBuilder completedLink = new StringBuilder();
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
 
-    completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
+    completedLink.append(Urls.getInstance().getFrontEndBaseUrl());
     completedLink.append(surveySuid + "&?" + originator + originatorId);
 
     logger.info("build survey link: " + completedLink.toString());
@@ -52,7 +53,7 @@ public abstract class SchedulerBaseJob {
     Notification notification = new Notification(recipientAddress, subject, body);
 
     try {
-      restTemplate.postForEntity(NotificationConstants.NOTIFICATION_ENDPOINT, notification, Notification.class);
+      restTemplate.postForEntity(Urls.getInstance().getNotificationEndpoint(), notification, Notification.class);
       logger.info("Generated email from rest template");
     } catch (Exception e) {
       logger.error("Quartz " + errorReference + " Error:  exception occurred while calling Notification service", e);
