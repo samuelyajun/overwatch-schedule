@@ -122,7 +122,7 @@ public class SchedulerConfig {
   public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail) {
     String beanName = "Daily Process";
     String group = "Daily";
-    String cronExpression = "0 0 5 1/1 * ? *";  //8:00 AM EST, every day
+    String cronExpression = "0/20 * * * * ? *";  //8:00 AM EST, every day
     return createTrigger(jobDetail, beanName, group, cronExpression);
   }
 

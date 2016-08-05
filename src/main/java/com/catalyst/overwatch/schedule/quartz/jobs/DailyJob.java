@@ -49,8 +49,10 @@ public class DailyJob extends SchedulerBaseJob implements Job {
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
 
+    logger.info("Daily Job Start");
     List<Schedule> cleanedSchedules = new ArrayList<>();
     cleanedSchedules.addAll(getSchedulesFromRepositoryAndProcess());
+    logger.info("cleaned schedules" + cleanedSchedules);
     generateOccurrencesForToday(cleanedSchedules);
 
   }
