@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.google.common.base.Objects;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -48,7 +49,7 @@ public class Schedule implements Serializable {
   @JoinColumn(name = "schedule_id")
   private Set<Respondent> respondents;
 
-  private Boolean isActive;
+  private boolean isActive;
 
   public Schedule() {
   }
@@ -93,19 +94,19 @@ public class Schedule implements Serializable {
     this.respondents = respondents;
   }
 
-  public Boolean getActive() {
+  public boolean getIsActive() {
     return isActive;
   }
 
-  public void setActive(Boolean active) {
-    isActive = active;
+  public void setIsActive(boolean isActive) {
+    this.isActive = isActive;
   }
 
   public String getTemplateUri() {
     return templateUri;
   }
 
-  public void setTemplateUri(String templateuri) {
+  public void setTemplateUri(String templateUri) {
     this.templateUri = templateUri;
   }
 
@@ -131,17 +132,14 @@ public class Schedule implements Serializable {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
     Schedule schedule = (Schedule) o;
-
-    if (!startDate.equals(schedule.startDate)) return false;
-    if (endDate != null ? !endDate.equals(schedule.endDate) : schedule.endDate != null) return false;
-    if (frequency != schedule.frequency) return false;
-    if (!templateUri.equals(schedule.templateUri)) return false;
-    if (!templateName.equals(schedule.templateName)) return false;
-    if (!respondents.equals(schedule.respondents)) return false;
-    return isActive.equals(schedule.isActive);
-
+    return isActive == schedule.isActive &&
+            Objects.equal(startDate, schedule.startDate) &&
+            Objects.equal(endDate, schedule.endDate) &&
+            frequency == schedule.frequency &&
+            Objects.equal(templateUri, schedule.templateUri) &&
+            Objects.equal(templateName, schedule.templateName) &&
+            Objects.equal(respondents, schedule.respondents);
   }
 
 }
