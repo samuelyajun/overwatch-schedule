@@ -2,8 +2,12 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.model.Notification;
+import com.catalyst.overwatch.schedule.model.external.SurveyLink;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -36,6 +40,7 @@ public abstract class SchedulerBaseJob {
     return completedLink.toString();
   }
 
+
   /**
    * Makes a restful call to the notifications service to generate an email to a user. This email will include
    * a clickable hyperlink in the body that will take them to a survey they can fill out and submit.
@@ -60,4 +65,37 @@ public abstract class SchedulerBaseJob {
 
   }
 
+  /**
+   * Utilizes a surveySuid and an occurrence id to build a functional http link to a survey.
+   *
+   * @param templateLink the relative link of a template on the survey service.
+   * @param surveyName the name of the survey from the survey service.
+   * @param originatorId the occurrence id to include in the link, linking the user to their response data.
+   *
+   * @return a valid link to a survey for a specific user's occurrence.
+   */
+  public String buildSurveyLink(final String templateLink, final String surveyName){
+
+    String surveyUrlToPost = NotificationConstants.SURVEY_ENDPOINT;
+
+    StringBuilder completedLink = new StringBuilder();
+    completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
+    SurveyLink surveyLink = new SurveyLink(surveyName, templateLink);
+    try {
+      SurveyLink returnedSurveyLink = restTemplate.postForEntity(surveyUrlToPost, surveyLink, SurveyLink.class).getBody();
+      completedLink.append(returnedSurveyLink.getSurveyDisplayLink());
+      logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
+    }catch (Exception e){
+      logger.error("Quartz Job buildCompletedLink, exception occurred while contacting the Survey Service", e);
+    }
+
+    return completedLink.toString();
+  }
+
+  public String addOriginatorIdToLink(StringBuilder link, final long originatorId){
+    String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
+    link.append("&?" + originator + originatorId);
+
+    return link.toString();
+  }
 }
