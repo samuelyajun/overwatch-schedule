@@ -1,13 +1,4 @@
 INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-08-08', 'Sprint Checkup', '/templates/1', 'ONE_WEEK', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-09-01', '2016-07-28', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2016-10-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'THREE_WEEKS', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2017-12-31', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES ('2015-01-01', '2016-07-27', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'false');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-06', '/surveys?suid=SKKE-2778954', 'THREE_WEEKS', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-13', '/surveys?suid=SKKE-2778954', 'TWO_WEEKS', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2016-07-20', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '/surveys?suid=SKKE-2778954', 'ONE_WEEK', 'true');
---INSERT INTO schedule  (end_date, start_date, template_uri, frequency, isActive) VALUES (null, '2017-07-27', '/surveys?suid=SKKE-2778954', 'ONE_TIME', 'true');
 
 INSERT INTO attributetype (name) VALUES ('ROLE');
 INSERT INTO attributetype (name) VALUES ('OFFICE');
@@ -33,52 +24,47 @@ INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Ove
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Mobile');
 
 INSERT INTO users (email, first_name, last_name) VALUES ('hmccardell@catalystdevworks.com','Hayes ','McCardell II');
-
-
---Cockram
---INSERT INTO users (email, first_name, last_name) VALUES ('bpyl@catalystdevworks.com','Brenton','Pyl');
---INSERT INTO users (email, first_name, last_name) VALUES ('elandes@catalystdevworks.com','Eric','Landes');
---INSERT INTO users (email, first_name, last_name) VALUES ('tbenz@catalystdevworks.com','Theresa','Benz');
---INSERT INTO users (email, first_name, last_name) VALUES ('sbyington@catalystdevworks.com','Steven','Byington');
---INSERT INTO users (email, first_name, last_name) VALUES ('sannamalai@catalystdevworks.com','Sivagami','Annamalai');
---INSERT INTO users (email, first_name, last_name) VALUES ('smoss@catalystdevworks.com','Steven','Moss');
---INSERT INTO users (email, first_name, last_name) VALUES ('nduncan@catalystdevworks.com','Nick','Duncan');
---INSERT INTO users (email, first_name, last_name) VALUES ('philario@catalystdevworks.com','Paolo','Hilario');
---INSERT INTO users (email, first_name, last_name) VALUES ('slandesberg@catalystdevworks.com','Sam','Landesberg');
---INSERT INTO users (email, first_name, last_name) VALUES ('gfisher@catalystdevworks.com','Greg','Fisher');
---INSERT INTO users (email, first_name, last_name) VALUES ('ddelaney@catalystdevworks.com','Derek','Delaney');
---INSERT INTO users (email, first_name, last_name) VALUES ('dgoldstein@catalystdevworks.com','Danny','Goldstein');
---INSERT INTO users (email, first_name, last_name) VALUES ('jjacobson@catalystdevworks.com','Josh','Jacobson');
---INSERT INTO users (email, first_name, last_name) VALUES ('dsloane@catalystdevworks.com','Dan','Sloane');
---INSERT INTO users (email, first_name, last_name) VALUES ('thoffman@catalystdevworks.com','Travis','Hoffman');
---INSERT INTO users (email, first_name, last_name) VALUES ('kslott@catalystdevworks.com','Kate','Slott');
---INSERT INTO users (email, first_name, last_name) VALUES ('afields@catalystdevworks.com','Adam','Fields');
---INSERT INTO users (email, first_name, last_name) VALUES ('kcoomes@catalystdevworks.com','Ken','Coomes');
---INSERT INTO users (email, first_name, last_name) VALUES ('pseng@catalystdevworks.com','Pros','Seng');
---INSERT INTO users (email, first_name, last_name) VALUES ('aedwards@catalystdevworks.com','Abby','Edwards');
---INSERT INTO users (email, first_name, last_name) VALUES ('bfutral@catalystdevworks.com','Brett','Futral');
---INSERT INTO users (email, first_name, last_name) VALUES ('blarsen@catalystdevworks.com','Brad','Larsen');
---INSERT INTO users (email, first_name, last_name) VALUES ('jbarroga@catalystdevworks.com','Jordan','Barroga');
---INSERT INTO users (email, first_name, last_name) VALUES ('jblair@catalystdevworks.com','James','Blair');
---INSERT INTO users (email, first_name, last_name) VALUES ('klafrance@catalystdevworks.com','Katy','LaFrance');
---INSERT INTO users (email, first_name, last_name) VALUES ('amoss@catalystdevworks.com','Alexandra','Moss');
---INSERT INTO users (email, first_name, last_name) VALUES ('arajigah@catalystdevworks.com','Andrew','Rajigah');
---INSERT INTO users (email, first_name, last_name) VALUES ('hmccardell@catalystdevworks.com','Hayes ','McCardell II');
---INSERT INTO users (email, first_name, last_name) VALUES ('mderfler@catalystdevworks.com','Michael','Derfler');
---INSERT INTO users (email, first_name, last_name) VALUES ('ppor@catalystdevworks.com','Peter','Por');
---INSERT INTO users (email, first_name, last_name) VALUES ('ssmith@catalystdevworks.com','Steve','Smith');
---INSERT INTO users (email, first_name, last_name) VALUES ('gstringfellow@catalystdevworks.com','Gavin','Stringfellow');
---INSERT INTO users (email, first_name, last_name) VALUES ('agraham@catalystdevworks.com','Andrew','Graham');
---INSERT INTO users (email, first_name, last_name) VALUES ('ejornales@catalystdevworks.com','Earl','Jornales');
---INSERT INTO users (email, first_name, last_name) VALUES ('cfernandez@catalystdevworks.com','CJ','Fernandez');
---INSERT INTO users (email, first_name, last_name) VALUES ('tgrimes@catalystdevworks.com','Tyler','Grimes');
---INSERT INTO users (email, first_name, last_name) VALUES ('jdouma@catalystdevworks.com','Justin','Douma');
---INSERT INTO users (email, first_name, last_name) VALUES ('jvanblokland@catalystdevworks.com','Jacques ','Van Blokland');
---INSERT INTO users (email, first_name, last_name) VALUES ('showard@catalystdevworks.com','Skye','Howard');
+INSERT INTO users (email, first_name, last_name) VALUES ('bpyl@catalystdevworks.com','Brenton','Pyl');
+INSERT INTO users (email, first_name, last_name) VALUES ('elandes@catalystdevworks.com','Eric','Landes');
+INSERT INTO users (email, first_name, last_name) VALUES ('tbenz@catalystdevworks.com','Theresa','Benz');
+INSERT INTO users (email, first_name, last_name) VALUES ('sbyington@catalystdevworks.com','Steven','Byington');
+INSERT INTO users (email, first_name, last_name) VALUES ('sannamalai@catalystdevworks.com','Sivagami','Annamalai');
+INSERT INTO users (email, first_name, last_name) VALUES ('smoss@catalystdevworks.com','Steven','Moss');
+INSERT INTO users (email, first_name, last_name) VALUES ('nduncan@catalystdevworks.com','Nick','Duncan');
+INSERT INTO users (email, first_name, last_name) VALUES ('philario@catalystdevworks.com','Paolo','Hilario');
+INSERT INTO users (email, first_name, last_name) VALUES ('slandesberg@catalystdevworks.com','Sam','Landesberg');
+INSERT INTO users (email, first_name, last_name) VALUES ('gfisher@catalystdevworks.com','Greg','Fisher');
+INSERT INTO users (email, first_name, last_name) VALUES ('ddelaney@catalystdevworks.com','Derek','Delaney');
+INSERT INTO users (email, first_name, last_name) VALUES ('dgoldstein@catalystdevworks.com','Danny','Goldstein');
+INSERT INTO users (email, first_name, last_name) VALUES ('jjacobson@catalystdevworks.com','Josh','Jacobson');
+INSERT INTO users (email, first_name, last_name) VALUES ('dsloane@catalystdevworks.com','Dan','Sloane');
+INSERT INTO users (email, first_name, last_name) VALUES ('thoffman@catalystdevworks.com','Travis','Hoffman');
+INSERT INTO users (email, first_name, last_name) VALUES ('kslott@catalystdevworks.com','Kate','Slott');
+INSERT INTO users (email, first_name, last_name) VALUES ('afields@catalystdevworks.com','Adam','Fields');
+INSERT INTO users (email, first_name, last_name) VALUES ('kcoomes@catalystdevworks.com','Ken','Coomes');
+INSERT INTO users (email, first_name, last_name) VALUES ('pseng@catalystdevworks.com','Pros','Seng');
+INSERT INTO users (email, first_name, last_name) VALUES ('aedwards@catalystdevworks.com','Abby','Edwards');
+INSERT INTO users (email, first_name, last_name) VALUES ('bfutral@catalystdevworks.com','Brett','Futral');
+INSERT INTO users (email, first_name, last_name) VALUES ('blarsen@catalystdevworks.com','Brad','Larsen');
+INSERT INTO users (email, first_name, last_name) VALUES ('jbarroga@catalystdevworks.com','Jordan','Barroga');
+INSERT INTO users (email, first_name, last_name) VALUES ('jblair@catalystdevworks.com','James','Blair');
+INSERT INTO users (email, first_name, last_name) VALUES ('klafrance@catalystdevworks.com','Katy','LaFrance');
+INSERT INTO users (email, first_name, last_name) VALUES ('amoss@catalystdevworks.com','Alexandra','Moss');
+INSERT INTO users (email, first_name, last_name) VALUES ('arajigah@catalystdevworks.com','Andrew','Rajigah');
+INSERT INTO users (email, first_name, last_name) VALUES ('hmccardell@catalystdevworks.com','Hayes ','McCardell II');
+INSERT INTO users (email, first_name, last_name) VALUES ('mderfler@catalystdevworks.com','Michael','Derfler');
+INSERT INTO users (email, first_name, last_name) VALUES ('ppor@catalystdevworks.com','Peter','Por');
+INSERT INTO users (email, first_name, last_name) VALUES ('ssmith@catalystdevworks.com','Steve','Smith');
+INSERT INTO users (email, first_name, last_name) VALUES ('gstringfellow@catalystdevworks.com','Gavin','Stringfellow');
+INSERT INTO users (email, first_name, last_name) VALUES ('agraham@catalystdevworks.com','Andrew','Graham');
+INSERT INTO users (email, first_name, last_name) VALUES ('ejornales@catalystdevworks.com','Earl','Jornales');
+INSERT INTO users (email, first_name, last_name) VALUES ('cfernandez@catalystdevworks.com','CJ','Fernandez');
+INSERT INTO users (email, first_name, last_name) VALUES ('tgrimes@catalystdevworks.com','Tyler','Grimes');
+INSERT INTO users (email, first_name, last_name) VALUES ('jdouma@catalystdevworks.com','Justin','Douma');
+INSERT INTO users (email, first_name, last_name) VALUES ('jvanblokland@catalystdevworks.com','Jacques ','Van Blokland');
+INSERT INTO users (email, first_name, last_name) VALUES ('showard@catalystdevworks.com','Skye','Howard');
 
 INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
-
-
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 1);
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 2);
 --INSERT INTO respondent (schedule_id, user_id) VALUES (2, 3);
@@ -199,3 +185,6 @@ INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VA
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 6);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 7);
 --INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 11);
+
+--INSERT INTO occurrence (generationdate, is_complete, respondent_id) VALUES ('2016-08-02', false, 1);
+--INSERT INTO occurrence (generationdate, is_complete, respondent_id) VALUES ('2016-08-03', false, 1);

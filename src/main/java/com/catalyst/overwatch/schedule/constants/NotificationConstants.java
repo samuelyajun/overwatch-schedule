@@ -1,5 +1,7 @@
 package com.catalyst.overwatch.schedule.constants;
 
+
+
 /**
  * Created by hmccardell on 7/20/2016.
  */
@@ -19,6 +21,4 @@ public class NotificationConstants {
   public static final String TATTLE_SUBJECT = "Incomplete surveys on your team";
   public static final String TATTLE_BODY_BEGIN = "We know your team is very busy and hard at work, but their feedback is important to us. Here is a list of your team members who have not yet responded to the";
   public static final String TATTLE_BODY_END = "Please see to it that all outstanding surveys are completed today.";
-
-
 }

@@ -1,10 +1,12 @@
 package com.catalyst.overwatch.schedule;
 
+import com.catalyst.overwatch.schedule.constants.Urls;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 
 /**
@@ -13,9 +15,11 @@ import java.text.SimpleDateFormat;
 @SpringBootApplication
 public class Application {
 
+
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
   }
+
 
   @Bean
   public Jackson2ObjectMapperBuilder jacksonBuilder() {

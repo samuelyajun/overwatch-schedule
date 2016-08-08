@@ -29,7 +29,7 @@ public class NagsJob extends SchedulerBaseJob implements Job {
   @Autowired
   private ScheduleRepository scheduleRepository;
 
-  Logger logger = LogManager.getLogger(NagsJob.class);
+  Logger logger = LogManager.getRootLogger();
 
   /**
    * The main function of the NagsJob, which executes the needed tasks.
@@ -46,7 +46,7 @@ public class NagsJob extends SchedulerBaseJob implements Job {
 
     LocalDate todaysDate = LocalDate.now();
 
-    occurrenceRepository.findByGenerationDateAndIsComplete(todaysDate, false)
+    occurrenceRepository.findByGenerationDateLessThanEqualAndIsComplete(todaysDate, false)
             .stream()
             .forEach(s -> {
               nagConstructor(s);
@@ -61,6 +61,7 @@ public class NagsJob extends SchedulerBaseJob implements Job {
    * @param occurrence
    */
   void nagConstructor(final Occurrence occurrence) {
+
 
     Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
     String templateName = schedule.getTemplateName();
