@@ -75,7 +75,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
     for (Schedule schedule : scheduleList) {
 
       StringBuilder surveyLinkForThisSchedule = new StringBuilder();
-      surveyLinkForThisSchedule.append(buildSurveyLink(schedule.getTemplateUri(), schedule.getTemplateName()));
+      surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri(), schedule.getTemplateName()));
 
       for (Respondent respondent : schedule.getRespondents()) {
         Occurrence occurrenceToPost = new Occurrence(respondent);

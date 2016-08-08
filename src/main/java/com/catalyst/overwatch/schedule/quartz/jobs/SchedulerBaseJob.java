@@ -70,19 +70,23 @@ public abstract class SchedulerBaseJob {
    *
    * @param templateLink the relative link of a template on the survey service.
    * @param surveyName the name of the survey from the survey service.
-   * @param originatorId the occurrence id to include in the link, linking the user to their response data.
    *
    * @return a valid link to a survey for a specific user's occurrence.
    */
-  public String buildSurveyLink(final String templateLink, final String surveyName){
+  public String newBuildSurveyLink(final String templateLink, final String surveyName){
 
     String surveyUrlToPost = NotificationConstants.SURVEY_ENDPOINT;
 
     StringBuilder completedLink = new StringBuilder();
     completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
-    SurveyLink surveyLink = new SurveyLink(surveyName, templateLink);
+    SurveyLink surveyLink = new SurveyLink(templateLink, surveyName);
+
+    logger.info("template: " + templateLink);
+    logger.info("name: " + surveyName);
+
     try {
       SurveyLink returnedSurveyLink = restTemplate.postForEntity(surveyUrlToPost, surveyLink, SurveyLink.class).getBody();
+      logger.info("post response: " + returnedSurveyLink);
       completedLink.append(returnedSurveyLink.getSurveyDisplayLink());
       logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
     }catch (Exception e){
