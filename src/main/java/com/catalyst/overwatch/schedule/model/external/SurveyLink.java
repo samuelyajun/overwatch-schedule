@@ -1,7 +1,11 @@
 package com.catalyst.overwatch.schedule.model.external;
 
+import com.google.common.base.Objects;
+
 /**
- * Created by hmccardell on 8/4/2016.
+ * This class is used to encapsulate data from the survey service.
+ *
+ * @author hmccardell
  */
 public class SurveyLink {
 
@@ -35,7 +39,8 @@ public class SurveyLink {
     this.surveyDisplayLink = surveyDisplayLink;
   }
 
-  public SurveyLink(){}
+  public SurveyLink() {
+  }
 
   public SurveyLink(String surveyName, String templateLink) {
     this.surveyName = surveyName;
@@ -50,4 +55,15 @@ public class SurveyLink {
             ", templateLink='" + templateLink + '\'' +
             '}';
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    SurveyLink that = (SurveyLink) o;
+    return Objects.equal(surveyDisplayLink, that.surveyDisplayLink) &&
+            Objects.equal(surveyName, that.surveyName) &&
+            Objects.equal(templateLink, that.templateLink);
+  }
+
 }

@@ -97,10 +97,19 @@ public abstract class SchedulerBaseJob {
     return completedLink.toString();
   }
 
+  /**
+   * Appends an originatorId (occurrence id) to a surveylink.
+   *
+   * @param link the link to add an originator to.
+   * @param originatorId the originatorId to add to the link.
+   *
+   * @return a link with an originatorId so that a user can click on it and have their answers recorded.
+   */
   public String addOriginatorIdToLink(StringBuilder link, final long originatorId){
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
     link.append("&?" + originator + originatorId);
 
     return link.toString();
   }
+
 }
