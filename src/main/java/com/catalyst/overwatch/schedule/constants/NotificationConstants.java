@@ -6,16 +6,14 @@ package com.catalyst.overwatch.schedule.constants;
 public class NotificationConstants {
 
   //FRONT END
-  public static final String FRONT_END_BASE_URL = "http://localhost:9000";
-
+  public static final String FRONT_END_BASE_URL = "http://localhost:3000";
+  public static final String SURVEY_ENDPOINT = "http://localhost:8070/surveys";
 
   //SURVEY RESPONSE SERVICE
   public static final String RESPONSE_BASE_URL = "http://localhost:8050";
-
   public static final String SURVEY_RESPONSE = "/surveyResponses";
   public static final String QUERY_BY_DATE = "/search/findSurveyResponseByDateAnswered?dateAnswered=";
   public static final String SEARCH_SURVEY_RESPONSE_BY_DATE = RESPONSE_BASE_URL + SURVEY_RESPONSE + QUERY_BY_DATE;
-
 
   //NOTIFICATIONS SERVICE
   public static final String NOTIFICATION_ENDPOINT = "http://localhost:8080/notify";
@@ -39,6 +37,5 @@ public class NotificationConstants {
   public static final String SURVEY_BODY_SPRINT_PLANNING = "How do you feel about your upcoming sprint? Please let us know how things are going by responding to the following survey.";
   public static final String SURVEY_BODY_SPRINT_PLANNING_LEADS = "We value your perspective as a leader. Once today’s sprint ceremonies are complete, please let us know how things are going by responding to the following survey.";
   public static final String SURVEY_BODY_QUANTITATIVE = "In order to assess project health, we need to gather key metrics from our teams. Please take a few moments today to provide the requested information about your most recent sprint.";
-
 
 }
