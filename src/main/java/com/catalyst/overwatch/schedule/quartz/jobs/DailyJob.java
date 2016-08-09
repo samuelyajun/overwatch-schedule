@@ -49,9 +49,12 @@ public class DailyJob extends SchedulerBaseJob implements Job {
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
 
+    logger.info("Daily Job Start");
     List<Schedule> cleanedSchedules = new ArrayList<>();
     cleanedSchedules.addAll(getSchedulesFromRepositoryAndProcess());
+    logger.info("cleaned schedules" + cleanedSchedules);
     generateOccurrencesForToday(cleanedSchedules);
+    logger.info("Daily Job End");
 
   }
 
@@ -70,10 +73,14 @@ public class DailyJob extends SchedulerBaseJob implements Job {
     body.append(NotificationConstants.SURVEY_WAITING_BODY + "\n\n");
 
     for (Schedule schedule : scheduleList) {
+
+      StringBuilder surveyLinkForThisSchedule = new StringBuilder();
+      surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri(), schedule.getTemplateName()));
+
       for (Respondent respondent : schedule.getRespondents()) {
         Occurrence occurrenceToPost = new Occurrence(respondent);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
-        surveyLinkForThisRespondent = buildSurveyLink(schedule.getTemplateUri(), postedOccurrence.getId());
+        surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
         body.append("Link to survey: " + surveyLinkForThisRespondent);
         generateNotification(respondent.getUser().getEmail(), body.toString(), subject, "Daily Job");
         logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
