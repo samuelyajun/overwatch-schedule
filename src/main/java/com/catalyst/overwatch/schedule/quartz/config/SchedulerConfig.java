@@ -122,7 +122,11 @@ public class SchedulerConfig {
   public CronTriggerFactoryBean dailyJobTrigger(@Qualifier("dailyJobDetail") JobDetail jobDetail) {
     String beanName = "Daily Process";
     String group = "Daily";
+<<<<<<< HEAD
     String cronExpression = "0/20 * * * * ? *";  //8:00 AM EST, every day
+=======
+    String cronExpression = SchedulerConstants.EIGHT_AM_EASTERN_EVERY_DAY;
+>>>>>>> bd9ba6c... made constants for the cron schedules
     return createTrigger(jobDetail, beanName, group, cronExpression);
   }
 
@@ -130,10 +134,26 @@ public class SchedulerConfig {
   public CronTriggerFactoryBean nagsJobTrigger(@Qualifier("nagsJobDetail") JobDetail jobDetail) {
     String beanName = "Nags Process";
     String group = "Nags";
-    String cronExpression = "0 30 13 1/1 * ? *";  //4:30 PM EST, every day
+    String cronExpression = SchedulerConstants.FOUR_THIRTY_PM_EASTERN_EVERY_DAY;
     return createTrigger(jobDetail, beanName, group, cronExpression);
   }
 
+<<<<<<< HEAD
+=======
+  @Bean(name = "tattlesJobTrigger")
+  public CronTriggerFactoryBean tattlesJobTrigger(@Qualifier("tattlesJobDetail") JobDetail jobDetail) {
+    String beanName = "Tattles Process";
+    String group = "Tattles";
+    String cronExpression = SchedulerConstants.JUST_AFTER_MIDNIGHT_EVERY_DAY;
+    return createTrigger(jobDetail, beanName, group, cronExpression);
+  }
+
+  @Bean
+  public JobDetailFactoryBean tattlesJobDetail() {
+    return createJobDetail(TattlesJob.class);
+  }
+
+>>>>>>> bd9ba6c... made constants for the cron schedules
   @Bean
   public JobDetailFactoryBean dailyJobDetail() {
     return createJobDetail(DailyJob.class);
