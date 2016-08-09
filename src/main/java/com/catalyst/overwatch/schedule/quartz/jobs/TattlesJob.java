@@ -16,7 +16,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,31 +37,71 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   private OccurrenceRepository occurrenceRepository;
 
   Logger logger = LogManager.getRootLogger();
-  String responseUrl = NotificationConstants.RESPONSE_BASE_URL + NotificationConstants.SURVEY_RESPONSE;
+  String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
+  List<Occurrence> occurrencesList = new ArrayList<>();
+  LocalDate yesterdaysDate = LocalDate.now().minus(1, ChronoUnit.DAYS);
 
+  /**
+   * The main function of the TattlesJob, which executes the needed tasks.
+   *
+   * @param context A context bundle containing handles to various environment information, that
+   *                is given to a quartz JobDetail instance as it is executed, and to a Trigger instance
+   *                after the execution completes.
+   * @throws JobExecutionException
+   */
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
 
     logger.info("Tattles Job Executing... :");
-    updateOccurrences();
+    findAndUpdateOccurrences();
 
   }
 
-  public void updateOccurrences() {
+  /**
+   * Finds all occurrences with response data and marks them complete by updating the
+   * occurrence in the Schedule database.
+   */
+  public void findAndUpdateOccurrences() {
 
-    List<Occurrence> occurrencesList = new ArrayList<>();
-    LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
-    logger.info(LocalDate.now() + " is today " + "yesterday: " + yesterday);
+    getOccurrenceResponses(yesterdaysDate)
+            .stream()
+            .forEach(o -> {
+              Occurrence occurrenceToUpdate = new Occurrence();
+              long occurrenceId = Long.parseLong(o.getOriginatorId());
+              logger.info("occurrenceId: " + occurrenceId);
+              occurrenceToUpdate = occurrenceRepository.findById(occurrenceId);
+              logger.info("occurrence: " + occurrenceToUpdate.toString());
+              occurrenceToUpdate.setComplete(true);
+              occurrenceRepository.save(occurrenceToUpdate);
+            });
 
-//    getOccurrenceResponses()
-//    .stream()
-//    .forEach(o -> {
-//
-//      logger.info(o.getId());
-//      long id = o.getId();
-//
-//    });
+  }
 
+  /**
+   * Contacts the SurveyResponse service to find all occurrences that had answer submissions yesterday.
+   *
+   * @param yesterdaysDate yesterday's date
+   * @return a list of SurveyResponses gotten from the SurveyReponse service.
+   */
+  private List<SurveyResponse> getOccurrenceResponses(final LocalDate yesterdaysDate) {
+
+    List<SurveyResponse> extractedResponseData = null;
+
+    try {
+      Resources<SurveyResponse> surveyResponses = restTemplate.exchange(
+              responseUrl + yesterdaysDate,
+              HttpMethod.GET,
+              null,
+              new ParameterizedTypeReference<Resources<SurveyResponse>>() {
+              }).getBody();
+
+      extractedResponseData = extractResponseData(surveyResponses);
+
+    } catch (Exception e) {
+      logger.error("Error occurred while contacting Survey Response service: ", e);
+    }
+
+    return extractedResponseData;
   }
 
   /**
@@ -72,24 +111,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    * @param responseData Resources object to extract the ResponseData from.
    * @return List of ResponseData objects extracted from the Resources object.
    */
-  private List<SurveyResponse> extractResponseData(Resources<SurveyResponse> responseData) {
+  private List<SurveyResponse> extractResponseData(final Resources<SurveyResponse> responseData) {
     List<SurveyResponse> extractedResponseData;
 
     extractedResponseData = new ArrayList<>(responseData.getContent());
-
-    return extractedResponseData;
-  }
-
-  private List<SurveyResponse> getOccurrenceResponses() {
-
-    Resources<SurveyResponse> surveyResponses = restTemplate.exchange(
-            responseUrl,
-            HttpMethod.GET,
-            null,
-            new ParameterizedTypeReference<Resources<SurveyResponse>>() {
-            }).getBody();
-
-    List<SurveyResponse> extractedResponseData = extractResponseData(surveyResponses);
 
     return extractedResponseData;
   }

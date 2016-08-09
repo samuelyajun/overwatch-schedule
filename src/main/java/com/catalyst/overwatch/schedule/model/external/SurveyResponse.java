@@ -13,6 +13,8 @@ public class SurveyResponse {
 
   private String originatorId;
 
+  private String dateAnswered;
+
   private List<Answer> answers;
 
   public long getId() {
@@ -47,12 +49,21 @@ public class SurveyResponse {
     this.answers = answers;
   }
 
+  public String getDateAnswered() {
+    return dateAnswered;
+  }
+
+  public void setDateAnswered(String dateAnswered) {
+    this.dateAnswered = dateAnswered;
+  }
+
   @Override
   public String toString() {
     return "SurveyResponse{" +
             "id=" + id +
             ", uniqueSurveyId='" + uniqueSurveyId + '\'' +
             ", originatorId='" + originatorId + '\'' +
+            ", dateAnswered='" + dateAnswered + '\'' +
             ", answers=" + answers +
             '}';
   }
