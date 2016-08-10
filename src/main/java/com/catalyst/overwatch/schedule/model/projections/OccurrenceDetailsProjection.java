@@ -9,7 +9,7 @@ import java.time.LocalDate;
 /**
  * Created by hmccardell on 8/4/2016.
  */
-@Projection(name = "occurrenceDetailsProjection", types = {Occurrence.class})
+@Projection(name = "occurrenceDetails", types = {Occurrence.class})
 public interface OccurrenceDetailsProjection {
 
   long getId();

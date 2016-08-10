@@ -2,8 +2,10 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.Respondent;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
+import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -36,6 +38,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   @Autowired
   private OccurrenceRepository occurrenceRepository;
 
+  @Autowired
+  private ScheduleRepository scheduleRepository;
+
   Logger logger = LogManager.getRootLogger();
   String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
   List<Occurrence> occurrencesList = new ArrayList<>();
@@ -54,6 +59,22 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     logger.info("Tattles Job Executing... :");
     findAndUpdateOccurrences();
+    findThreshold();
+
+  }
+
+  public void findThreshold(){
+
+    scheduleRepository.findByIsActive(true)
+      .stream()
+            .forEach(s -> {
+                occurrenceRepository.findByScheduleIdOrderByGenerationDateAsc(s.getId())
+                .stream()
+                        .forEach(o -> {
+
+                        });
+            });
+
 
   }
 
