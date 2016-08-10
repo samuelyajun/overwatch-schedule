@@ -2,8 +2,10 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -39,7 +41,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   Logger logger = LogManager.getRootLogger();
   String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
   List<Occurrence> occurrencesList = new ArrayList<>();
-  LocalDate yesterdaysDate = LocalDate.now().minus(1, ChronoUnit.DAYS);
 
   /**
    * The main function of the TattlesJob, which executes the needed tasks.
@@ -52,8 +53,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
 
-    logger.info("Tattles Job Executing... :");
+    logger.info("Tattles Job Begin... :");
     findAndUpdateOccurrences();
+    logger.info("Tattles Job End... :");
+
+
+    //TODO more tasks for this job will be created. Updating occurrences is only the first step.
 
   }
 
@@ -61,9 +66,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    * Finds all occurrences with response data and marks them complete by updating the
    * occurrence in the Schedule database.
    */
-  public void findAndUpdateOccurrences() {
+  public void findAndUpdateOccurrences(){
 
-    getOccurrenceResponses(yesterdaysDate)
+    getOccurrenceResponses()
             .stream()
             .forEach(o -> {
               Occurrence occurrenceToUpdate = new Occurrence();
@@ -80,25 +85,28 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   /**
    * Contacts the SurveyResponse service to find all occurrences that had answer submissions yesterday.
    *
-   * @param yesterdaysDate yesterday's date
    * @return a list of SurveyResponses gotten from the SurveyReponse service.
    */
-  private List<SurveyResponse> getOccurrenceResponses(final LocalDate yesterdaysDate) {
+  private List<SurveyResponse> getOccurrenceResponses(){
 
-    List<SurveyResponse> extractedResponseData = null;
+    List<SurveyResponse> extractedResponseData = new ArrayList<>();
 
     try {
       Resources<SurveyResponse> surveyResponses = restTemplate.exchange(
-              responseUrl + yesterdaysDate,
+              responseUrl + LocalDate.now().minus(1, ChronoUnit.DAYS),
               HttpMethod.GET,
               null,
               new ParameterizedTypeReference<Resources<SurveyResponse>>() {
               }).getBody();
 
-      extractedResponseData = extractResponseData(surveyResponses);
+      extractedResponseData.addAll(extractResponseData(surveyResponses));
 
     } catch (Exception e) {
-      logger.error("Error occurred while contacting Survey Response service: ", e);
+      logger.error("Error occurred while contacting Survey Response service: ");
+      OverwatchScheduleException exception = new OverwatchScheduleException();
+      exception.setOverwatchMessage("Error occurred while contacting Survey Response service: ");
+      exception.setException(e);
+      throw exception;
     }
 
     return extractedResponseData;
@@ -112,9 +120,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    * @return List of ResponseData objects extracted from the Resources object.
    */
   private List<SurveyResponse> extractResponseData(final Resources<SurveyResponse> responseData) {
-    List<SurveyResponse> extractedResponseData;
+    List<SurveyResponse> extractedResponseData = new ArrayList<>();
 
-    extractedResponseData = new ArrayList<>(responseData.getContent());
+    extractedResponseData.addAll(responseData.getContent());
 
     return extractedResponseData;
   }

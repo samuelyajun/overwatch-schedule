@@ -15,28 +15,58 @@ public class SurveyLink {
 
   String templateLink;
 
+  /**
+   * Gets surveyName.
+   *
+   * @return Value of surveyName.
+   */
   public String getSurveyName() {
     return surveyName;
   }
 
-  public void setSurveyName(String surveyName) {
-    this.surveyName = surveyName;
-  }
-
-  public String getTemplateLink() {
-    return templateLink;
-  }
-
-  public void setTemplateLink(String templateLink) {
-    this.templateLink = templateLink;
-  }
-
+  /**
+   * Gets surveyDisplayLink.
+   *
+   * @return Value of surveyDisplayLink.
+   */
   public String getSurveyDisplayLink() {
     return surveyDisplayLink;
   }
 
+  /**
+   * Sets new surveyName.
+   *
+   * @param surveyName New value of surveyName.
+   */
+  public void setSurveyName(String surveyName) {
+    this.surveyName = surveyName;
+  }
+
+  /**
+   * Sets new templateLink.
+   *
+   * @param templateLink New value of templateLink.
+   */
+  public void setTemplateLink(String templateLink) {
+    this.templateLink = templateLink;
+  }
+
+  /**
+   * Sets new surveyDisplayLink.
+   *
+   * @param surveyDisplayLink New value of surveyDisplayLink.
+   */
   public void setSurveyDisplayLink(String surveyDisplayLink) {
     this.surveyDisplayLink = surveyDisplayLink;
+  }
+
+  /**
+   * Gets templateLink.
+   *
+   * @return Value of templateLink.
+   */
+  public String getTemplateLink() {
+    return templateLink;
   }
 
   public SurveyLink() {
