@@ -2,8 +2,7 @@ package com.catalyst.overwatch.schedule.model;
 
 import org.hibernate.envers.Audited;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -19,11 +18,16 @@ import java.io.Serializable;
  *
  * @author hmccardell
  */
-@Audited
+
 @Entity
+@Audited
 public class CheckOccurrence implements Serializable {
 
   private static final long serialVersionUID = -4951321295232200246L;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
   @Column(name = "schedule_id")
   private long scheduleId;

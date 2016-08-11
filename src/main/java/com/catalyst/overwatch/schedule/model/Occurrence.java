@@ -36,54 +36,134 @@ public class Occurrence implements Serializable {
 
   private long scheduleId;
 
+  private long occurrenceNumber;
+
   public Occurrence() {
   }
 
-  public Occurrence(Respondent respondent, long scheduleId) {
+  public Occurrence(Respondent respondent, long scheduleId, long occurrenceNumber) {
     isComplete = false;
     this.respondent = respondent;
     this.generationDate = LocalDate.now();
     this.scheduleId = scheduleId;
+    this.occurrenceNumber = occurrenceNumber;
   }
 
+  /**
+   * Sets new scheduleId.
+   *
+   * @param scheduleId New value of scheduleId.
+   */
+  public void setScheduleId(long scheduleId) {
+    this.scheduleId = scheduleId;
+  }
+
+  /**
+   * Gets id.
+   *
+   * @return Value of id.
+   */
   public long getId() {
     return id;
   }
 
+  /**
+   * Gets serialVersionUID.
+   *
+   * @return Value of serialVersionUID.
+   */
+  public static long getSerialVersionUID() {
+    return serialVersionUID;
+  }
+
+  /**
+   * Sets new isComplete.
+   *
+   * @param isComplete New value of isComplete.
+   */
+  public void setIsComplete(boolean isComplete) {
+    this.isComplete = isComplete;
+  }
+
+  /**
+   * Sets new occurrenceNumber.
+   *
+   * @param occurrenceNumber New value of occurrenceNumber.
+   */
+  public void setOccurrenceNumber(long occurrenceNumber) {
+    this.occurrenceNumber = occurrenceNumber;
+  }
+
+  /**
+   * Sets new id.
+   *
+   * @param id New value of id.
+   */
   public void setId(long id) {
     this.id = id;
   }
 
-  public Respondent getRespondent() {
-    return respondent;
+  /**
+   * Gets occurrenceNumber.
+   *
+   * @return Value of occurrenceNumber.
+   */
+  public long getOccurrenceNumber() {
+    return occurrenceNumber;
   }
 
-  public void setRespondent(Respondent respondent) {
-    this.respondent = respondent;
-  }
-
-  public LocalDate getGenerationDate() {
-    return generationDate;
-  }
-
+  /**
+   * Sets new generationDate.
+   *
+   * @param generationDate New value of generationDate.
+   */
   public void setGenerationDate(LocalDate generationDate) {
     this.generationDate = generationDate;
   }
 
-  public boolean isComplete() {
-    return isComplete;
-  }
-
-  public void setComplete(boolean isComplete) {
-    this.isComplete = isComplete;
-  }
-
+  /**
+   * Gets scheduleId.
+   *
+   * @return Value of scheduleId.
+   */
   public long getScheduleId() {
     return scheduleId;
   }
 
-  public void setScheduleId(long scheduleId) {
-    this.scheduleId = scheduleId;
+  /**
+   * Gets respondent.
+   *
+   * @return Value of respondent.
+   */
+  public Respondent getRespondent() {
+    return respondent;
+  }
+
+  /**
+   * Gets generationDate.
+   *
+   * @return Value of generationDate.
+   */
+  public LocalDate getGenerationDate() {
+    return generationDate;
+  }
+
+  /**
+   * Gets isComplete.
+   *
+   * @return Value of isComplete.
+   */
+  public boolean getIsComplete() {
+    return isComplete;
+  }
+
+  /**
+   * Sets new respondent.
+   *
+   * @param respondent New value of respondent.
+   */
+  public void setRespondent(Respondent respondent) {
+    this.respondent = respondent;
   }
 
   @Override
@@ -94,6 +174,7 @@ public class Occurrence implements Serializable {
             ", generationDate=" + generationDate +
             ", isComplete=" + isComplete +
             ", scheduleId=" + scheduleId +
+            ", occurrenceNumber=" + occurrenceNumber +
             '}';
   }
 
@@ -102,9 +183,9 @@ public class Occurrence implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Occurrence that = (Occurrence) o;
-    return id == that.id &&
-            isComplete == that.isComplete &&
+    return isComplete == that.isComplete &&
             scheduleId == that.scheduleId &&
+            occurrenceNumber == that.occurrenceNumber &&
             Objects.equal(respondent, that.respondent) &&
             Objects.equal(generationDate, that.generationDate);
   }

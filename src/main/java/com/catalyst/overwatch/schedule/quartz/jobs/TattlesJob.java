@@ -2,6 +2,7 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.model.CheckOccurrence;
+import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Respondent;
 import com.catalyst.overwatch.schedule.model.Schedule;
@@ -9,6 +10,7 @@ import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.CheckOccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
  * surveys.  Repeats every 12 hours.
  *
  * @author hmccardell
+ * @author bfutral
  */
 public class TattlesJob extends SchedulerBaseJob implements Job {
 
@@ -51,7 +54,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   Logger logger = LogManager.getRootLogger();
   String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
   List<Occurrence> occurrencesList = new ArrayList<>();
-  LocalDate yesterdaysDate = LocalDate.now().minus(1, ChronoUnit.DAYS);
 
   /**
    * The main function of the TattlesJob, which executes the needed tasks.
@@ -64,8 +66,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
 
-    logger.info("Tattles Job Executing... :");
+    logger.info("Tattles Job Begin... :");
     findAndUpdateOccurrences();
+    logger.info("Tattles Job End... :");
+
+
+    //TODO more tasks for this job will be created. Updating occurrences is only the first step.
 
     List<Schedule> activeSchedules = new ArrayList<>();
     activeSchedules.addAll(scheduleRepository.findByIsActive(true));
@@ -99,7 +105,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
       //Loop through each occurrence in that flight of occurrences to see if it is completed or not
       for(Occurrence occurrence : occurrenceList){
-        if(occurrence.isComplete() == true){
+        if(occurrence.getIsComplete() == true){
           ++completeCounter;
         }
         else{
@@ -128,9 +134,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    * Finds all occurrences with response data and marks them complete by updating the
    * occurrence in the Schedule database.
    */
-  public void findAndUpdateOccurrences() {
+  public void findAndUpdateOccurrences(){
 
-    getOccurrenceResponses(yesterdaysDate)
+    getOccurrenceResponses()
             .stream()
             .forEach(o -> {
               Occurrence occurrenceToUpdate = new Occurrence();
@@ -138,7 +144,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
               logger.info("occurrenceId: " + occurrenceId);
               occurrenceToUpdate = occurrenceRepository.findById(occurrenceId);
               logger.info("occurrence: " + occurrenceToUpdate.toString());
-              occurrenceToUpdate.setComplete(true);
+              occurrenceToUpdate.setIsComplete(true);
               occurrenceRepository.save(occurrenceToUpdate);
             });
 
@@ -147,25 +153,27 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   /**
    * Contacts the SurveyResponse service to find all occurrences that had answer submissions yesterday.
    *
-   * @param yesterdaysDate yesterday's date
    * @return a list of SurveyResponses gotten from the SurveyReponse service.
    */
-  private List<SurveyResponse> getOccurrenceResponses(final LocalDate yesterdaysDate) {
+  private List<SurveyResponse> getOccurrenceResponses(){
 
-    List<SurveyResponse> extractedResponseData = null;
+    List<SurveyResponse> extractedResponseData = new ArrayList<>();
 
     try {
       Resources<SurveyResponse> surveyResponses = restTemplate.exchange(
-              responseUrl + yesterdaysDate,
+              responseUrl + LocalDate.now().minus(1, ChronoUnit.DAYS),
               HttpMethod.GET,
               null,
               new ParameterizedTypeReference<Resources<SurveyResponse>>() {
               }).getBody();
 
-      extractedResponseData = extractResponseData(surveyResponses);
+      extractedResponseData.addAll(extractResponseData(surveyResponses));
 
     } catch (Exception e) {
       logger.error("Error occurred while contacting Survey Response service: ", e);
+      
+      throw new OverwatchScheduleException("Error occurred while contacting Survey Response service: ", e);
+
     }
 
     return extractedResponseData;
@@ -179,9 +187,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    * @return List of ResponseData objects extracted from the Resources object.
    */
   private List<SurveyResponse> extractResponseData(final Resources<SurveyResponse> responseData) {
-    List<SurveyResponse> extractedResponseData;
+    List<SurveyResponse> extractedResponseData = new ArrayList<>();
 
-    extractedResponseData = new ArrayList<>(responseData.getContent());
+    extractedResponseData.addAll(responseData.getContent());
 
     return extractedResponseData;
   }
