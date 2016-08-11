@@ -102,7 +102,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       extractedResponseData.addAll(extractResponseData(surveyResponses));
 
     } catch (Exception e) {
-      logger.error("Error occurred while contacting Survey Response service: ");
+      logger.error("Error occurred while contacting Survey Response service: ", e);
       
       throw new OverwatchScheduleException("Error occurred while contacting Survey Response service: ", e);
 
