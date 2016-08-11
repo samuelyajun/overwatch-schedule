@@ -1,8 +1,8 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Occurrence;
-import com.catalyst.overwatch.schedule.model.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.sun.xml.internal.bind.v2.TODO;
@@ -103,10 +103,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     } catch (Exception e) {
       logger.error("Error occurred while contacting Survey Response service: ");
-      OverwatchScheduleException exception = new OverwatchScheduleException();
-      exception.setOverwatchMessage("Error occurred while contacting Survey Response service: ");
-      exception.setException(e);
-      throw exception;
+      
+      throw new OverwatchScheduleException("Error occurred while contacting Survey Response service: ", e);
+
     }
 
     return extractedResponseData;
