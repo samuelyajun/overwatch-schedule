@@ -29,6 +29,7 @@ import java.util.List;
  * surveys.  Repeats every 12 hours.
  *
  * @author hmccardell
+ * @author bfutral
  */
 public class TattlesJob extends SchedulerBaseJob implements Job {
 
