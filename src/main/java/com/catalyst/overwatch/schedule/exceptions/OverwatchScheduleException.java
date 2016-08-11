@@ -4,6 +4,7 @@ package com.catalyst.overwatch.schedule.exceptions;
  * An exception class for the Schedule Service.
  *
  * @author hmccardell
+ * @author bfutral
  */
 public class OverwatchScheduleException extends RuntimeException {
 
