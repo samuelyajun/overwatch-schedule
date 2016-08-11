@@ -201,3 +201,5 @@ INSERT INTO occurrence (generationdate, is_complete, respondent_id) VALUES ('201
 INSERT INTO occurrence (generationdate, is_complete, respondent_id) VALUES ('2016-08-01', false, 1);
 INSERT INTO occurrence (generationdate, is_complete, respondent_id) VALUES ('2016-08-08', false, 1);
 INSERT INTO occurrence (generationdate, is_complete, respondent_id) VALUES ('2016-08-08', false, 2);
+
+INSERT INTO checkoccurrence (schedule_id, occurrence_number, isClosed) VALUES (1, 1, false);

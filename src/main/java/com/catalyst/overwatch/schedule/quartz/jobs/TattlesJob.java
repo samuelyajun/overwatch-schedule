@@ -1,9 +1,12 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import com.catalyst.overwatch.schedule.model.CheckOccurrence;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Respondent;
+import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
+import com.catalyst.overwatch.schedule.repository.CheckOccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +24,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This job executes daily, finding schedules with respondents who have not submitted responses
@@ -41,6 +45,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   @Autowired
   private ScheduleRepository scheduleRepository;
 
+  @Autowired
+  private CheckOccurrenceRepository checkOccurrenceRepository;
+
   Logger logger = LogManager.getRootLogger();
   String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
   List<Occurrence> occurrencesList = new ArrayList<>();
@@ -59,21 +66,60 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     logger.info("Tattles Job Executing... :");
     findAndUpdateOccurrences();
-    findThreshold();
+
+    List<Schedule> activeSchedules = new ArrayList<>();
+    activeSchedules.addAll(scheduleRepository.findByIsActive(true));
+
+    //Loop through all active schedules and calculate the threshold for each
+    for (Schedule schedule : activeSchedules) {
+      calculateThreshold(schedule);
+    }
 
   }
 
-  public void findThreshold(){
+  /**
+   * Calculates the threshold for a given schedule.
+   *
+   */
+  public void calculateThreshold(final Schedule schedule) {
+    int numberOfRespondents = schedule.getRespondents().size();
 
-    scheduleRepository.findByIsActive(true)
-      .stream()
-            .forEach(s -> {
-                occurrenceRepository.findByScheduleIdOrderByGenerationDateAsc(s.getId())
-                .stream()
-                        .forEach(o -> {
+    List<Occurrence> sendList = new ArrayList<>();
+    List<CheckOccurrence> checkOccurrenceList = new ArrayList<>();
+    List<Occurrence> occurrenceList = new ArrayList<>();
+    checkOccurrenceList.addAll(checkOccurrenceRepository.findByScheduleIdAndIsClosed(schedule.getId(), false));
 
-                        });
-            });
+    //Loop through each CheckOccurrence that is not closed
+    for(CheckOccurrence checkOccurrence : checkOccurrenceList){
+
+      int completeCounter = 0;
+      int notCompleteCounter = 0;
+
+      occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndOccurrenceNumber(schedule.getId(), checkOccurrence.getOccurrenceNumber()));
+
+      //Loop through each occurrence in that flight of occurrences to see if it is completed or not
+      for(Occurrence occurrence : occurrenceList){
+        if(occurrence.isComplete() == true){
+          ++completeCounter;
+        }
+        else{
+          ++notCompleteCounter;
+          sendList.add(occurrence);
+        }
+      }
+
+      if(completeCounter != numberOfRespondents){
+        logger.info("Threshold has not been met");
+        // TODO: 8/11/2016 send tattles
+      }
+      if(completeCounter == numberOfRespondents && notCompleteCounter == 0){
+        logger.info("Threshold met");
+        // TODO: 8/11/2016 send "threshold met" notification to stakeholders
+
+      }
+
+    }
+
 
 
   }
