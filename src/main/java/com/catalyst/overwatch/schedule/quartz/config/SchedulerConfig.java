@@ -2,6 +2,7 @@ package com.catalyst.overwatch.schedule.quartz.config;
 
 import com.catalyst.overwatch.schedule.quartz.jobs.DailyJob;
 import com.catalyst.overwatch.schedule.quartz.jobs.NagsJob;
+import com.catalyst.overwatch.schedule.quartz.jobs.TattlesJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
@@ -108,12 +109,13 @@ public class SchedulerConfig {
   @Bean
   public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory,
                                                    @Qualifier("dailyJobTrigger") Trigger dailyJobTrigger,
-                                                   @Qualifier("nagsJobTrigger") Trigger nagsJobTrigger
+                                                   @Qualifier("nagsJobTrigger") Trigger nagsJobTrigger,
+                                                   @Qualifier("tattlesJobTrigger") Trigger tattlesJobTrigger
   ) throws IOException {
     SchedulerFactoryBean factory = new SchedulerFactoryBean();
     factory.setJobFactory(jobFactory);
     factory.setQuartzProperties(quartzProperties());
-    factory.setTriggers(dailyJobTrigger, nagsJobTrigger);
+    factory.setTriggers(dailyJobTrigger, nagsJobTrigger, tattlesJobTrigger);
 
     return factory;
   }
@@ -132,6 +134,19 @@ public class SchedulerConfig {
     String group = "Nags";
     String cronExpression = SchedulerConstants.FOUR_THIRTY_PM_EASTERN_EVERY_DAY;
     return createTrigger(jobDetail, beanName, group, cronExpression);
+  }
+
+  @Bean(name = "tattlesJobTrigger")
+  public CronTriggerFactoryBean tattlesJobTrigger(@Qualifier("tattlesJobDetail") JobDetail jobDetail) {
+    String beanName = "Tattles Process";
+    String group = "Tattles";
+    String cronExpression = SchedulerConstants.JUST_AFTER_MIDNIGHT_EVERY_DAY;
+    return createTrigger(jobDetail, beanName, group, cronExpression);
+  }
+
+  @Bean
+  public JobDetailFactoryBean tattlesJobDetail() {
+    return createJobDetail(TattlesJob.class);
   }
 
   @Bean
