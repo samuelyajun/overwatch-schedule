@@ -92,9 +92,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
       }
 
       logger.info("new flight number: " + flightNumber);
-      int occurrencesInFlight = 0;
       for (Respondent respondent : schedule.getRespondents()) {
-        ++occurrencesInFlight;
         Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
         surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
@@ -103,7 +101,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
         logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
         logger.info(respondent.getUser());
       }
-      Flight flightToPersist = new Flight(schedule.getId(), true, flightNumber, false, occurrencesInFlight);
+      Flight flightToPersist = new Flight(schedule.getId(), true, flightNumber, false);
       flightRepository.save(flightToPersist);
     }
   }

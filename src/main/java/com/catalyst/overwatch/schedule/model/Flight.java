@@ -1,5 +1,6 @@
 package com.catalyst.overwatch.schedule.model;
 
+import com.google.common.base.Objects;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -41,17 +42,13 @@ public class Flight implements Serializable {
   @Column(name = "is_closed")
   private boolean isClosed;
 
-  @Column(name = "number_of_occurrences")
-  private long numberOfOccurrences;
-
   public Flight(){}
 
-  public Flight(long scheduleId, boolean scheduleIsActive, long flightNumber, boolean isClosed, long numberOfOccurrences) {
+  public Flight(long scheduleId, boolean scheduleIsActive, long flightNumber, boolean isClosed) {
     this.scheduleId = scheduleId;
     this.scheduleIsActive = scheduleIsActive;
     this.flightNumber = flightNumber;
     this.isClosed = isClosed;
-    this.numberOfOccurrences = numberOfOccurrences;
   }
 
   /**
@@ -70,15 +67,6 @@ public class Flight implements Serializable {
    */
   public void setIsClosed(boolean isClosed) {
     this.isClosed = isClosed;
-  }
-
-  /**
-   * Gets numberOfOccurrences.
-   *
-   * @return Value of numberOfOccurrences.
-   */
-  public long getNumberOfOccurrences() {
-    return numberOfOccurrences;
   }
 
   /**
@@ -145,15 +133,6 @@ public class Flight implements Serializable {
   }
 
   /**
-   * Sets new numberOfOccurrences.
-   *
-   * @param numberOfOccurrences New value of numberOfOccurrences.
-   */
-  public void setNumberOfOccurrences(long numberOfOccurrences) {
-    this.numberOfOccurrences = numberOfOccurrences;
-  }
-
-  /**
    * Sets new scheduleId.
    *
    * @param scheduleId New value of scheduleId.
@@ -170,4 +149,28 @@ public class Flight implements Serializable {
   public void setScheduleIsActive(boolean scheduleIsActive) {
     this.scheduleIsActive = scheduleIsActive;
   }
+
+  @Override
+  public String toString() {
+    return "Flight{" +
+            "id=" + id +
+            ", scheduleId=" + scheduleId +
+            ", scheduleIsActive=" + scheduleIsActive +
+            ", flightNumber=" + flightNumber +
+            ", isClosed=" + isClosed +
+            '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Flight flight = (Flight) o;
+    return id == flight.id &&
+            scheduleId == flight.scheduleId &&
+            scheduleIsActive == flight.scheduleIsActive &&
+            flightNumber == flight.flightNumber &&
+            isClosed == flight.isClosed;
+  }
+
 }
