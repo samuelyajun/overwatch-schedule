@@ -69,12 +69,11 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     occurrenceRepository.save(testOccurrence);
 
     List<Flight> flightListToProcess = new ArrayList<>();
-    flightListToProcess = flightRepository.findByScheduleIsActiveAndIsClosed(true, false);
-
-    //Loop through each Flight that is not closed and has an active schedule
-    for (Flight flightToCalculate : flightListToProcess) {
-      calculateThresholdForFlight(flightToCalculate);
-    }
+    flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
+            .stream()
+            .forEach(flight -> {
+              calculateThresholdForFlight(flight);
+            });
 
     logger.info("Tattles Job End... :");
 
@@ -87,7 +86,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   public void calculateThresholdForFlight(Flight flight) {
 
-    long thresholdMark = flight.getOccurrencesInFlight();
+    long thresholdMark = flight.getNumberOfOccurrences();
     List<Occurrence> sendList = new ArrayList<>();
     List<Occurrence> occurrenceList = new ArrayList<>();
 

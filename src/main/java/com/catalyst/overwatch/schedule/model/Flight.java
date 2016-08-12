@@ -41,17 +41,17 @@ public class Flight implements Serializable {
   @Column(name = "is_closed")
   private boolean isClosed;
 
-  @Column(name = "occurrences_in_flight")
-  private long occurrencesInFlight;
+  @Column(name = "number_of_occurrences")
+  private long numberOfOccurrences;
 
   public Flight(){}
 
-  public Flight(long scheduleId, boolean scheduleIsActive, long flightNumber, boolean isClosed, long occurrencesInFlight) {
+  public Flight(long scheduleId, boolean scheduleIsActive, long flightNumber, boolean isClosed, long numberOfOccurrences) {
     this.scheduleId = scheduleId;
     this.scheduleIsActive = scheduleIsActive;
     this.flightNumber = flightNumber;
     this.isClosed = isClosed;
-    this.occurrencesInFlight = occurrencesInFlight;
+    this.numberOfOccurrences = numberOfOccurrences;
   }
 
   /**
@@ -73,12 +73,12 @@ public class Flight implements Serializable {
   }
 
   /**
-   * Gets occurrencesInFlight.
+   * Gets numberOfOccurrences.
    *
-   * @return Value of occurrencesInFlight.
+   * @return Value of numberOfOccurrences.
    */
-  public long getOccurrencesInFlight() {
-    return occurrencesInFlight;
+  public long getNumberOfOccurrences() {
+    return numberOfOccurrences;
   }
 
   /**
@@ -145,12 +145,12 @@ public class Flight implements Serializable {
   }
 
   /**
-   * Sets new occurrencesInFlight.
+   * Sets new numberOfOccurrences.
    *
-   * @param occurrencesInFlight New value of occurrencesInFlight.
+   * @param numberOfOccurrences New value of numberOfOccurrences.
    */
-  public void setOccurrencesInFlight(long occurrencesInFlight) {
-    this.occurrencesInFlight = occurrencesInFlight;
+  public void setNumberOfOccurrences(long numberOfOccurrences) {
+    this.numberOfOccurrences = numberOfOccurrences;
   }
 
   /**
