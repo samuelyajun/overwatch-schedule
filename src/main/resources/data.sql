@@ -64,78 +64,96 @@ INSERT INTO users (email, first_name, last_name) VALUES ('showard@catalystdevwor
 
 -- START FIRST GROUP OF TEST DATA
 
-INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-07-21', 'Sprint Checkup', '/templates/1', 'ONE_WEEK', 'true');
-
-INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
-INSERT INTO respondent (schedule_id, user_id) VALUES (1, 2);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 4);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 5);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 4);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 5);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 10);
-
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-21', true, 1, 1, 1);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-21', true, 2, 1, 1);
-
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-28', true, 1, 1, 2);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-28', true, 2, 1, 2);
-
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 1, 1, 3);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 2, 1, 3);
-
-INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed, occurrences_in_flight) VALUES (1, true, 1, true, 2);
-INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed, occurrences_in_flight) VALUES (1, true, 2, true, 2);
-INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed, occurrences_in_flight) VALUES (1, true, 3, false, 2);
-
--- END FIRST GROUP OF TEST DATA
-
-
--- START SECOND GROUP OF TEST DATA
-INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-08-04', 'Sprint Checkup', '/templates/1', 'ONE_TIME', 'true');
-
-INSERT INTO respondent (schedule_id, user_id) VALUES (2, 3);
-INSERT INTO respondent (schedule_id, user_id) VALUES (2, 4);
-INSERT INTO respondent (schedule_id, user_id) VALUES (2, 5);
-INSERT INTO respondent (schedule_id, user_id) VALUES (2, 6);
-INSERT INTO respondent (schedule_id, user_id) VALUES (2, 7);
-INSERT INTO respondent (schedule_id, user_id) VALUES (2, 8);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 4);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 6);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 10);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 4);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 6);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 10);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 4);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 6);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 10);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 4);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 6);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 10);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 4);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 6);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 10);
-
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 3);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 6);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 10);
+--INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-07-22', 'Sprint Checkup', '/templates/1', 'ONE_WEEK', 'true');
+--
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 2);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 10);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 1, 1, 1);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 2, 1, 1);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 1, 1, 2);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 2, 1, 2);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-05', true, 1, 1, 3);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-05', false, 2, 1, 3);
+--
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed, occurrences_in_flight) VALUES (1, true, 1, true, 2);
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed, occurrences_in_flight) VALUES (1, true, 2, true, 2);
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed, occurrences_in_flight) VALUES (1, true, 3, false, 2);
+--
+---- END FIRST GROUP OF TEST DATA
+--
+--
+---- START SECOND GROUP OF TEST DATA
+--INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-08-04', 'Sprint Checkup', '/templates/1', 'ONE_TIME', 'true');
+--
+--INSERT INTO respondent (schedule_id, user_id) VALUES (2, 3);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (2, 4);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (2, 5);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (2, 6);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (2, 7);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (2, 8);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (5, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (6, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (7, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 3);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (8, 10);
 
 --INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-11', true, 1, 1, 1);
 
 
 -- END SECOND GROUP OF TEST DATA
+
+
+-- START DAILY JOB TEST : ONE TIME FREQUENCY, START DATE YESTERDAY
+--INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-08-11', 'Sprint Checkup', '/templates/1', 'ONE_TIME', 'true');
+--
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 3);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 4);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 3);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 3);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 6);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 10);
+-- END DAILY JOB TEST : ONE TIME FREQUENCY, START DATE YESTERDAY
