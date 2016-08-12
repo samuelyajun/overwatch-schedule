@@ -28,25 +28,27 @@ public class Occurrence implements Serializable {
   @ManyToOne(cascade = {CascadeType.MERGE})
   private Respondent respondent;
 
-  @Column
+  @Column(name = "generation_date")
   private LocalDate generationDate;
 
   @Column(name = "is_complete")
   private boolean isComplete;
 
+  @Column(name = "schedule_id")
   private long scheduleId;
 
-  private long occurrenceNumber;
+  @Column(name = "flight_number")
+  private long flightNumber;
 
   public Occurrence() {
   }
 
-  public Occurrence(Respondent respondent, long scheduleId, long occurrenceNumber) {
+  public Occurrence(Respondent respondent, long scheduleId, long flightNumber) {
     isComplete = false;
     this.respondent = respondent;
     this.generationDate = LocalDate.now();
     this.scheduleId = scheduleId;
-    this.occurrenceNumber = occurrenceNumber;
+    this.flightNumber = flightNumber;
   }
 
   /**
@@ -86,12 +88,12 @@ public class Occurrence implements Serializable {
   }
 
   /**
-   * Sets new occurrenceNumber.
+   * Sets new flightNumber.
    *
-   * @param occurrenceNumber New value of occurrenceNumber.
+   * @param flightNumber New value of flightNumber.
    */
-  public void setOccurrenceNumber(long occurrenceNumber) {
-    this.occurrenceNumber = occurrenceNumber;
+  public void setFlightNumber(long flightNumber) {
+    this.flightNumber = flightNumber;
   }
 
   /**
@@ -104,12 +106,12 @@ public class Occurrence implements Serializable {
   }
 
   /**
-   * Gets occurrenceNumber.
+   * Gets flightNumber.
    *
-   * @return Value of occurrenceNumber.
+   * @return Value of flightNumber.
    */
-  public long getOccurrenceNumber() {
-    return occurrenceNumber;
+  public long getFlightNumber() {
+    return flightNumber;
   }
 
   /**
@@ -174,7 +176,7 @@ public class Occurrence implements Serializable {
             ", generationDate=" + generationDate +
             ", isComplete=" + isComplete +
             ", scheduleId=" + scheduleId +
-            ", occurrenceNumber=" + occurrenceNumber +
+            ", flightNumber=" + flightNumber +
             '}';
   }
 
@@ -185,7 +187,7 @@ public class Occurrence implements Serializable {
     Occurrence that = (Occurrence) o;
     return isComplete == that.isComplete &&
             scheduleId == that.scheduleId &&
-            occurrenceNumber == that.occurrenceNumber &&
+            flightNumber == that.flightNumber &&
             Objects.equal(respondent, that.respondent) &&
             Objects.equal(generationDate, that.generationDate);
   }

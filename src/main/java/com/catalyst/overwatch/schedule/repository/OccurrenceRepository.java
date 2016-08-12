@@ -27,6 +27,6 @@ public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {
 
   List<Occurrence> findByScheduleIdOrderByGenerationDateAsc(@Param(value = "scheduleId") long scheduleId);
 
-  List<Occurrence> findByScheduleIdAndOccurrenceNumber(@Param(value = "scheduleId") long scheduleId,
-                                                       @Param(value = "occurrenceNumber") long occurrenceNumber);
+  List<Occurrence> findByScheduleIdAndFlightNumber(@Param(value = "scheduleId") long scheduleId,
+                                                       @Param(value = "flightNumber") long flightNumber);
 }

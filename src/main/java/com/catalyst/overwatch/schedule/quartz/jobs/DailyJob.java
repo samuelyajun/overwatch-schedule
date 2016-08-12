@@ -76,11 +76,11 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 
       StringBuilder surveyLinkForThisSchedule = new StringBuilder();
       surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri(), schedule.getTemplateName()));
-      long occurrenceNumber = 0L;
+      long flightNumber = 0L;
 
       for (Respondent respondent : schedule.getRespondents()) {
-        ++occurrenceNumber;
-        Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), occurrenceNumber);
+        ++flightNumber;
+        Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
         surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
         body.append("Link to survey: " + surveyLinkForThisRespondent);
