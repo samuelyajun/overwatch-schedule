@@ -9,6 +9,11 @@ import org.springframework.data.rest.core.config.Projection;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * A schedule projection that exposes Respondent details for consumption.
+ *
+ * @author hmccardell
+ */
 @Projection(name = "scheduleDetails", types = {Schedule.class})
 public interface ScheduleDetailsProjection {
 
@@ -23,6 +28,8 @@ public interface ScheduleDetailsProjection {
     Frequency getFrequency();
 
     String getTemplateUri();
+
+    String getTemplateName();
 
     Set<RespondentDetailsProjection> getRespondents();
 }
