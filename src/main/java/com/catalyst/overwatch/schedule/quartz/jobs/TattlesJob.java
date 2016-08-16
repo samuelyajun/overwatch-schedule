@@ -2,9 +2,12 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
+import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
+import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
+import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -38,6 +41,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   @Autowired
   private OccurrenceRepository occurrenceRepository;
 
+  @Autowired
+  private ScheduleRepository scheduleRepository;
+
+  @Autowired
+  private FlightRepository flightRepository;
+
   Logger logger = LogManager.getRootLogger();
   String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
   List<Occurrence> occurrencesList = new ArrayList<>();
@@ -54,11 +63,70 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   public void execute(JobExecutionContext context) throws JobExecutionException {
 
     logger.info("Tattles Job Begin... :");
+
     findAndUpdateOccurrences();
+
+    List<Flight> flightListToProcess = new ArrayList<>();
+    flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
+            .stream()
+            .forEach(flight -> {
+              calculateThresholdForFlight(flight);
+            });
+
     logger.info("Tattles Job End... :");
 
+  }
 
-    //TODO more tasks for this job will be created. Updating occurrences is only the first step.
+  /**
+   * Calculates whether or not the response threshold has been met for a flight of occurrences.
+   *
+   * @param flight a flight of occurrences to calculate the threshold for.
+   */
+  public void calculateThresholdForFlight(Flight flight) {
+
+    long thresholdMark = 0;
+    List<Occurrence> sendList = new ArrayList<>();
+    List<Occurrence> occurrenceList = new ArrayList<>();
+
+    int completeCounter = 0;
+
+    occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
+
+    //Loop through each occurrence in this flight to see if it has met the threshold
+    for (Occurrence occurrence : occurrenceList) {
+      ++thresholdMark;
+      logger.info("flight number; " + occurrence.getFlightNumber());
+      logger.info("generation date: " + occurrence.getGenerationDate());
+      logger.info(occurrence.toString());
+      if (occurrence.getIsComplete() == true) {
+        ++completeCounter;
+        logger.info(occurrence.getRespondent().getUser().getEmail() + " has responded to the survey");
+
+      } else {
+        logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
+        sendList.add(occurrence);
+      }
+    }
+
+    //Threshold met, generate reports and stakeholder notification
+    if (completeCounter == thresholdMark) {
+      logger.info("Threshold met");
+      logger.info("Updating the flight table");
+      flight.setIsClosed(true);
+      flightRepository.save(flight);
+      // TODO: 8/11/2016 send "threshold met" notification to stakeholders
+
+    }
+    //Threshold not met, generate tattles for the delinquent respondents
+    else {
+      logger.info("Threshold has not been met");
+      logger.info("Respondents in flight:  " + thresholdMark);
+      logger.info("Number of responses: " + completeCounter);
+      for (Occurrence occurrence : sendList) {
+        logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getEmail());
+      }
+      // TODO: 8/11/2016 construct and send tattles
+    }
 
   }
 
@@ -66,7 +134,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    * Finds all occurrences with response data and marks them complete by updating the
    * occurrence in the Schedule database.
    */
-  public void findAndUpdateOccurrences(){
+  public void findAndUpdateOccurrences() {
 
     getOccurrenceResponses()
             .stream()
@@ -76,7 +144,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
               logger.info("occurrenceId: " + occurrenceId);
               occurrenceToUpdate = occurrenceRepository.findById(occurrenceId);
               logger.info("occurrence: " + occurrenceToUpdate.toString());
-              occurrenceToUpdate.setComplete(true);
+              occurrenceToUpdate.setIsComplete(true);
               occurrenceRepository.save(occurrenceToUpdate);
             });
 
@@ -87,7 +155,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    *
    * @return a list of SurveyResponses gotten from the SurveyReponse service.
    */
-  private List<SurveyResponse> getOccurrenceResponses(){
+  private List<SurveyResponse> getOccurrenceResponses() {
 
     List<SurveyResponse> extractedResponseData = new ArrayList<>();
 
@@ -103,7 +171,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     } catch (Exception e) {
       logger.error("Error occurred while contacting Survey Response service: ", e);
-      
+
       throw new OverwatchScheduleException("Error occurred while contacting Survey Response service: ", e);
 
     }
