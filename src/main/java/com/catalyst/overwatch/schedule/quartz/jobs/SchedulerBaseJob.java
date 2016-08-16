@@ -6,6 +6,7 @@ import com.catalyst.overwatch.schedule.model.Notification;
 import com.catalyst.overwatch.schedule.model.external.SurveyLink;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -17,6 +18,9 @@ import org.springframework.web.client.RestTemplate;
  * @author hmccardell
  */
 public abstract class SchedulerBaseJob {
+
+  @Autowired
+  private Urls urls;
 
   Logger logger = LogManager.getLogger((SchedulerBaseJob.class));
   RestTemplate restTemplate = new RestTemplate();
@@ -33,7 +37,7 @@ public abstract class SchedulerBaseJob {
     StringBuilder completedLink = new StringBuilder();
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
 
-    completedLink.append(Urls.getInstance().getFrontEndBaseUrl());
+    completedLink.append(urls.getFrontEndBaseUrl());
     completedLink.append(surveySuid + "&?" + originator + originatorId);
 
     logger.info("build survey link: " + completedLink.toString());
@@ -58,7 +62,7 @@ public abstract class SchedulerBaseJob {
     Notification notification = new Notification(recipientAddress, subject, body);
 
     try {
-      restTemplate.postForEntity(Urls.getInstance().getNotificationEndpoint(), notification, Notification.class);
+      restTemplate.postForEntity(urls.getNotificationEndpoint(), notification, Notification.class);
       logger.info("Generated email from rest template");
     } catch (Exception e) {
       logger.error("Quartz " + errorReference + " Error:  exception occurred while calling Notification service", e);
