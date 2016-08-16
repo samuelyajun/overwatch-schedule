@@ -19,4 +19,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
   Schedule findByRespondentsId(@Param(value = "respondent_id") long id);
 
+  List<Schedule> findByIsActive(boolean isActive);
 }

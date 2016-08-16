@@ -1,5 +1,3 @@
-INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-08-12', 'Sprint Checkup', '/templates/1', 'ONE_WEEK', 'true');
-
 INSERT INTO attributetype (name) VALUES ('ROLE');
 INSERT INTO attributetype (name) VALUES ('OFFICE');
 INSERT INTO attributetype (name) VALUES ('CLIENT');

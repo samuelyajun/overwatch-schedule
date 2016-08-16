@@ -1,8 +1,10 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
+import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Respondent;
 import com.catalyst.overwatch.schedule.model.Schedule;
+import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
 import com.catalyst.overwatch.schedule.utilities.CustomNotificationParser;
@@ -35,6 +37,9 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 
   @Autowired
   private OccurrenceRepository occurrenceRepository;
+
+  @Autowired
+  private FlightRepository flightRepository;
 
   Logger logger = LogManager.getRootLogger();
 
@@ -72,14 +77,25 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 
 
     for (Schedule schedule : scheduleList) {
+      long flightNumber = 1;
 
       String templateName = schedule.getTemplateName();
 
       StringBuilder surveyLinkForThisSchedule = new StringBuilder();
       surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri(), templateName));
+      List<Flight> flightList = new ArrayList<>();
+      flightList.addAll(flightRepository.findByScheduleId(schedule.getId()));
 
+      //if flights exist, the new flight number is one greater than the previous max for that schedule
+      if (!flightList.isEmpty()) {
+        flightNumber = flightRepository.findLargestByScheduleId(schedule.getId());
+        logger.info("current flightNumber: " + flightNumber);
+        ++flightNumber;
+      }
+
+      logger.info("new flight number: " + flightNumber);
       for (Respondent respondent : schedule.getRespondents()) {
-        Occurrence occurrenceToPost = new Occurrence(respondent);
+        Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
         surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
         body.append("Link to survey: " + surveyLinkForThisRespondent);
@@ -92,6 +108,8 @@ public class DailyJob extends SchedulerBaseJob implements Job {
         logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
         logger.info(respondent.getUser());
       }
+      Flight flightToPersist = new Flight(schedule.getId(), true, flightNumber, false);
+      flightRepository.save(flightToPersist);
     }
   }
 
@@ -112,17 +130,12 @@ public class DailyJob extends SchedulerBaseJob implements Job {
     int weeksValueOfFrequency = schedule.getFrequency().getValue();
     long daysBetween = ChronoUnit.DAYS.between(thisScheduleStartDate, todaysDate);
 
-    //Need a way to handle one shots.
-    //Their startdate will be the day they get submitted, but daily process runs at 8am.
-    //So their startdate will be in the past by the time they are checked.
-
-    if (schedule.getFrequency().getValue() == 0) {
+    if (schedule.getFrequency().getValue() == 0 && todaysDate.equals(schedule.getStartDate().plus(1, ChronoUnit.DAYS))) {
       isOnFrequency = true;
-      logger.info("The start date is today's date, so today is on that schedule's frequency.");
-      logger.info(schedule);
-    } else if (daysBetween % weeksValueOfFrequency == 0) {
+      logger.info("Schedule frequency is ONE_TIME, start date was yesterday, should create occurrence.");
+    } else if (schedule.getFrequency().getValue() != 0 && daysBetween % weeksValueOfFrequency == 0) {
       isOnFrequency = true;
-      logger.info("Today's date lands on the schedule frequency." + schedule.getStartDate() + " " + schedule.getFrequency());
+      logger.info("Today's date lands on the schedule frequency, should create occurrence." + schedule.getStartDate() + " " + schedule.getFrequency());
     }
 
     return isOnFrequency;
