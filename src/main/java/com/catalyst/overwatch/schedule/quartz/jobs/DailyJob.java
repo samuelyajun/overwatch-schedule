@@ -82,7 +82,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
         surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
         body.append("Link to survey: " + surveyLinkForThisRespondent);
-        generateNotification(respondent.getUser().getEmail(), body.toString(), subject, "Daily Job");
+        generateNotification(respondent.getUser().getEmail(),subject.toString(), subject, "Daily Job");
         logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
         logger.info(respondent.getUser());
       }
