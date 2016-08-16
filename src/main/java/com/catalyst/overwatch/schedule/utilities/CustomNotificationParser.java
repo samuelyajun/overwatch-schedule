@@ -1,6 +1,7 @@
 package com.catalyst.overwatch.schedule.utilities;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import org.slf4j.Logger;
 
 /**
  * Takes in the template name, modifies the string and selects a constant
@@ -11,6 +12,8 @@ import com.catalyst.overwatch.schedule.constants.NotificationConstants;
  * @since 1.0
  */
 public class CustomNotificationParser {
+
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(CustomNotificationParser.class);
 
 
     /**
@@ -46,6 +49,11 @@ public class CustomNotificationParser {
             case "SURVEY_SUBJECT_QUANTITATIVE":
                 surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_QUANTITATIVE;
                 break;
+
+            default:
+                surveySubjectValue = "SUBJECT N/A";
+                LOGGER.info("Notification Subject Error: schedule.getTemplateName returned a value that does not match any of the Notification Constants");
+
 
         }
 
@@ -87,6 +95,10 @@ public class CustomNotificationParser {
             case "SURVEY_BODY_QUANTITATIVE":
                 surveyBodyValue = NotificationConstants.SURVEY_BODY_QUANTITATIVE;
                 break;
+
+            default:
+                surveyBodyValue = "SUBJECT N/A";
+                LOGGER.info("Notification Body Error: schedule.getTemplateName returned a value that does not match any of the Notification Constants");
 
         }
 
