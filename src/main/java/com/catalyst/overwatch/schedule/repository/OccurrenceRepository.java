@@ -9,7 +9,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Created by hmccardell on 7/28/2016.
+ * This repository extends JpaRepository, and by its existence exposes basic CRUD endpoints for
+ * occurrences.  In addition, the below queries are exposed for consumption in Java and via
+ * /search endpoints in the API.
+ *
+ * example: http://localhost:8090/occurrences/search/findById?id=1
+ *
+ * @author hmccardell
  */
 @Repository
 public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {
@@ -19,4 +25,8 @@ public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {
   List<Occurrence> findByGenerationDateLessThanEqualAndIsComplete(@Param(value = "generationDate") LocalDate date,
                                                      @Param(value = "isComplete") boolean isComplete);
 
+  List<Occurrence> findByScheduleIdOrderByGenerationDateAsc(@Param(value = "scheduleId") long scheduleId);
+
+  List<Occurrence> findByScheduleIdAndFlightNumber(@Param(value = "scheduleId") long scheduleId,
+                                                       @Param(value = "flightNumber") long flightNumber);
 }
