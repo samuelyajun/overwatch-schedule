@@ -85,6 +85,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   public void calculateThresholdForFlight(Flight flight) {
 
     long thresholdMark = 0;
+    long id = 0;
     List<Occurrence> sendList = new ArrayList<>();
     List<Occurrence> occurrenceList = new ArrayList<>();
 
@@ -95,6 +96,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     //Loop through each occurrence in this flight to see if it has met the threshold
     for (Occurrence occurrence : occurrenceList) {
       ++thresholdMark;
+      id = occurrence.getId();
       logger.info("flight number; " + occurrence.getFlightNumber());
       logger.info("generation date: " + occurrence.getGenerationDate());
       logger.info(occurrence.toString());
@@ -116,6 +118,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flightRepository.save(flight);
       // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
+      restTemplate.getForObject("/report/" + id, String.class);
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
@@ -126,6 +129,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getEmail());
       }
       // TODO: 8/11/2016 construct and send tattles
+
+
     }
 
   }
