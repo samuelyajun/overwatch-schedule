@@ -74,13 +74,13 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 
     String surveyLinkForThisRespondent;
     String subject = NotificationConstants.SURVEY_WAITING_SUBJECT;
-    StringBuilder body = new StringBuilder();
-    body.append(NotificationConstants.SURVEY_WAITING_BODY + "\n\n");
 
+    long flightNumber = 0;
+    
     for (Schedule schedule : scheduleList) {
-      long flightNumber = 1;
+      
       StringBuilder surveyLinkForThisSchedule = new StringBuilder();
-      surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri(), schedule.getTemplateName()));
+      surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri()));
       List<Flight> flightList = new ArrayList<>();
       flightList.addAll(flightRepository.findByScheduleId(schedule.getId()));
 
@@ -93,6 +93,8 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 
       logger.info("new flight number: " + flightNumber);
       for (Respondent respondent : schedule.getRespondents()) {
+	    StringBuilder body = new StringBuilder();
+	    body.append(NotificationConstants.SURVEY_WAITING_BODY + "\n\n");
         Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
         surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());

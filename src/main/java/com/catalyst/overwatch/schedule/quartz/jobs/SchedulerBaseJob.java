@@ -38,7 +38,7 @@ public abstract class SchedulerBaseJob {
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
 
     completedLink.append(urls.getFrontEndBaseUrl());
-    completedLink.append(surveySuid + "&?" + originator + originatorId);
+    completedLink.append(surveySuid + "&" + originator + originatorId);
 
     logger.info("build survey link: " + completedLink.toString());
 
@@ -71,33 +71,23 @@ public abstract class SchedulerBaseJob {
   }
 
   /**
-   * Utilizes a surveySuid and an occurrence id to build a functional http link to a survey.
+   * Utilizes a surveySuid to build an http link to a survey. Does not append originatorId.
    *
-   * @param templateLink the relative link of a template on the survey service.
-   * @param surveyName the name of the survey from the survey service.
+   * @param surveySuid the relative link of a template on the survey service.
    *
    * @return a valid link to a survey for a specific user's occurrence.
    */
-  public String newBuildSurveyLink(final String templateLink, final String surveyName){
-
-    String surveyUrlToPost = NotificationConstants.SURVEY_ENDPOINT;
+  public String newBuildSurveyLink(final String surveySuid){
 
     StringBuilder completedLink = new StringBuilder();
     completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
-    SurveyLink surveyLink = new SurveyLink(templateLink, surveyName);
+    completedLink.append(NotificationConstants.SURVEY_ENDPOINT);
 
-    logger.info("template: " + templateLink);
-    logger.info("name: " + surveyName);
+    logger.info("Base email URL: " + completedLink.toString());
 
-    try {
-      SurveyLink returnedSurveyLink = restTemplate.postForEntity(surveyUrlToPost, surveyLink, SurveyLink.class).getBody();
-      logger.info("post response: " + returnedSurveyLink);
-      completedLink.append(returnedSurveyLink.getSurveyDisplayLink());
-      logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
-    }catch (Exception e){
-      logger.error("Quartz Job buildCompletedLink, exception occurred while contacting the Survey Service", e);
-    }
-
+    completedLink.append("?suid=" + surveySuid);
+    logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
+    
     return completedLink.toString();
   }
 
@@ -111,7 +101,7 @@ public abstract class SchedulerBaseJob {
    */
   public String addOriginatorIdToLink(StringBuilder link, final long originatorId){
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
-    link.append("&?" + originator + originatorId);
+    link.append("&" + originator + originatorId);
 
     return link.toString();
   }
