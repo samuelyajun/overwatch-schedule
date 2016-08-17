@@ -21,7 +21,6 @@ INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, '3DS
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Overwatch');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Mobile');
 
-INSERT INTO users (email, first_name, last_name) VALUES ('hmccardell@catalystdevworks.com','Hayes ','McCardell II');
 INSERT INTO users (email, first_name, last_name) VALUES ('bpyl@catalystdevworks.com','Brenton','Pyl');
 INSERT INTO users (email, first_name, last_name) VALUES ('elandes@catalystdevworks.com','Eric','Landes');
 INSERT INTO users (email, first_name, last_name) VALUES ('tbenz@catalystdevworks.com','Theresa','Benz');
@@ -52,7 +51,6 @@ INSERT INTO users (email, first_name, last_name) VALUES ('arajigah@catalystdevwo
 INSERT INTO users (email, first_name, last_name) VALUES ('hmccardell@catalystdevworks.com','Hayes ','McCardell II');
 INSERT INTO users (email, first_name, last_name) VALUES ('mderfler@catalystdevworks.com','Michael','Derfler');
 INSERT INTO users (email, first_name, last_name) VALUES ('ppor@catalystdevworks.com','Peter','Por');
-INSERT INTO users (email, first_name, last_name) VALUES ('ssmith@catalystdevworks.com','Steve','Smith');
 INSERT INTO users (email, first_name, last_name) VALUES ('gstringfellow@catalystdevworks.com','Gavin','Stringfellow');
 INSERT INTO users (email, first_name, last_name) VALUES ('agraham@catalystdevworks.com','Andrew','Graham');
 INSERT INTO users (email, first_name, last_name) VALUES ('ejornales@catalystdevworks.com','Earl','Jornales');
