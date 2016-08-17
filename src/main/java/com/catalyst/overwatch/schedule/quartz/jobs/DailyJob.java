@@ -1,6 +1,5 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
-import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Respondent;
@@ -8,6 +7,7 @@ import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
+import com.catalyst.overwatch.schedule.utilities.CustomNotificationParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -73,14 +73,16 @@ public class DailyJob extends SchedulerBaseJob implements Job {
   protected void generateOccurrencesForToday(List<Schedule> scheduleList) {
 
     String surveyLinkForThisRespondent;
-    String subject = NotificationConstants.SURVEY_WAITING_SUBJECT;
     StringBuilder body = new StringBuilder();
-    body.append(NotificationConstants.SURVEY_WAITING_BODY + "\n\n");
+
 
     for (Schedule schedule : scheduleList) {
       long flightNumber = 1;
+
+      String templateName = schedule.getTemplateName();
+
       StringBuilder surveyLinkForThisSchedule = new StringBuilder();
-      surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri(), schedule.getTemplateName()));
+      surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri(), templateName));
       List<Flight> flightList = new ArrayList<>();
       flightList.addAll(flightRepository.findByScheduleId(schedule.getId()));
 
@@ -97,7 +99,12 @@ public class DailyJob extends SchedulerBaseJob implements Job {
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
         surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
         body.append("Link to survey: " + surveyLinkForThisRespondent);
-        generateNotification(respondent.getUser().getEmail(), body.toString(), subject, "Daily Job");
+
+        generateNotification(respondent.getUser().getEmail(),
+                CustomNotificationParser.notificationBodyParser(templateName) + body,
+                CustomNotificationParser.notificationSubjectParser(templateName),
+                "Daily Job");
+
         logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
         logger.info(respondent.getUser());
       }
