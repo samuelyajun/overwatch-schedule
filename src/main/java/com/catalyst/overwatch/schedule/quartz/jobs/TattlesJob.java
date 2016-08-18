@@ -2,8 +2,7 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
-import com.catalyst.overwatch.schedule.model.Flight;
-import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.*;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
@@ -22,7 +21,9 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This job executes daily, finding schedules with respondents who have not submitted responses
@@ -192,6 +193,25 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     extractedResponseData.addAll(responseData.getContent());
 
     return extractedResponseData;
+  }
+
+  private List<Respondent> determineTattleRecipients(Schedule schedule){
+    List<Respondent> sendList = new ArrayList<>();
+    Set<Respondent> checkList = new HashSet<>();
+    checkList.addAll(schedule.getRespondents());
+
+    if(!checkList.isEmpty()) {
+      for (Respondent respondent : checkList){
+        for(AllowedAttribute allowedAttribute : respondent.getAllowedAttributes()){
+          if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
+                  && allowedAttribute.getAttributeType().equals("ROLE")){
+            sendList.add(respondent);
+          }
+        }
+      }
+    }
+
+    return sendList;
   }
 
 }
