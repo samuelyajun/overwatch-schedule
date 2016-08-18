@@ -83,7 +83,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    *
    * @param flight a flight of occurrences to calculate the threshold for.
    */
-  public void calculateThresholdForFlight(Flight flight) {
+  public void calculateThresholdForFlight(Flight flight, Schedule schedule) {
 
     long thresholdMark = 0;
     List<Occurrence> sendList = new ArrayList<>();
@@ -124,7 +124,20 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.info("Respondents in flight:  " + thresholdMark);
       logger.info("Number of responses: " + completeCounter);
       for (Occurrence occurrence : sendList) {
-        logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getEmail());
+        logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser());
+
+        StringBuilder tattleSubject = new StringBuilder();
+        StringBuilder tattleBody = new StringBuilder();
+        StringBuilder tattle = new StringBuilder();
+        tattleSubject.append(NotificationConstants.TATTLE_SUBJECT);
+        tattleBody.append(NotificationConstants.TATTLE_BODY_BEGIN +
+                schedule.getTemplateName() +
+                sendList+
+                NotificationConstants.TATTLE_BODY_END);
+        tattle.append(tattleSubject);
+        tattle.append(tattleBody);
+        tattle.toString();
+        logger.info("tattle: " + tattle);
       }
       // TODO: 8/11/2016 construct and send tattles
     }
