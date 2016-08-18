@@ -94,15 +94,12 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 	    StringBuilder body = new StringBuilder();
 	    body.append(NotificationConstants.SURVEY_WAITING_BODY + "\n\n");
 	    
-	    StringBuilder surveyLinkForThisSchedule = new StringBuilder();
-	    surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri()));
-	    
         Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
         
-        String surveyLinkForThisRespondent = "";
-        surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
-        
+	    StringBuilder surveyLinkForThisRespondent = new StringBuilder();
+	    surveyLinkForThisRespondent.append(buildSurveyLink(schedule.getTemplateUri(), postedOccurrence.getId()));
+	    
         body.append("Link to survey: " + surveyLinkForThisRespondent);
         
         generateNotification(respondent.getUser().getEmail(), body.toString(), subject, "Daily Job");

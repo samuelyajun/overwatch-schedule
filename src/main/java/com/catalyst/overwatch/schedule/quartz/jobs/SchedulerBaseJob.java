@@ -26,7 +26,7 @@ public abstract class SchedulerBaseJob {
   RestTemplate restTemplate = new RestTemplate();
 
   /**
-   * Utilizes a surveySuid and an occurrence id to build a functional http link to a survey.
+   * Utilizes a surveySuid and an occurrence id (aka originatorId) to build a functional http link to a survey.
    *
    * @param surveySuid   the id of the survey to build into the link
    * @param originatorId the occurrence id to include in the link
@@ -40,10 +40,14 @@ public abstract class SchedulerBaseJob {
     completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
     completedLink.append(NotificationConstants.SURVEY_ENDPOINT);
     
+    logger.info("Base email URL: " + completedLink.toString()); 
+    logger.info("surveySuid: " + surveySuid);
+    logger.info("occurrenceId: " + originatorId);
+    
     completedLink.append("?suid=" + surveySuid);
     completedLink.append("&" + originator + originatorId);
 
-    logger.info("build survey link: " + completedLink.toString());
+    logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
 
     return completedLink.toString();
   }
@@ -71,42 +75,6 @@ public abstract class SchedulerBaseJob {
       logger.error("Quartz " + errorReference + " Error:  exception occurred while calling Notification service", e);
     }
 
-  }
-
-  /**
-   * Utilizes a surveySuid to build an http link to a survey. Does not append originatorId.
-   *
-   * @param surveySuid the relative link of a template on the survey service.
-   *
-   * @return a valid link to a survey for a specific user's occurrence.
-   */
-  public String newBuildSurveyLink(final String surveySuid){
-
-    StringBuilder completedLink = new StringBuilder();
-    completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
-    completedLink.append(NotificationConstants.SURVEY_ENDPOINT);
-
-    logger.info("Base email URL: " + completedLink.toString());
-
-    completedLink.append("?suid=" + surveySuid);
-    logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
-    
-    return completedLink.toString();
-  }
-
-  /**
-   * Appends an originatorId (occurrence id) to a surveylink.
-   *
-   * @param link the link to add an originator to.
-   * @param originatorId the originatorId to add to the link.
-   *
-   * @return a link with an originatorId so that a user can click on it and have their answers recorded.
-   */
-  public String addOriginatorIdToLink(StringBuilder link, final long originatorId){
-    String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
-    link.append("&" + originator + originatorId);
-
-    return link.toString();
   }
 
 }
