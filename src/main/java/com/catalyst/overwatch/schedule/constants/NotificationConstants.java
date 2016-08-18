@@ -27,7 +27,7 @@ public class NotificationConstants {
   public static final String SURVEY_WAITING_BODY = "Please fill out this survey. I don't know what the nags and tattles will entail, but it's not good";
 
   public static final String NAG_BODY = "Your feedback is vital and we are waiting to hear from you! Before the end of the day, please take a few minutes to fill out your survey.";
-  
+
   public static final String SURVEY_SUBJECT_SPRINT_CHECKUP = "Sprint Checkup Survey";
   public static final String SURVEY_SUBJECT_SPD_TEAM = "Sprint Planning Day Survey";
   public static final String SURVEY_SUBJECT_SPD_LEADERS = "Sprint Planning Day Survey for Leads";
