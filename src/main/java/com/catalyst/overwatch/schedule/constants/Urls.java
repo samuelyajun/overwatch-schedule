@@ -54,22 +54,18 @@ public class Urls {
     }
 
     public String getFrontEndBaseUrl() {
-        System.out.println("\t\tFRONT_END_BASE_URL: " + String.format(FRONT_END_BASE_URL,notificationDomain,notificationPort));
         return String.format(FRONT_END_BASE_URL, frontendDomain, frontendPort);
     }
 
     public String getSurveyEndpoint() {
-        System.out.println("\t\tSURVEY_ENDPOINT: " + String.format(SURVEY_ENDPOINT, surveyDomain, surveyPort));
         return String.format(SURVEY_ENDPOINT, surveyDomain, surveyPort);
     }
 
     public String getResponseBaseUrl() {
-        System.out.println("\t\tRESPONSE_BASE_URL: " + String.format(RESPONSE_BASE_URL, responseDomain, responsePort));
         return String.format(RESPONSE_BASE_URL, responseDomain, responsePort);
     }
 
     public String getSearchSurveyResponseByDate() {
-        System.out.println("\t\tSURVEY_RESPONSE_BY_DATE: " + getResponseBaseUrl() + SURVEY_RESPONSE + QUERY_BY_DATE);
         return getResponseBaseUrl() + SURVEY_RESPONSE + QUERY_BY_DATE;
     }
 
