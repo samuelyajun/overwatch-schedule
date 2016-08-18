@@ -37,8 +37,11 @@ public abstract class SchedulerBaseJob {
     StringBuilder completedLink = new StringBuilder();
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
 
-    completedLink.append(urls.getFrontEndBaseUrl());
-    completedLink.append(surveySuid + "&" + originator + originatorId);
+    completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
+    completedLink.append(NotificationConstants.SURVEY_ENDPOINT);
+    
+    completedLink.append("?suid=" + surveySuid);
+    completedLink.append("&" + originator + originatorId);
 
     logger.info("build survey link: " + completedLink.toString());
 

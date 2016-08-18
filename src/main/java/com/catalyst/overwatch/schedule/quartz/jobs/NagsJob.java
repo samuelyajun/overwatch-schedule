@@ -51,6 +51,8 @@ public class NagsJob extends SchedulerBaseJob implements Job {
             .forEach(s -> {
               nagConstructor(s);
             });
+    
+    logger.info("Nags Job Complete");
   }
 
   /**

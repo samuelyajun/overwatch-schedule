@@ -132,7 +132,7 @@ public class SchedulerConfig {
   public CronTriggerFactoryBean nagsJobTrigger(@Qualifier("nagsJobDetail") JobDetail jobDetail) {
     String beanName = "Nags Process";
     String group = "Nags";
-    String cronExpression = SchedulerConstants.FOUR_THIRTY_PM_EASTERN_EVERY_DAY;
+    String cronExpression = SchedulerConstants.EVERY_15_SECONDS;
     return createTrigger(jobDetail, beanName, group, cronExpression);
   }
 

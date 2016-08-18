@@ -72,15 +72,12 @@ public class DailyJob extends SchedulerBaseJob implements Job {
    */
   protected void generateOccurrencesForToday(List<Schedule> scheduleList) {
 
-    String surveyLinkForThisRespondent;
     String subject = NotificationConstants.SURVEY_WAITING_SUBJECT;
 
-    long flightNumber = 0;
+    long flightNumber = 1;
     
     for (Schedule schedule : scheduleList) {
       
-      StringBuilder surveyLinkForThisSchedule = new StringBuilder();
-      surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri()));
       List<Flight> flightList = new ArrayList<>();
       flightList.addAll(flightRepository.findByScheduleId(schedule.getId()));
 
@@ -93,13 +90,23 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 
       logger.info("new flight number: " + flightNumber);
       for (Respondent respondent : schedule.getRespondents()) {
+    	  
 	    StringBuilder body = new StringBuilder();
 	    body.append(NotificationConstants.SURVEY_WAITING_BODY + "\n\n");
+	    
+	    StringBuilder surveyLinkForThisSchedule = new StringBuilder();
+	    surveyLinkForThisSchedule.append(newBuildSurveyLink(schedule.getTemplateUri()));
+	    
         Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
         Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
+        
+        String surveyLinkForThisRespondent = "";
         surveyLinkForThisRespondent = addOriginatorIdToLink(surveyLinkForThisSchedule, postedOccurrence.getId());
+        
         body.append("Link to survey: " + surveyLinkForThisRespondent);
+        
         generateNotification(respondent.getUser().getEmail(), body.toString(), subject, "Daily Job");
+        
         logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
         logger.info(respondent.getUser());
       }
