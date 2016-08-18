@@ -31,11 +31,11 @@ public class AllowedAttribute implements Serializable {
     this.id = id;
   }
 
-  public AttributeType getAttributeTypes() {
+  public AttributeType getAttributeType() {
     return attributeType;
   }
 
-  public void setAttributeTypes(AttributeType attributeType) {
+  public void setAttributeType(AttributeType attributeType) {
     this.attributeType = attributeType;
   }
 
