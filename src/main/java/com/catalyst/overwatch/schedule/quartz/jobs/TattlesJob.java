@@ -1,6 +1,7 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
@@ -47,8 +48,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   @Autowired
   private FlightRepository flightRepository;
 
+  @Autowired
+  private Urls urls;
+
   Logger logger = LogManager.getRootLogger();
-  String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
   List<Occurrence> occurrencesList = new ArrayList<>();
 
   /**
@@ -161,7 +164,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     try {
       Resources<SurveyResponse> surveyResponses = restTemplate.exchange(
-              responseUrl + LocalDate.now().minus(1, ChronoUnit.DAYS),
+              urls.getSearchSurveyResponseByDate() + LocalDate.now().minus(1, ChronoUnit.DAYS),
               HttpMethod.GET,
               null,
               new ParameterizedTypeReference<Resources<SurveyResponse>>() {
