@@ -49,22 +49,57 @@ public class Urls {
     @Value("${response.port}")
     private String responsePort;
 
+    /**
+     * Builds the notification endpoint for use from either docker or local
+     * from the values in the respective properties file
+     *
+     * @return String - fully formed notification endpoint string
+     * 	Example: "http://someDomain:somePort/notify"
+     */
     public String getNotificationEndpoint() {
         return String.format(NOTIFICATION_ENDPOINT, notificationDomain, notificationPort);
     }
-
+    
+    /**
+     * Builds the front end base url for use from either docker or local
+     * from the values in the respective properties file
+     *
+     * @return String - front end base url 
+     */
     public String getFrontEndBaseUrl() {
         return String.format(FRONT_END_BASE_URL, frontendDomain, frontendPort);
     }
 
+    /**
+     * Builds the survey service endpoint for use from either docker or local
+     * from the values in the respective properties file
+     *
+     * @return String - fully formed survey service endpoint 
+     * 	Example: "http://someDomain:somePort/surveys"
+     */
     public String getSurveyEndpoint() {
         return String.format(SURVEY_ENDPOINT, surveyDomain, surveyPort);
     }
 
+    /**
+     * Builds the response service url for use from either docker or local
+     * from the values in the respective properties file
+     *
+     * @return String -	response service base url 
+     */
     public String getResponseBaseUrl() {
         return String.format(RESPONSE_BASE_URL, responseDomain, responsePort);
     }
 
+    /**
+     * Builds the response endpoint for searching survey responses by date 
+     * for use from either docker or local
+     * from the values in the respective properties file
+     *
+     * @return String - response endpoint for searching by date
+     * 	Example: "http://someDomain: somePort/surveyResponses/search/
+     * 	findSurveyResponseByDateAnswered?dateAnswered="
+     */
     public String getSearchSurveyResponseByDate() {
         return getResponseBaseUrl() + SURVEY_RESPONSE + QUERY_BY_DATE;
     }
