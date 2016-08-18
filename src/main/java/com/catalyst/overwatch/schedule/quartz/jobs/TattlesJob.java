@@ -118,7 +118,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flightRepository.save(flight);
       // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
-      restTemplate.getForObject("/report/" + id, String.class);
+      //// TODO: 8/18/2016 add paramaterized link 
+      restTemplate.getForObject("localhost:8040/report/" + id, String.class);
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
