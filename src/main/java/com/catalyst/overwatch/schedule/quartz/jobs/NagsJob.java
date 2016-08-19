@@ -77,6 +77,9 @@ public class NagsJob extends SchedulerBaseJob implements Job {
             CustomNotificationParser.notificationBodyParser(templateName) + body,
             CustomNotificationParser.notificationSubjectParser(templateName),
             "Nags Job");
+    
+    logger.info("Nag email sent to: " + emailAddress);
+
   }
 
   /**

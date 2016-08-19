@@ -89,7 +89,7 @@ public class Urls {
      * 	Example: "http://someDomain:somePort/surveys"
      */
     public String getSurveyURLEndpoint() {
-        return String.format(FRONT_END_BASE_URL, surveyDomain, surveyPort);
+        return String.format(SURVEY_ENDPOINT, frontendDomain, frontendPort);
     }
 
     /**

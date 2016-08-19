@@ -3,7 +3,6 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.model.Notification;
-import com.catalyst.overwatch.schedule.model.external.SurveyLink;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +60,7 @@ public abstract class SchedulerBaseJob {
    */
   public void generateNotification(final String emailAddress, final String body, final String subject,
                                    final String errorReference) {
+	logger.info("Sending email to: " + emailAddress);
 
     String[] recipientAddress = new String[]{emailAddress};
     Notification notification = new Notification(recipientAddress, subject, body);
