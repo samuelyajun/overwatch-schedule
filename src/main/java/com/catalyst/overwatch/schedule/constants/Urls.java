@@ -50,8 +50,8 @@ public class Urls {
     private String responsePort;
 
     /**
-     * Builds the notification endpoint for use from either docker or local
-     * from the values in the respective properties file
+     * Builds the notification endpoint 
+     * Generated from the values in the respective local or docker properties file
      *
      * @return String - fully formed notification endpoint string
      * 	Example: "http://someDomain:somePort/notify"
@@ -61,8 +61,8 @@ public class Urls {
     }
     
     /**
-     * Builds the front end base url for use from either docker or local
-     * from the values in the respective properties file
+     * Builds the front end base url 
+     * Generated from the values in the respective local or docker properties file
      *
      * @return String - front end base url 
      */
@@ -71,8 +71,8 @@ public class Urls {
     }
 
     /**
-     * Builds the survey service endpoint for use from either docker or local
-     * from the values in the respective properties file
+     * Builds the survey service endpoint 
+     * Generated from the values in the respective local or docker properties file
      *
      * @return String - fully formed survey service endpoint 
      * 	Example: "http://someDomain:somePort/surveys"
@@ -80,10 +80,21 @@ public class Urls {
     public String getSurveyEndpoint() {
         return String.format(SURVEY_ENDPOINT, surveyDomain, surveyPort);
     }
+    
+    /**
+     * Builds the survey frontend endpoint for survey email links 
+     * Generated from the values in the respective local or docker properties file
+     * 
+     *
+     * @return String - fully formed survey service endpoint 
+     */
+    public String getSurveyURLEndpoint() {
+        return String.format(SURVEY_ENDPOINT, frontendDomain, frontendPort);
+    }
 
     /**
-     * Builds the response service url for use from either docker or local
-     * from the values in the respective properties file
+     * Builds the response service base url
+     * Generated from the values in the respective local or docker properties file
      *
      * @return String -	response service base url 
      */
@@ -93,8 +104,7 @@ public class Urls {
 
     /**
      * Builds the response endpoint for searching survey responses by date 
-     * for use from either docker or local
-     * from the values in the respective properties file
+     * Generated from the values in the respective local or docker properties file
      *
      * @return String - response endpoint for searching by date
      * 	Example: "http://someDomain: somePort/surveyResponses/search/
