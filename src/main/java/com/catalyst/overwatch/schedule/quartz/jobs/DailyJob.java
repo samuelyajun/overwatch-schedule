@@ -75,6 +75,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
     
     for (Schedule schedule : scheduleList) {
       long flightNumber = 1;
+      
       String templateName = schedule.getTemplateName();
 
       List<Flight> flightList = new ArrayList<>();
