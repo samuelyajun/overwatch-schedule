@@ -77,17 +77,15 @@ public abstract class SchedulerBaseJob {
    */
   public String newBuildSurveyLink(final String templateLink, final String surveyName) {
 
-    String surveyUrlToPost = NotificationConstants.SURVEY_ENDPOINT;
-
     StringBuilder completedLink = new StringBuilder();
-    completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
+    completedLink.append(urls.getFrontEndBaseUrl());
     SurveyLink surveyLink = new SurveyLink(templateLink, surveyName);
 
     logger.info("template: " + templateLink);
     logger.info("name: " + surveyName);
 
     try {
-      SurveyLink returnedSurveyLink = restTemplate.postForEntity(surveyUrlToPost, surveyLink, SurveyLink.class).getBody();
+      SurveyLink returnedSurveyLink = restTemplate.postForEntity(urls.getSurveyEndpoint(), surveyLink, SurveyLink.class).getBody();
       logger.info("post response: " + returnedSurveyLink);
       completedLink.append(returnedSurveyLink.getSurveyDisplayLink());
       logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
