@@ -22,9 +22,13 @@ public interface OccurrenceDetailsProjection {
   @JsonSerialize(using = LocalDateSerializer.class)
   LocalDate getGenerationDate();
 
-  boolean isComplete();
+  boolean getIsComplete();
 
   RespondentDetailsProjection getRespondent();
+
+  long getScheduleId();
+
+  long getFlightNumber();
 
 }
 
