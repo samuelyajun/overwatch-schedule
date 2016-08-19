@@ -19,11 +19,19 @@ public class Urls {
 
     private static final String SURVEY_ENDPOINT = "http://%s:%s/surveys";
 
-    public static final String RESPONSE_BASE_URL = "http://%s:%s";
+    private static final String RESPONSE_BASE_URL = "http://%s:%s";
 
-    public static final String SURVEY_RESPONSE = "/surveyResponses";
+    private static final String SURVEY_RESPONSE = "/surveyResponses";
 
-    public static final String QUERY_BY_DATE = "/search/findSurveyResponseByDateAnswered?dateAnswered=";
+    private static final String QUERY_BY_DATE = "/search/findSurveyResponseByDateAnswered?dateAnswered=";
+
+    private static final String REPORT_ENDPOINT= "http://%s:%s/report/";
+
+    @Value("${report.domain}")
+    private String reportDomain;
+
+    @Value("${report.port}")
+    private String reportPort;
 
     @Value("${frontend.domain}")
     private String frontendDomain;
@@ -48,6 +56,16 @@ public class Urls {
 
     @Value("${response.port}")
     private String responsePort;
+
+    /**
+     * Builds the the report endpoint for use from docker or local
+     * from the values in the respecitve properties file
+     *
+     * @return String - fully formed report endpoint string
+     */
+    public String getReportEndpoint(){
+        return String.format(REPORT_ENDPOINT, reportDomain, reportPort);
+    }
 
     /**
      * Builds the notification endpoint for use from either docker or local

@@ -1,6 +1,5 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
-import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Flight;
@@ -122,7 +121,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
       //// TODO: 8/18/2016 add paramaterized link 
-      restTemplate.getForObject("localhost:8040/report/" + id, String.class);
+      restTemplate.getForObject(urls.getReportEndpoint() + id, String.class);
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
