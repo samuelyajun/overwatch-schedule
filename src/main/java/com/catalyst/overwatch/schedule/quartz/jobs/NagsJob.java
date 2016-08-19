@@ -5,6 +5,7 @@ import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
+import com.catalyst.overwatch.schedule.utilities.CustomNotificationParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -64,17 +65,18 @@ public class NagsJob extends SchedulerBaseJob implements Job {
    */
   void nagConstructor(final Occurrence occurrence) {
 
-
     Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
     String templateName = schedule.getTemplateName();
     String templateSuid = schedule.getTemplateUri();
     String emailAddress = occurrence.getRespondent().getUser().getEmail();
     String completeSurveyLink = buildSurveyLink(templateSuid, occurrence.getId());
 
-    String subject = buildNagSubject(templateName);
     String body = buildNagBody(completeSurveyLink);
 
-    generateNotification(emailAddress, body.toString(), subject.toString(), "Nags Job");
+    generateNotification(emailAddress,
+            CustomNotificationParser.notificationBodyParser(templateName) + body,
+            CustomNotificationParser.notificationSubjectParser(templateName),
+            "Nags Job");
   }
 
   /**

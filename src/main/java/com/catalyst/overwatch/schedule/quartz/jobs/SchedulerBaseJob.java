@@ -7,9 +7,6 @@ import com.catalyst.overwatch.schedule.model.external.SurveyLink;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -22,8 +19,10 @@ public abstract class SchedulerBaseJob {
   @Autowired
   private Urls urls;
 
+  @Autowired
+  private RestTemplate restTemplate;
+
   Logger logger = LogManager.getLogger((SchedulerBaseJob.class));
-  RestTemplate restTemplate = new RestTemplate();
 
   /**
    * Utilizes a surveySuid and an occurrence id (aka originatorId) to build a functional http link to a survey.
@@ -37,8 +36,7 @@ public abstract class SchedulerBaseJob {
     StringBuilder completedLink = new StringBuilder();
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
 
-    completedLink.append(NotificationConstants.FRONT_END_BASE_URL);
-    completedLink.append(NotificationConstants.SURVEY_ENDPOINT);
+    completedLink.append(urls.getSurveyURLEndpoint());
     
     logger.info("Base email URL: " + completedLink.toString()); 
     logger.info("surveySuid: " + surveySuid);
@@ -51,7 +49,6 @@ public abstract class SchedulerBaseJob {
 
     return completedLink.toString();
   }
-
 
   /**
    * Makes a restful call to the notifications service to generate an email to a user. This email will include
