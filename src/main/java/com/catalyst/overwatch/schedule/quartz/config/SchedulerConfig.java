@@ -140,7 +140,7 @@ public class SchedulerConfig {
   public CronTriggerFactoryBean tattlesJobTrigger(@Qualifier("tattlesJobDetail") JobDetail jobDetail) {
     String beanName = "Tattles Process";
     String group = "Tattles";
-    String cronExpression = SchedulerConstants.JUST_AFTER_MIDNIGHT_EVERY_DAY;
+    String cronExpression = SchedulerConstants.EVERY_30_SECONDS;
     return createTrigger(jobDetail, beanName, group, cronExpression);
   }
 

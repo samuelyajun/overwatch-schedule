@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Collections.addAll;
+
 /**
  * This job executes daily, finding schedules with respondents who have not submitted responses
  * for their surveys.  The job will send a "tattle" email that shows which surveys have not
@@ -83,7 +85,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    *
    * @param flight a flight of occurrences to calculate the threshold for.
    */
-  public void calculateThresholdForFlight(Flight flight, Schedule schedule) {
+  public void calculateThresholdForFlight(Flight flight) {
+    logger.info(flight);
+    Schedule schedule = new Schedule();
+    schedule = scheduleRepository.findById(flight.getScheduleId());
 
     long thresholdMark = 0;
     List<Occurrence> sendList = new ArrayList<>();
@@ -106,6 +111,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       } else {
         logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
         sendList.add(occurrence);
+        logger.info("THIS IS THE SENDLIST: " + sendList);
       }
     }
 
@@ -123,21 +129,30 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.info("Threshold has not been met");
       logger.info("Respondents in flight:  " + thresholdMark);
       logger.info("Number of responses: " + completeCounter);
+      List<Respondent> tattleRecipients = new ArrayList<>();
+      tattleRecipients.addAll(determineTattleRecipients(schedule));
       for (Occurrence occurrence : sendList) {
-        logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser());
+        logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getFirstName());
+
+        String firstName = occurrence.getRespondent().getUser().getFirstName();
+        String lastName = occurrence.getRespondent().getUser().getLastName();
 
         StringBuilder tattleSubject = new StringBuilder();
         StringBuilder tattleBody = new StringBuilder();
         StringBuilder tattle = new StringBuilder();
+        StringBuilder tattleName = new StringBuilder();
+        tattleName.append(firstName + " " + lastName);
         tattleSubject.append(NotificationConstants.TATTLE_SUBJECT);
         tattleBody.append(NotificationConstants.TATTLE_BODY_BEGIN +
-                schedule.getTemplateName() +
-                sendList+
+                " survey: " +
+                tattleName +
+                ". " +
                 NotificationConstants.TATTLE_BODY_END);
-        tattle.append(tattleSubject);
+        tattle.append(tattleSubject + " ");
         tattle.append(tattleBody);
         tattle.toString();
         logger.info("tattle: " + tattle);
+
       }
       // TODO: 8/11/2016 construct and send tattles
     }
@@ -212,9 +227,11 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     List<Respondent> sendList = new ArrayList<>();
     Set<Respondent> checkList = new HashSet<>();
     checkList.addAll(schedule.getRespondents());
+    logger.info("checkList: " + checkList);
 
     if(!checkList.isEmpty()) {
       for (Respondent respondent : checkList){
+        logger.info("respondent in checklist: " + respondent);
         for(AllowedAttribute allowedAttribute : respondent.getAllowedAttributes()){
           if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
                   && allowedAttribute.getAttributeType().equals("ROLE")){
@@ -223,7 +240,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         }
       }
     }
-
     return sendList;
   }
 
