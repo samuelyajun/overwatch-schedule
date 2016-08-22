@@ -4,6 +4,7 @@ import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
@@ -88,6 +89,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     long thresholdMark = 0;
     long id = 0;
+
     List<Occurrence> sendList = new ArrayList<>();
     List<Occurrence> occurrenceList = new ArrayList<>();
 
@@ -97,8 +99,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     //Loop through each occurrence in this flight to see if it has met the threshold
     for (Occurrence occurrence : occurrenceList) {
+      id = occurrence.getScheduleId();
       ++thresholdMark;
-      id = occurrence.getId();
       logger.info("flight number; " + occurrence.getFlightNumber());
       logger.info("generation date: " + occurrence.getGenerationDate());
       logger.info(occurrence.toString());
@@ -120,8 +122,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flightRepository.save(flight);
       // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
-      //// TODO: 8/18/2016 add paramaterized link 
-      restTemplate.getForObject(urls.getReportEndpoint() + id, String.class);
+      //// TODO: 8/18/2016 add paramaterized link
+      Schedule scheduleById = scheduleRepository.findById(id);
+      restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), String.class);
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
