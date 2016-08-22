@@ -152,12 +152,20 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         tattle.append(tattleBody);
         tattle.toString();
         logger.info("tattle: " + tattle);
+        //TODO: GENERATE TATTLE!
 
       }
       // TODO: 8/11/2016 construct and send tattles
     }
 
   }
+
+  void tattleConstructor(final Occurrence occurrence) {
+    Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
+    String
+  }
+
+
 
   /**
    * Finds all occurrences with response data and marks them complete by updating the
@@ -217,9 +225,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   private List<SurveyResponse> extractResponseData(final Resources<SurveyResponse> responseData) {
     List<SurveyResponse> extractedResponseData = new ArrayList<>();
-
     extractedResponseData.addAll(responseData.getContent());
-
     return extractedResponseData;
   }
 
@@ -231,11 +237,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     if(!checkList.isEmpty()) {
       for (Respondent respondent : checkList){
-        logger.info("respondent in checklist: " + respondent);
         for(AllowedAttribute allowedAttribute : respondent.getAllowedAttributes()){
           if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
-                  && allowedAttribute.getAttributeType().equals("ROLE")){
+                  && allowedAttribute.getAttributeType().getName().equals("ROLE")){
+            logger.info("Sending Tattles to the following: " + respondent);
             sendList.add(respondent);
+            logger.info("Sending Tattles to the following: " + sendList);
           }
         }
       }

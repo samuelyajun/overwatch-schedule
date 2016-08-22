@@ -112,31 +112,31 @@ INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VA
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 5);
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 9);
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 10);
---EM
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (18, 1);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (18, 5);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (18, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (18, 10);
---TL
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 2);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 5);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (20, 10);
+
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 1);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 5);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 9);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 10);
+
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 2);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 5);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 9);
+INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 10);
 
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 1, 1, 1);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 2, 1, 1);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 18, 1, 1);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 20, 1, 1);
+INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 3, 1, 1);
+INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 4, 1, 1);
 
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 1, 1, 2);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 2, 1, 2);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 18, 1, 2);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 20, 1, 2);
+INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 3, 1, 2);
+INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 4, 1, 2);
 
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 1, 1, 3);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 2, 1, 3);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 18, 1, 3);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 20, 1, 3);
+INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 3, 1, 3);
+INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 4, 1, 3);
 
 INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 1, true);
 INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 2, true);
