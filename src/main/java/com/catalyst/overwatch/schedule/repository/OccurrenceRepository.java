@@ -9,7 +9,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Created by hmccardell on 7/28/2016.
+ * Exposes a basic RESTFUL endpoint for Occurences.
+ * 
+ * @author hmccardell
+ * @author bfutral
  */
 @Repository
 public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {

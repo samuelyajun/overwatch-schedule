@@ -5,6 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
+/**
+ * Exposes a basic RESTFUL endpoint for Users.
+ * 
+ * @author bfutral
+ */
 @RepositoryRestResource(path = "users", collectionResourceRel = "users", itemResourceRel = "users")
 public interface UserRepository extends JpaRepository<User, Long> {
 

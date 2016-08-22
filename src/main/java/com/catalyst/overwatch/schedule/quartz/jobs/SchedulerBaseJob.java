@@ -2,14 +2,17 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
+import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Notification;
 import com.catalyst.overwatch.schedule.model.external.SurveyLink;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A base class for Overwatch Schedule jobs, providing basic utilities common to multiple jobs.
@@ -19,7 +22,9 @@ import org.springframework.web.client.RestTemplate;
 public abstract class SchedulerBaseJob {
 
   Logger logger = LogManager.getLogger((SchedulerBaseJob.class));
-  RestTemplate restTemplate = new RestTemplate();
+  
+  @Autowired
+  RestTemplate restTemplate;
 
   /**
    * Utilizes a surveySuid and an occurrence id to build a functional http link to a survey.
@@ -54,6 +59,11 @@ public abstract class SchedulerBaseJob {
   public void generateNotification(final String emailAddress, final String body, final String subject,
                                    final String errorReference) {
 
+    checkNotNull(emailAddress, "emailAddress cannot be null");
+    checkNotNull(body, "body cannot be null");
+    checkNotNull(subject, "subject cannot be null");
+    checkNotNull(errorReference, "errorReference cannot be null");
+    
     String[] recipientAddress = new String[]{emailAddress};
     Notification notification = new Notification(recipientAddress, subject, body);
 
@@ -62,6 +72,7 @@ public abstract class SchedulerBaseJob {
       logger.info("Generated email from rest template");
     } catch (Exception e) {
       logger.error("Quartz " + errorReference + " Error:  exception occurred while calling Notification service", e);
+      throw new OverwatchScheduleException("Error:  exception occurred while calling Notification service", e);
     }
 
   }
@@ -111,5 +122,5 @@ public abstract class SchedulerBaseJob {
 
     return link.toString();
   }
-
+  
 }
