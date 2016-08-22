@@ -1,4 +1,4 @@
-FROM alpine-java8:latest
+FROM hub.catalystsolves.com:5000/alpine-java8:latest
 
 # Add Compiled Spring Boot Package
 VOLUME /tmp
