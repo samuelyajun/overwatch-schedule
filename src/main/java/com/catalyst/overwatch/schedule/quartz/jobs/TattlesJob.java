@@ -7,6 +7,7 @@ import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
+import com.catalyst.overwatch.schedule.utilities.CustomNotificationParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -133,27 +134,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       tattleRecipients.addAll(determineTattleRecipients(schedule));
       for (Occurrence occurrence : sendList) {
         logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getFirstName());
-
-        String firstName = occurrence.getRespondent().getUser().getFirstName();
-        String lastName = occurrence.getRespondent().getUser().getLastName();
-
-        StringBuilder tattleSubject = new StringBuilder();
-        StringBuilder tattleBody = new StringBuilder();
-        StringBuilder tattle = new StringBuilder();
-        StringBuilder tattleName = new StringBuilder();
-        tattleName.append(firstName + " " + lastName);
-        tattleSubject.append(NotificationConstants.TATTLE_SUBJECT);
-        tattleBody.append(NotificationConstants.TATTLE_BODY_BEGIN +
-                " survey: " +
-                tattleName +
-                ". " +
-                NotificationConstants.TATTLE_BODY_END);
-        tattle.append(tattleSubject + " ");
-        tattle.append(tattleBody);
-        tattle.toString();
-        logger.info("tattle: " + tattle);
-        //TODO: GENERATE TATTLE!
-
+        tattleConstructor(occurrence);
       }
       // TODO: 8/11/2016 construct and send tattles
     }
@@ -162,7 +143,44 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
   void tattleConstructor(final Occurrence occurrence) {
     Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
-    String
+    String templateName = schedule.getTemplateName();
+    List<Respondent> sendList = determineTattleRecipients(schedule);
+    String emailAddress = null;
+    logger.info("SENDLIST: " + sendList);
+    for(Respondent respondent : sendList) {
+      emailAddress = respondent.getUser().getEmail();
+      logger.info("EMAIL: " + emailAddress);
+    }
+
+    String tattleBody = buildTattleBody(occurrence);
+
+    generateNotification(emailAddress,
+            CustomNotificationParser.notificationBodyParser(templateName) + tattleBody,
+            CustomNotificationParser.notificationSubjectParser(templateName),
+            "Tattle Job");
+
+    logger.info("GENERATED!");
+  }
+
+  String buildTattleBody(Occurrence occurrence) {
+    String firstName = occurrence.getRespondent().getUser().getFirstName();
+    String lastName = occurrence.getRespondent().getUser().getLastName();
+
+    StringBuilder tattleSubject = new StringBuilder();
+    StringBuilder tattleBody = new StringBuilder();
+    StringBuilder tattle = new StringBuilder();
+    StringBuilder tattleUserName = new StringBuilder();
+    tattleUserName.append(firstName + " " + lastName);
+    tattleSubject.append(NotificationConstants.TATTLE_SUBJECT);
+    tattleBody.append(NotificationConstants.TATTLE_BODY_BEGIN +
+            " survey: " +
+            tattleUserName +
+            ". " +
+            NotificationConstants.TATTLE_BODY_END);
+    tattle.append(tattleSubject + " ");
+    tattle.append(tattleBody);
+    logger.info("GENERATE TATTLE: " + tattle);
+    return tattle.toString();
   }
 
 
@@ -242,7 +260,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
                   && allowedAttribute.getAttributeType().getName().equals("ROLE")){
             logger.info("Sending Tattles to the following: " + respondent);
             sendList.add(respondent);
-            logger.info("Sending Tattles to the following: " + sendList);
+            logger.info("THIS IS THE SEND LIST: " + sendList);
           }
         }
       }

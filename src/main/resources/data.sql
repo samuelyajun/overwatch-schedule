@@ -133,7 +133,7 @@ INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 3, 1, 2);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 4, 1, 2);
 
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 1, 1, 3);
+INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 1, 1, 3);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 2, 1, 3);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 3, 1, 3);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 4, 1, 3);
