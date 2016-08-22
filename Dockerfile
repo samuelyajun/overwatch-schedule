@@ -1,4 +1,4 @@
-FROM alpine-java8:latest
+FROM hub.catalystsolves.com:5000/alpine-java8:latest
 
 # Add Compiled Spring Boot Package
 VOLUME /tmp
@@ -7,4 +7,3 @@ RUN sh -c 'touch /app.jar'
 EXPOSE 80
 ENV SPRING_PROFILES_ACTIVE docker
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-
