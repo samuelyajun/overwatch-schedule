@@ -32,7 +32,10 @@ public abstract class SchedulerBaseJob {
    * @param originatorId the occurrence id to include in the link
    * @return a valid link to a survey for a specific user's occurrence
    */
-  protected String buildSurveyLink(final String surveySuid, final long originatorId) {
+  protected String buildSurveyLink(final String surveySuid, final Long originatorId) {
+    
+    checkNotNull(surveySuid, "surveySuid cannot be null");
+    checkNotNull(originatorId, "originatorId cannot be null");
 
     StringBuilder completedLink = new StringBuilder();
     String originator = NotificationConstants.SURVEYS_ORIGINATOR_PARAM;
@@ -62,12 +65,13 @@ public abstract class SchedulerBaseJob {
    */
   public void generateNotification(final String emailAddress, final String body, final String subject,
                                    final String errorReference) {
-	logger.info("Sending email to: " + emailAddress);
-
+	
     checkNotNull(emailAddress, "emailAddress cannot be null");
     checkNotNull(body, "body cannot be null");
     checkNotNull(subject, "subject cannot be null");
     checkNotNull(errorReference, "errorReference cannot be null");
+    
+    logger.info("Sending email to: " + emailAddress);
     
     String[] recipientAddress = new String[]{emailAddress};
     Notification notification = new Notification(recipientAddress, subject, body);

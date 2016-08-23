@@ -1,6 +1,20 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
-import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Respondent;
@@ -9,19 +23,6 @@ import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
 import com.catalyst.overwatch.schedule.utilities.CustomNotificationParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
-import static com.google.common.base.Preconditions.*;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * This daily job will run every day on a schedule designated in the SchedulerConfig. In the alpha
@@ -79,45 +80,49 @@ public class DailyJob extends SchedulerBaseJob implements Job {
   protected void generateOccurrencesForToday(List<Schedule> scheduleList) {
 
     checkNotNull(scheduleList, "scheduleList cannotbe null");
+    
     for (Schedule schedule : scheduleList) {
       long flightNumber = 1;
-      
+
       String templateName = schedule.getTemplateName();
 
       List<Flight> flightList = new ArrayList<>();
       flightList.addAll(flightRepository.findByScheduleId(schedule.getId()));
 
-      //if flights exist, the new flight number is one greater than the previous max for that schedule
+      // if flights exist, the new flight number is one greater than the previous max for that
+      // schedule
       if (!flightList.isEmpty()) {
         flightNumber = flightRepository.findLargestByScheduleId(schedule.getId());
         logger.info("current flightNumber: " + flightNumber);
         ++flightNumber;
       }
-      
+
       logger.info("new flight number: " + flightNumber);
-      
-      for (Respondent respondent : schedule.getRespondents()) {
-    	  
-	    StringBuilder body = new StringBuilder();
-	    
-        Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
-        Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
-        
-	    StringBuilder surveyLinkForThisRespondent = new StringBuilder();
-	    surveyLinkForThisRespondent.append(buildSurveyLink(schedule.getTemplateUri(), postedOccurrence.getId()));
-	    
-        body.append("Link to survey: " + surveyLinkForThisRespondent);
+      if (schedule.getRespondents() != null) {
+        for (Respondent respondent : schedule.getRespondents()) {
 
-        generateNotification(respondent.getUser().getEmail(),
-                CustomNotificationParser.notificationBodyParser(templateName) + body,
-                CustomNotificationParser.notificationSubjectParser(templateName),
-                "Daily Job");
+          StringBuilder body = new StringBuilder();
 
-        logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: " + surveyLinkForThisRespondent);
-        logger.info(respondent.getUser());
+          Occurrence occurrenceToPost = new Occurrence(respondent, schedule.getId(), flightNumber);
+          Occurrence postedOccurrence = occurrenceRepository.save(occurrenceToPost);
+
+          StringBuilder surveyLinkForThisRespondent = new StringBuilder();
+          surveyLinkForThisRespondent
+              .append(buildSurveyLink(schedule.getTemplateUri(), postedOccurrence.getId()));
+
+          body.append("Link to survey: " + surveyLinkForThisRespondent);
+
+          generateNotification(respondent.getUser().getEmail(),
+              CustomNotificationParser.notificationBodyParser(templateName) + body,
+              CustomNotificationParser.notificationSubjectParser(templateName), "Daily Job");
+
+          logger.info("Generate notification: " + respondent.getUser().getEmail() + "    link: "
+              + surveyLinkForThisRespondent);
+          logger.info(respondent.getUser());
+        }
+        Flight flightToPersist = new Flight(schedule.getId(), true, flightNumber, false);
+        flightRepository.save(flightToPersist);
       }
-      Flight flightToPersist = new Flight(schedule.getId(), true, flightNumber, false);
-      flightRepository.save(flightToPersist);
     }
   }
 
@@ -130,23 +135,27 @@ public class DailyJob extends SchedulerBaseJob implements Job {
    * @param schedule the schedule to check.
    * @return boolean true when today's date falls on the schedule's frequency, else false.
    */
-  protected boolean isTodayOnScheduleFrequency(Schedule schedule) {
+  protected boolean isTodayOnScheduleFrequency(final Schedule schedule) {
 
     checkNotNull(schedule, "schedule must not be null");
     checkNotNull(schedule.getStartDate(), "Schedule Startdate must not be null");
-    checkNotNull(schedule.getFrequency(), "Schedule Frequencymust not be null");
+    checkNotNull(schedule.getFrequency(), "Schedule Frequency must not be null");
 
     boolean isOnFrequency = false;
 
     int weeksValueOfFrequency = schedule.getFrequency().getValue();
     long daysBetween = ChronoUnit.DAYS.between(schedule.getStartDate(), LocalDate.now());
 
-    if (schedule.getFrequency().getValue() == 0 && LocalDate.now().equals(schedule.getStartDate().plus(1, ChronoUnit.DAYS))) {
+    if (schedule.getFrequency().getValue() == 0
+        && LocalDate.now().equals(schedule.getStartDate().plus(1, ChronoUnit.DAYS))) {
       isOnFrequency = true;
-      logger.info("Schedule frequency is ONE_TIME, start date was yesterday, should create occurrence.");
-    } else if (schedule.getFrequency().getValue() != 0 && daysBetween % weeksValueOfFrequency == 0) {
+      logger.info(
+          "Schedule frequency is ONE_TIME, start date was yesterday, should create occurrence.");
+    } else
+      if (schedule.getFrequency().getValue() != 0 && daysBetween % weeksValueOfFrequency == 0) {
       isOnFrequency = true;
-      logger.info("Today's date lands on the schedule frequency, should create occurrence." + schedule.getStartDate() + " " + schedule.getFrequency());
+      logger.info("Today's date lands on the schedule frequency, should create occurrence."
+          + schedule.getStartDate() + " " + schedule.getFrequency());
     }
 
     return isOnFrequency;
