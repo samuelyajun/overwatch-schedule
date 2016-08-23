@@ -67,4 +67,12 @@ public class AllowedAttribute implements Serializable {
     return attributeValue.equals(that.attributeValue);
 
   }
+
+  @Override
+  public int hashCode() {
+    int result = (int) (id ^ (id >>> 32));
+    result = 31 * result + attributeType.hashCode();
+    result = 31 * result + attributeValue.hashCode();
+    return result;
+  }
 }

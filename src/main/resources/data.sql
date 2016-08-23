@@ -21,7 +21,7 @@ INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, '3DS
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Overwatch');
 INSERT INTO allowedattribute (attributetype_id, attribute_value) VALUES (4, 'Mobile');
 
-INSERT INTO users (email, first_name, last_name) VALUES ('hmccardell@catalystdevworks.com','Hayes ','McCardell II');
+INSERT INTO users (email, first_name, last_name) VALUES ('hmccardell@catalystdevworks.com','Hayes','McCardell II');
 INSERT INTO users (email, first_name, last_name) VALUES ('bpyl@catalystdevworks.com','Brenton','Pyl');
 INSERT INTO users (email, first_name, last_name) VALUES ('elandes@catalystdevworks.com','Eric','Landes');
 INSERT INTO users (email, first_name, last_name) VALUES ('tbenz@catalystdevworks.com','Theresa','Benz');
@@ -94,14 +94,113 @@ INSERT INTO users (email, first_name, last_name) VALUES ('showard@catalystdevwor
 
 -- END TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET
 
--- TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET  (Team includes TL & EM, occurrence id 6 is not complete)
+-- TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET 2  (Team includes TL & EM, occurrence id 6 is not complete)
+
+--INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-07-22', 'Sprint Checkup', '/templates/1', 'ONE_WEEK', 'true');
+--
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 2);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 17);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 20);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 1);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 2);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 10);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 1, 1, 1);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 2, 1, 1);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 3, 1, 1);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 4, 1, 1);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 1, 1, 2);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 2, 1, 2);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 3, 1, 2);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 4, 1, 2);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 1, 1, 3);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 2, 1, 3);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 3, 1, 3);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 4, 1, 3);
+--
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 1, true);
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 2, true);
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 3, false);
+
+-- END TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET 2
+
+-- TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET 3  (Team includes 2 TL & No EM, occurrence id 6 is not complete)
+
+--INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-07-22', 'Sprint Checkup', '/templates/1', 'ONE_WEEK', 'true');
+--
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 2);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 28);
+--INSERT INTO respondent (schedule_id, user_id) VALUES (1, 23);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 4);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (2, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 2);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 10);
+--
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 2);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 5);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 9);
+--INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 10);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 1, 1, 1);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 2, 1, 1);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 3, 1, 1);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 4, 1, 1);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 1, 1, 2);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 2, 1, 2);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 3, 1, 2);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 4, 1, 2);
+--
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 1, 1, 3);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 2, 1, 3);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 3, 1, 3);
+--INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 4, 1, 3);
+--
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 1, true);
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 2, true);
+--INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 3, false);
+
+-- END TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET 3
+
+-- TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET 4  (Team includes No TL & 2 EM, occurrence id 6 is not complete)
 
 INSERT INTO schedule  (end_date, start_date, template_name, template_uri, frequency, isActive) VALUES (null, '2016-07-22', 'Sprint Checkup', '/templates/1', 'ONE_WEEK', 'true');
 
 INSERT INTO respondent (schedule_id, user_id) VALUES (1, 1);
 INSERT INTO respondent (schedule_id, user_id) VALUES (1, 2);
-INSERT INTO respondent (schedule_id, user_id) VALUES (1, 18);
-INSERT INTO respondent (schedule_id, user_id) VALUES (1, 20);
+INSERT INTO respondent (schedule_id, user_id) VALUES (1, 28);
 
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 4);
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (1, 5);
@@ -118,31 +217,23 @@ INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VA
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 9);
 INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (3, 10);
 
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 2);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 5);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 9);
-INSERT INTO respondent_allowedattribute (respondent_id, allowedattributes_id) VALUES (4, 10);
-
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 1, 1, 1);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 2, 1, 1);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 3, 1, 1);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-22', true, 4, 1, 1);
 
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 1, 1, 2);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 2, 1, 2);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 3, 1, 2);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-07-29', true, 4, 1, 2);
 
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 1, 1, 3);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', false, 2, 1, 3);
 INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 3, 1, 3);
-INSERT INTO occurrence (generation_date, is_complete, respondent_id, schedule_id, flight_number) VALUES ('2016-08-04', true, 4, 1, 3);
 
 INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 1, true);
 INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 2, true);
 INSERT INTO flight (schedule_id, schedule_is_active, flight_number, is_closed) VALUES (1, true, 3, false);
 
--- END TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET
+-- END TEST CASE FOR TATTLES JOB: THRESHOLD IS NOT MET 4
 
 
 

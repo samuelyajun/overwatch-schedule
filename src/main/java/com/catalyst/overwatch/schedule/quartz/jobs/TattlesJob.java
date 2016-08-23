@@ -53,7 +53,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
   Logger logger = LogManager.getRootLogger();
   String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
-  List<Occurrence> occurrencesList = new ArrayList<>();
 
   /**
    * The main function of the TattlesJob, which executes the needed tasks.
@@ -88,17 +87,16 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   public void calculateThresholdForFlight(Flight flight) {
     logger.info(flight);
-    Schedule schedule = new Schedule();
-    schedule = scheduleRepository.findById(flight.getScheduleId());
+    Schedule schedule = scheduleRepository.findById(flight.getScheduleId());
 
     long thresholdMark = 0;
-    List<Occurrence> sendList = new ArrayList<>();
     List<Occurrence> occurrenceList = new ArrayList<>();
 
     int completeCounter = 0;
 
     occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
 
+    List<Occurrence> tattleOnList = new ArrayList<>();
     //Loop through each occurrence in this flight to see if it has met the threshold
     for (Occurrence occurrence : occurrenceList) {
       ++thresholdMark;
@@ -111,8 +109,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
       } else {
         logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
-        sendList.add(occurrence);
-        logger.info("THIS IS THE SENDLIST: " + sendList);
+        tattleOnList.add(occurrence);
+        logger.info("THIS IS THE SENDLIST: " + tattleOnList);
       }
     }
 
@@ -123,67 +121,69 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flight.setIsClosed(true);
       flightRepository.save(flight);
       // TODO: 8/11/2016 send "threshold met" notification to stakeholders
-
     }
+
     //Threshold not met, generate tattles for the delinquent respondents
     else {
       logger.info("Threshold has not been met");
       logger.info("Respondents in flight:  " + thresholdMark);
       logger.info("Number of responses: " + completeCounter);
-      List<Respondent> tattleRecipients = new ArrayList<>();
-      tattleRecipients.addAll(determineTattleRecipients(schedule));
-      for (Occurrence occurrence : sendList) {
-        logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getFirstName());
-        tattleConstructor(occurrence);
-      }
-      // TODO: 8/11/2016 construct and send tattles
+      tattleConstructor(tattleOnList);
     }
-
   }
 
-  void tattleConstructor(final Occurrence occurrence) {
-    Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
-    String templateName = schedule.getTemplateName();
-    List<Respondent> sendList = determineTattleRecipients(schedule);
+  public void tattleConstructor(final List<Occurrence> occurrences) {
+    Set<Respondent> sendTattleList = new HashSet<>();
+    for (Occurrence occurrence : occurrences) {
+      Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
+      sendTattleList.addAll(determineTattleRecipients(schedule));
+    }
+
     String emailAddress = null;
-    logger.info("SENDLIST: " + sendList);
-    for(Respondent respondent : sendList) {
+    logger.info("SEND TATTLE TO: " + sendTattleList);
+    for(Respondent respondent : sendTattleList) {
       emailAddress = respondent.getUser().getEmail();
       logger.info("EMAIL: " + emailAddress);
     }
 
-    String tattleBody = buildTattleBody(occurrence);
+    String tattleBody = buildTattleBody(occurrences);
 
     generateNotification(emailAddress,
-            CustomNotificationParser.notificationBodyParser(templateName) + tattleBody,
-            CustomNotificationParser.notificationSubjectParser(templateName),
+            tattleBody,
+            NotificationConstants.TATTLE_SUBJECT,
             "Tattle Job");
 
     logger.info("GENERATED!");
   }
 
-  String buildTattleBody(Occurrence occurrence) {
-    String firstName = occurrence.getRespondent().getUser().getFirstName();
-    String lastName = occurrence.getRespondent().getUser().getLastName();
-
-    StringBuilder tattleSubject = new StringBuilder();
+  /**
+  * Builds body for the tattle.
+  * */
+  private String buildTattleBody(List<Occurrence> occurrences) {
     StringBuilder tattleBody = new StringBuilder();
     StringBuilder tattle = new StringBuilder();
-    StringBuilder tattleUserName = new StringBuilder();
-    tattleUserName.append(firstName + " " + lastName);
-    tattleSubject.append(NotificationConstants.TATTLE_SUBJECT);
-    tattleBody.append(NotificationConstants.TATTLE_BODY_BEGIN +
-            " survey: " +
-            tattleUserName +
-            ". " +
+    StringBuilder usersString = new StringBuilder();
+    Long scheduleId = occurrences.get(0).getScheduleId();
+    String surveyName;
+
+    Schedule schedule = scheduleRepository.findById(scheduleId);
+    surveyName = schedule.getTemplateName() + ": ";
+
+    for (Occurrence occurrence : occurrences) {
+      Respondent respondent = occurrence.getRespondent();
+      String firstName = respondent.getUser().getFirstName();
+      String lastName = respondent.getUser().getLastName();
+      usersString.append(firstName + " " + lastName + "\n");
+    }
+
+    tattleBody.append(NotificationConstants.TATTLE_BODY_BEGIN + " " +
+            surveyName + "\n" + "\n" +
+            usersString.toString() + "\n" +
             NotificationConstants.TATTLE_BODY_END);
-    tattle.append(tattleSubject + " ");
     tattle.append(tattleBody);
     logger.info("GENERATE TATTLE: " + tattle);
     return tattle.toString();
   }
-
-
 
   /**
    * Finds all occurrences with response data and marks them complete by updating the
@@ -247,8 +247,16 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     return extractedResponseData;
   }
 
+  /**
+  * Determines which respondent(s) will have tattles sent to them.
+  * Checks for respondents with a ROLE of Engagement Manager and/or Tech Lead AttributeValue,
+  * and adds them to a list.
+  *
+  * @param schedule
+  * @return List of respondents to receive tattles.
+  * */
   private List<Respondent> determineTattleRecipients(Schedule schedule){
-    List<Respondent> sendList = new ArrayList<>();
+    List<Respondent> tattleToList = new ArrayList<>();
     Set<Respondent> checkList = new HashSet<>();
     checkList.addAll(schedule.getRespondents());
     logger.info("checkList: " + checkList);
@@ -259,13 +267,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
           if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
                   && allowedAttribute.getAttributeType().getName().equals("ROLE")){
             logger.info("Sending Tattles to the following: " + respondent);
-            sendList.add(respondent);
-            logger.info("THIS IS THE SEND LIST: " + sendList);
+            tattleToList.add(respondent);
           }
         }
       }
     }
-    return sendList;
+    return tattleToList;
   }
 
 }
