@@ -124,7 +124,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
       //// TODO: 8/18/2016 add paramaterized link
       Schedule scheduleById = scheduleRepository.findById(id);
-      restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), String.class);
+      Object response;
+      response = restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class);
+
+      logger.info(response);
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
