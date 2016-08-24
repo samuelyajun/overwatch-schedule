@@ -120,14 +120,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.info("Updating the flight table");
       flight.setIsClosed(true);
       flightRepository.save(flight);
-      // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
-      //// TODO: 8/18/2016 add paramaterized link
       Schedule scheduleById = scheduleRepository.findById(id);
       Object response;
       response = restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class);
 
-      logger.info(response);
+      logger.info(response.toString());
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
