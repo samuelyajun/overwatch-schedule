@@ -77,9 +77,9 @@ public class DailyJob extends SchedulerBaseJob implements Job {
    *
    * @param scheduleList a list of schedules that are ready for occurrence generation.
    */
-  protected void generateOccurrencesForToday(List<Schedule> scheduleList) {
+  protected void generateOccurrencesForToday(final List<Schedule> scheduleList) {
 
-    checkNotNull(scheduleList, "scheduleList cannotbe null");
+    checkNotNull(scheduleList, "scheduleList cannot be null");
     
     for (Schedule schedule : scheduleList) {
       long flightNumber = 1;

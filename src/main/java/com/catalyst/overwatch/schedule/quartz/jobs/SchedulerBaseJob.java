@@ -14,6 +14,7 @@ import static com.google.common.base.Preconditions.*;
  * A base class for Overwatch Schedule jobs, providing basic utilities common to multiple jobs.
  *
  * @author hmccardell
+ * @author bfutral
  */
 public abstract class SchedulerBaseJob {
 
