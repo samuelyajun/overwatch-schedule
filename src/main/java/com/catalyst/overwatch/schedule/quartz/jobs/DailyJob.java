@@ -80,7 +80,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
   protected void generateOccurrencesForToday(final List<Schedule> scheduleList) {
 
     checkNotNull(scheduleList, "scheduleList cannot be null");
-    
+
     for (Schedule schedule : scheduleList) {
       long flightNumber = 1;
 

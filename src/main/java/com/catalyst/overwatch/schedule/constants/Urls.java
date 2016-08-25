@@ -19,11 +19,19 @@ public class Urls {
 
     private static final String SURVEY_ENDPOINT = "http://%s:%s/surveys";
 
-    public static final String RESPONSE_BASE_URL = "http://%s:%s";
+    private static final String RESPONSE_BASE_URL = "http://%s:%s";
 
-    public static final String SURVEY_RESPONSE = "/surveyResponses";
+    private static final String SURVEY_RESPONSE = "/surveyResponses";
 
-    public static final String QUERY_BY_DATE = "/search/findSurveyResponseByDateAnswered?dateAnswered=";
+    private static final String QUERY_BY_DATE = "/search/findSurveyResponseByDateAnswered?dateAnswered=";
+
+    private static final String REPORT_ENDPOINT= "http://%s:%s/report/";
+
+    @Value("${report.domain}")
+    private String reportDomain;
+
+    @Value("${report.port}")
+    private String reportPort;
 
     @Value("${frontend.domain}")
     private String frontendDomain;
@@ -50,7 +58,17 @@ public class Urls {
     private String responsePort;
 
     /**
-     * Builds the notification endpoint 
+     * Builds the the report endpoint for use from docker or local
+     * from the values in the respecitve properties file
+     *
+     * @return String - fully formed report endpoint string
+     */
+    public String getReportEndpoint(){
+        return String.format(REPORT_ENDPOINT, reportDomain, reportPort);
+    }
+
+    /**
+     * Builds the notification endpoint
      * Generated from the values in the respective local or docker properties file
      *
      * @return String - fully formed notification endpoint string
@@ -61,7 +79,7 @@ public class Urls {
     }
     
     /**
-     * Builds the front end base url 
+     * Builds the front end base url
      * Generated from the values in the respective local or docker properties file
      *
      * @return String - front end base url 
@@ -71,7 +89,7 @@ public class Urls {
     }
 
     /**
-     * Builds the survey service endpoint 
+     * Builds the survey service endpoint
      * Generated from the values in the respective local or docker properties file
      *
      * @return String - fully formed survey service endpoint 
@@ -80,13 +98,13 @@ public class Urls {
     public String getSurveyEndpoint() {
         return String.format(SURVEY_ENDPOINT, surveyDomain, surveyPort);
     }
-    
+
     /**
-     * Builds the survey frontend endpoint for survey email links 
+     * Builds the survey frontend endpoint for survey email links
      * Generated from the values in the respective local or docker properties file
-     * 
      *
-     * @return String - fully formed survey service endpoint 
+     *
+     * @return String - fully formed survey service endpoint
      */
     public String getSurveyURLEndpoint() {
         return String.format(SURVEY_ENDPOINT, frontendDomain, frontendPort);

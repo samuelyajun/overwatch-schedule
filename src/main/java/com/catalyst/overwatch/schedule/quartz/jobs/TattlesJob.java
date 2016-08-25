@@ -1,10 +1,10 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
-import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
@@ -88,6 +88,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   public void calculateThresholdForFlight(Flight flight) {
 
     long thresholdMark = 0;
+    long id = 0;
+
     List<Occurrence> sendList = new ArrayList<>();
     List<Occurrence> occurrenceList = new ArrayList<>();
 
@@ -97,6 +99,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     //Loop through each occurrence in this flight to see if it has met the threshold
     for (Occurrence occurrence : occurrenceList) {
+      id = occurrence.getScheduleId();
       ++thresholdMark;
       logger.info("flight number; " + occurrence.getFlightNumber());
       logger.info("generation date: " + occurrence.getGenerationDate());
@@ -117,8 +120,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.info("Updating the flight table");
       flight.setIsClosed(true);
       flightRepository.save(flight);
-      // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
+      Schedule scheduleById = scheduleRepository.findById(id);
+      Object response;
+      response = restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class);
+
+      logger.info(response.toString());
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
@@ -129,6 +136,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getEmail());
       }
       // TODO: 8/11/2016 construct and send tattles
+
+
     }
 
   }
