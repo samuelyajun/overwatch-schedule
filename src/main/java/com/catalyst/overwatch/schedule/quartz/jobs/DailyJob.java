@@ -151,8 +151,8 @@ public class DailyJob extends SchedulerBaseJob implements Job {
       isOnFrequency = true;
       logger.info(
           "Schedule frequency is ONE_TIME, start date was yesterday, should create occurrence.");
-    } else
-      if (schedule.getFrequency().getValue() != 0 && daysBetween % weeksValueOfFrequency == 0) {
+    } else if (schedule.getFrequency().getValue() != 0 
+        && daysBetween % weeksValueOfFrequency == 0) {
       isOnFrequency = true;
       logger.info("Today's date lands on the schedule frequency, should create occurrence."
           + schedule.getStartDate() + " " + schedule.getFrequency());
