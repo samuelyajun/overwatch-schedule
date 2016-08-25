@@ -117,6 +117,11 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flightRepository.save(flight);
       // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
+      Schedule scheduleById = scheduleRepository.findById(id);
+      Object response;
+      response = restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class);
+
+      logger.info(response.toString());
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
@@ -193,25 +198,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     extractedResponseData.addAll(responseData.getContent());
 
     return extractedResponseData;
-  }
-
-  private List<Respondent> determineTattleRecipients(Schedule schedule){
-    List<Respondent> sendList = new ArrayList<>();
-    Set<Respondent> checkList = new HashSet<>();
-    checkList.addAll(schedule.getRespondents());
-
-    if(!checkList.isEmpty()) {
-      for (Respondent respondent : checkList){
-        for(AllowedAttribute allowedAttribute : respondent.getAllowedAttributes()){
-          if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
-                  && allowedAttribute.getAttributeType().equals("ROLE")){
-            sendList.add(respondent);
-          }
-        }
-      }
-    }
-
-    return sendList;
   }
 
 }
