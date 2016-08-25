@@ -38,16 +38,20 @@ public class CustomNotificationParser {
                 surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_SPRINT_CHECKUP;
                 break;
 
-            case "SURVEY_SUBJECT_SPRINT_PLANNING":
-                surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_SPRINT_PLANNING;
+            case "SURVEY_SUBJECT_SPD_TEAM":
+                surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_SPD_TEAM;
                 break;
 
-            case "SURVEY_SUBJECT_SPRINT_PLANNING_LEADS":
-                surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_SPRINT_PLANNING_LEADS;
+            case "SURVEY_SUBJECT_SPD_LEADERS":
+                surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_SPD_LEADERS;
                 break;
 
-            case "SURVEY_SUBJECT_QUANTITATIVE":
-                surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_QUANTITATIVE;
+            case "SURVEY_SUBJECT_EM_QUANTITATIVE":
+                surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_EM_TL_QUANTITATIVE;
+                break;
+
+            case "SURVEY_SUBJECT_TL_QUANTITATIVE":
+                surveySubjectValue = NotificationConstants.SURVEY_SUBJECT_EM_TL_QUANTITATIVE;
                 break;
 
             default:
@@ -84,16 +88,20 @@ public class CustomNotificationParser {
                 surveyBodyValue = NotificationConstants.SURVEY_BODY_SPRINT_CHECKUP;
                 break;
 
-            case "SURVEY_BODY_SPRINT_PLANNING":
-                surveyBodyValue = NotificationConstants.SURVEY_BODY_SPRINT_PLANNING;
+            case "SURVEY_BODY_SPD_TEAM":
+                surveyBodyValue = NotificationConstants.SURVEY_BODY_SPD_TEAM;
                 break;
 
-            case "SURVEY_BODY_SPRINT_PLANNING_LEADS":
-                surveyBodyValue = NotificationConstants.SURVEY_BODY_SPRINT_PLANNING_LEADS;
+            case "SURVEY_BODY_SPD_LEADERS":
+                surveyBodyValue = NotificationConstants.SURVEY_BODY_SPD_LEADERS;
                 break;
 
-            case "SURVEY_BODY_QUANTITATIVE":
-                surveyBodyValue = NotificationConstants.SURVEY_BODY_QUANTITATIVE;
+            case "SURVEY_BODY_EM_QUANTITATIVE":
+                surveyBodyValue = NotificationConstants.SURVEY_BODY_EM_TL_QUANTITATIVE;
+                break;
+
+            case "SURVEY_BODY_TL_QUANTITATIVE":
+                surveyBodyValue = NotificationConstants.SURVEY_BODY_EM_TL_QUANTITATIVE;
                 break;
 
             default:

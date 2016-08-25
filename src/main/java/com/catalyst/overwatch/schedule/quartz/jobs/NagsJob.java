@@ -52,6 +52,8 @@ public class NagsJob extends SchedulerBaseJob implements Job {
             .forEach(s -> {
               nagConstructor(s);
             });
+    
+    logger.info("Nags Job Complete");
   }
 
   /**
@@ -62,7 +64,6 @@ public class NagsJob extends SchedulerBaseJob implements Job {
    * @param occurrence
    */
   void nagConstructor(final Occurrence occurrence) {
-
 
     Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
     String templateName = schedule.getTemplateName();
@@ -76,6 +77,9 @@ public class NagsJob extends SchedulerBaseJob implements Job {
             CustomNotificationParser.notificationBodyParser(templateName) + body,
             CustomNotificationParser.notificationSubjectParser(templateName),
             "Nags Job");
+    
+    logger.info("Nag email sent to: " + emailAddress);
+
   }
 
   /**

@@ -1,8 +1,10 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
-import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
-import com.catalyst.overwatch.schedule.model.*;
+import com.catalyst.overwatch.schedule.model.Flight;
+import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
@@ -21,9 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * This job executes daily, finding schedules with respondents who have not submitted responses
@@ -48,8 +48,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   @Autowired
   private FlightRepository flightRepository;
 
+  @Autowired
+  private Urls urls;
+
   Logger logger = LogManager.getRootLogger();
-  String responseUrl = NotificationConstants.SEARCH_SURVEY_RESPONSE_BY_DATE;
   List<Occurrence> occurrencesList = new ArrayList<>();
 
   /**
@@ -86,6 +88,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   public void calculateThresholdForFlight(Flight flight) {
 
     long thresholdMark = 0;
+    long id = 0;
+
     List<Occurrence> sendList = new ArrayList<>();
     List<Occurrence> occurrenceList = new ArrayList<>();
 
@@ -95,6 +99,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     //Loop through each occurrence in this flight to see if it has met the threshold
     for (Occurrence occurrence : occurrenceList) {
+      id = occurrence.getScheduleId();
       ++thresholdMark;
       logger.info("flight number; " + occurrence.getFlightNumber());
       logger.info("generation date: " + occurrence.getGenerationDate());
@@ -115,8 +120,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.info("Updating the flight table");
       flight.setIsClosed(true);
       flightRepository.save(flight);
-      // TODO: 8/11/2016 send "threshold met" notification to stakeholders
 
+      Schedule scheduleById = scheduleRepository.findById(id);
+      Object response;
+      response = restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class);
+
+      logger.info(response.toString());
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
@@ -127,6 +136,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getEmail());
       }
       // TODO: 8/11/2016 construct and send tattles
+
+
     }
 
   }
@@ -162,7 +173,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     try {
       Resources<SurveyResponse> surveyResponses = restTemplate.exchange(
-              responseUrl + LocalDate.now().minus(1, ChronoUnit.DAYS),
+              urls.getSearchSurveyResponseByDate() + LocalDate.now().minus(1, ChronoUnit.DAYS),
               HttpMethod.GET,
               null,
               new ParameterizedTypeReference<Resources<SurveyResponse>>() {
@@ -193,25 +204,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     extractedResponseData.addAll(responseData.getContent());
 
     return extractedResponseData;
-  }
-
-  private List<Respondent> determineTattleRecipients(Schedule schedule){
-    List<Respondent> sendList = new ArrayList<>();
-    Set<Respondent> checkList = new HashSet<>();
-    checkList.addAll(schedule.getRespondents());
-
-    if(!checkList.isEmpty()) {
-      for (Respondent respondent : checkList){
-        for(AllowedAttribute allowedAttribute : respondent.getAllowedAttributes()){
-          if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
-                  && allowedAttribute.getAttributeType().equals("ROLE")){
-            sendList.add(respondent);
-          }
-        }
-      }
-    }
-
-    return sendList;
   }
 
 }
