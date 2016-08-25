@@ -59,7 +59,7 @@ public class DailyJobTest {
   private Schedule testScheduleNullEndDate;
   private Schedule testOneTimeSchedule;
   private Schedule testOneTimeOffSchedule;
-  private Schedule testNoStartDatechedule;
+  private Schedule testNoStartDateSchedule;
   private Schedule testScheduleExpiredEndDate;
   
   private List<Schedule> testSchedules = new ArrayList<Schedule>();
@@ -118,8 +118,8 @@ public class DailyJobTest {
     testFlight = new Flight();
     testFlight.setFlightNumber(TEST_LONG);
 
-    testNoStartDatechedule = new Schedule();
-    testNoStartDatechedule.setFrequency(Frequency.TWO_WEEKS);
+    testNoStartDateSchedule = new Schedule();
+    testNoStartDateSchedule.setFrequency(Frequency.TWO_WEEKS);
 
     when(mockOccurrenceRepository.save(any(Occurrence.class))).thenReturn(testOccurrence);
     when(mockFlightRepository.findByScheduleId(anyLong())).thenReturn(testFlights);
@@ -223,7 +223,7 @@ public class DailyJobTest {
   @Test
   public void testIsTodayOnScheduleFrequencyThrowsExceptionNullStartDate() {
     exception.expect(NullPointerException.class);
-    testDailyJob.isTodayOnScheduleFrequency(testNoStartDatechedule);
+    testDailyJob.isTodayOnScheduleFrequency(testNoStartDateSchedule);
   }
 
   @Test
