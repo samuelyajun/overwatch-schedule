@@ -87,7 +87,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   public void calculateThresholdForFlight(Flight flight) {
     logger.info(flight);
-    Schedule schedule = scheduleRepository.findById(flight.getScheduleId());
 
     long thresholdMark = 0;
     List<Occurrence> occurrenceList = new ArrayList<>();
@@ -146,10 +145,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.info("EMAIL: " + emailAddress);
     }
 
-    String tattleBody = buildTattleBody(occurrences);
+    String tattle = buildTattleBody(occurrences);
 
     generateNotification(emailAddress,
-            tattleBody,
+            tattle,
             NotificationConstants.TATTLE_SUBJECT,
             "Tattle Job");
 
@@ -160,14 +159,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   * Builds body for the tattle.
   * */
   private String buildTattleBody(List<Occurrence> occurrences) {
-    StringBuilder tattleBody = new StringBuilder();
-    StringBuilder tattle = new StringBuilder();
-    StringBuilder usersString = new StringBuilder();
-    Long scheduleId = occurrences.get(0).getScheduleId();
-    String surveyName;
 
-    Schedule schedule = scheduleRepository.findById(scheduleId);
-    surveyName = schedule.getTemplateName() + ": ";
+    StringBuilder usersString = new StringBuilder();
 
     for (Occurrence occurrence : occurrences) {
       Respondent respondent = occurrence.getRespondent();
@@ -176,12 +169,16 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       usersString.append(firstName + " " + lastName + "\n");
     }
 
-    tattleBody.append(NotificationConstants.TATTLE_BODY_BEGIN + " " +
-            surveyName + "\n" + "\n" +
-            usersString.toString() + "\n" +
-            NotificationConstants.TATTLE_BODY_END);
-    tattle.append(tattleBody);
-    logger.info("GENERATE TATTLE: " + tattle);
+    StringBuilder tattle = new StringBuilder();
+    Long scheduleId = occurrences.get(0).getScheduleId();
+    String surveyName;
+
+    Schedule schedule = scheduleRepository.findById(scheduleId);
+    surveyName = schedule.getTemplateName() + ": ";
+
+    tattle.append(NotificationConstants.TATTLE_BODY_BEGIN).append(" ").append(surveyName).append("\n\n")
+            .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END);
+    logger.info("TATTLE: " + tattle);
     return tattle.toString();
   }
 
