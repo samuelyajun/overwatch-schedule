@@ -99,7 +99,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
 	    StringBuilder surveyLinkForThisRespondent = new StringBuilder();
 	    surveyLinkForThisRespondent.append(buildSurveyLink(schedule.getTemplateUri(), postedOccurrence.getId()));
 	    
-        body.append("Link to survey: " + surveyLinkForThisRespondent);
+        body.append("\nLink to survey: " + surveyLinkForThisRespondent);
 
         generateNotification(respondent.getUser().getEmail(),
                 CustomNotificationParser.notificationBodyParser(templateName) + body,
