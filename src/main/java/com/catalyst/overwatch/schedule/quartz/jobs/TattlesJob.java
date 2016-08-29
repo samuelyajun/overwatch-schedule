@@ -158,7 +158,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   /**
   * Builds body for the tattle.
   * */
-  private String buildTattleBody(List<Occurrence> occurrences) {
+  public String buildTattleBody(List<Occurrence> occurrences) {
 
     StringBuilder usersString = new StringBuilder();
 
