@@ -5,10 +5,6 @@ package com.catalyst.overwatch.schedule.constants;
  */
 public class NotificationConstants {
 
-  //FRONT END
-  public static final String FRONT_END_BASE_URL = "http://localhost:3000";
-  public static final String SURVEY_ENDPOINT = "http://localhost:8070/surveys";
-
   //SURVEY RESPONSE SERVICE
   public static final String RESPONSE_BASE_URL = "http://localhost:8050";
   public static final String SURVEY_RESPONSE = "/surveyResponses";
