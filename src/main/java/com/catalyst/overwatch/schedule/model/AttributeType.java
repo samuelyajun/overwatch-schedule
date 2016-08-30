@@ -50,7 +50,5 @@ public class AttributeType implements Serializable {
     AttributeType that = (AttributeType) o;
 
     return name.equals(that.name);
-
   }
-
 }

@@ -80,6 +80,7 @@ public abstract class SchedulerBaseJob {
     try {
       restTemplate.postForEntity(urls.getNotificationEndpoint(), notification, Notification.class);
       logger.info("Generated email from rest template");
+      logger.info("restTemplate: " + restTemplate);
     } catch (Exception e) {
       logger.error("Quartz " + errorReference + " Error:  exception occurred while calling Notification service", e);
       throw new OverwatchScheduleException("Error:  exception occurred while calling Notification service", e);

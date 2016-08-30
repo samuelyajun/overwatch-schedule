@@ -25,15 +25,13 @@ import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
 import com.catalyst.overwatch.schedule.utilities.CustomNotificationParser;
 
 /**
- * This daily job will run every day on a schedule designated in the SchedulerConfig. In the alpha
- * build, schedules are checked to see if the current date falls on their frequency. If it does,
- * occurrences will be generated for each respondent on each schedule. These occurrences are posted
- * to the database, and their ids are used to construct hyperlinks which are then packaged into a
- * restful call to the notification service, which generates an email to the respondent with their
- * survey link.
+ * This daily job will run every day on a schedule designated in the SchedulerConfig.  In the alpha build,
+ * schedules are checked to see if the current date falls on their frequency. If it does, occurrences will
+ * be generated for each respondent on each schedule.  These occurrences are posted to the database, and
+ * their ids are used to construct hyperlinks which are then packaged into a restful call to the notification
+ * service, which generates an email to the respondent with their survey link.
  *
  * @author hmccardell
- * @author bfutral
  */
 public class DailyJob extends SchedulerBaseJob implements Job {
 
@@ -98,6 +96,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
       }
 
       logger.info("new flight number: " + flightNumber);
+
       if (schedule.getRespondents() != null) {
         for (Respondent respondent : schedule.getRespondents()) {
 
@@ -110,7 +109,7 @@ public class DailyJob extends SchedulerBaseJob implements Job {
           surveyLinkForThisRespondent
               .append(buildSurveyLink(schedule.getTemplateUri(), postedOccurrence.getId()));
 
-          body.append("Link to survey: " + surveyLinkForThisRespondent);
+          body.append("\nLink to survey: " + surveyLinkForThisRespondent);
 
           generateNotification(respondent.getUser().getEmail(),
               CustomNotificationParser.notificationBodyParser(templateName) + body,

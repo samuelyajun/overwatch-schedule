@@ -66,5 +66,4 @@ public class Respondent implements Serializable {
     return user.equals(that.user);
 
   }
-
 }

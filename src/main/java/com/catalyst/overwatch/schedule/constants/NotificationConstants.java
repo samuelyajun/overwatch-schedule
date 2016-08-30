@@ -6,7 +6,7 @@ package com.catalyst.overwatch.schedule.constants;
 public class NotificationConstants {
 
   //NOTIFICATIONS SERVICE
-  public static final String TATTLE_SUBJECT = "Incomplete surveys on your team";
+  public static final String TATTLE_SUBJECT = "Incomplete surveys on your team.";
   public static final String TATTLE_BODY_BEGIN = "We know your team is very busy and hard at work, but their feedback is important to us. Here is a list of your team members who have not yet responded to the";
   public static final String TATTLE_BODY_END = "Please see to it that all outstanding surveys are completed today.";
 
@@ -25,39 +25,4 @@ public class NotificationConstants {
   public static final String SURVEY_BODY_SPD_TEAM = "How do you feel about your upcoming sprint? Please let us know how things are going by responding to the following survey.";
   public static final String SURVEY_BODY_SPD_LEADERS = "We value your perspective as a leader. Once today’s sprint ceremonies are complete, please let us know how things are going by responding to the following survey.";
   public static final String SURVEY_BODY_EM_TL_QUANTITATIVE = "In order to assess project health, we need to gather key metrics from our teams. Please take a few moments today to provide the requested information about your most recent sprint.";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
