@@ -5,14 +5,7 @@ package com.catalyst.overwatch.schedule.constants;
  */
 public class NotificationConstants {
 
-  //SURVEY RESPONSE SERVICE
-  public static final String RESPONSE_BASE_URL = "http://localhost:8050";
-  public static final String SURVEY_RESPONSE = "/surveyResponses";
-  public static final String QUERY_BY_DATE = "/search/findSurveyResponseByDateAnswered?dateAnswered=";
-  public static final String SEARCH_SURVEY_RESPONSE_BY_DATE = RESPONSE_BASE_URL + SURVEY_RESPONSE + QUERY_BY_DATE;
-
-  //NOTIFICATIONS SERVICE
-  public static final String NOTIFICATION_ENDPOINT = "http://localhost:8080/notify";
+//NOTIFICATIONS SERVICE
 
   public static final String TATTLE_SUBJECT = "Incomplete surveys on your team.";
   public static final String TATTLE_BODY_BEGIN = "We know your team is very busy and hard at work, but their feedback is important to us. Here is a list of your team members who have not yet responded to the";
