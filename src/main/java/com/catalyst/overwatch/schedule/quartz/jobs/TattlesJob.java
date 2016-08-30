@@ -1,5 +1,6 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.*;
@@ -7,7 +8,6 @@ import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
-import com.catalyst.overwatch.schedule.utilities.CustomNotificationParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -69,7 +69,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     findAndUpdateOccurrences();
 
-    List<Flight> flightListToProcess = new ArrayList<>();
     flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
             .stream()
             .forEach(flight -> {
@@ -145,10 +144,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.info("EMAIL: " + emailAddress);
     }
 
-    String tattle = buildTattleBody(occurrences);
-
     generateNotification(emailAddress,
-            tattle,
+            buildTattleBody(occurrences),
             NotificationConstants.TATTLE_SUBJECT,
             "Tattle Job");
 
@@ -156,30 +153,39 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   }
 
   /**
-  * Builds body for the tattle.
+  * Builds the body of the Tattle email that is sent when a respondent in a given occurrence
+  * has not completed the survey.
+  *
+  * @return a string containing a pre-determined message and a list with the names of respondents to be "tattled" on.
   * */
   public String buildTattleBody(List<Occurrence> occurrences) {
 
-    StringBuilder usersString = new StringBuilder();
+    checkNotNull(occurrences, "Occurrences cannot be empty");
 
+    StringBuilder usersString = new StringBuilder();
     for (Occurrence occurrence : occurrences) {
-      Respondent respondent = occurrence.getRespondent();
-      String firstName = respondent.getUser().getFirstName();
-      String lastName = respondent.getUser().getLastName();
-      usersString.append(firstName + " " + lastName + "\n");
+      if(occurrence.getRespondent() != null && occurrence.getRespondent().getUser() != null &&
+              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null) {
+
+        usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
+                occurrence.getRespondent().getUser().getLastName() + "\n");
+      } else {
+        logger.error("Respondents are null");
+      }
     }
 
-    StringBuilder tattle = new StringBuilder();
+    String surveyName = null;
     Long scheduleId = occurrences.get(0).getScheduleId();
-    String surveyName;
-
     Schedule schedule = scheduleRepository.findById(scheduleId);
-    surveyName = schedule.getTemplateName() + ": ";
 
-    tattle.append(NotificationConstants.TATTLE_BODY_BEGIN).append(" ").append(surveyName).append("\n\n")
-            .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END);
-    logger.info("TATTLE: " + tattle);
-    return tattle.toString();
+    if(schedule != null) {
+      surveyName = schedule.getTemplateName();
+    } else {
+      logger.error("Schedule is null");
+    }
+
+    return new StringBuilder(NotificationConstants.TATTLE_BODY_BEGIN).append(" ").append(surveyName).append(": ").append("\n\n")
+            .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END).toString();
   }
 
   /**
@@ -225,9 +231,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.error("Error occurred while contacting Survey Response service: ", e);
 
       throw new OverwatchScheduleException("Error occurred while contacting Survey Response service: ", e);
-
     }
-
     return extractedResponseData;
   }
 

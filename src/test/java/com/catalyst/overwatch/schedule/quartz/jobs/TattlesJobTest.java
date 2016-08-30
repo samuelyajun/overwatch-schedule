@@ -2,7 +2,6 @@ package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
-import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
 import com.catalyst.overwatch.schedule.model.Respondent;
 import com.catalyst.overwatch.schedule.model.Schedule;
@@ -32,34 +31,29 @@ import static org.mockito.Mockito.when;
  * @author arajigah
  */
 
+@RunWith(MockitoJUnitRunner.class)
 public class TattlesJobTest {
 
     @InjectMocks
     private TattlesJob testTattlesJob;
 
     @Mock
-    private JobExecutionContext mockContext;
-
-    @Mock
-    private ScheduleRepository mockScheduleRepository;
+    private RestTemplate mockRestTemplate;
 
     @Mock
     private OccurrenceRepository mockOccurrenceRepository;
 
     @Mock
-    private FlightRepository mockFlightRepository;
+    private ScheduleRepository mockScheduleRepository;
 
     @Mock
-    private RestTemplate mockRestTemplate;
+    private FlightRepository mockFlightRepository;
 
     @Mock
     private Urls mockUrls;
 
     @Mock
     private Schedule schedule;
-
-    @Mock
-    private Flight flight;
 
     @Mock
     private Occurrence mockOccurrence;
@@ -73,8 +67,17 @@ public class TattlesJobTest {
     private List<Occurrence> testOccurrences = new ArrayList<Occurrence>();
 
     @Test
-    public void flightIsNotNullTest() {
-        when(mockFlightRepository.findByScheduleId(1)).thenReturn((List<Flight>) flight);
+    public void buildTattleBodyTest() {
+        mockOccurrence.setFlightNumber(1);
+        mockOccurrence.setScheduleId(1);
+        mockOccurrence.setGenerationDate(localDate);
+        mockOccurrence.setScheduleId(1);
+
+
+
+        when(mockScheduleRepository.findById(1)).thenReturn(schedule);
+
+        String expected = testTattlesJob.buildTattleBody(List<mockOccurrence>);
 
     }
 }
