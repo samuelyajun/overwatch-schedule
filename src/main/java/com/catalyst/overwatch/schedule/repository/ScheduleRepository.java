@@ -9,9 +9,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Created by bpyl on 6/14/2016.
+ * Exposes a basic RESTFUL endpoint for Schedules.
+ * 
+ * @author bpyl
+ * @author bfutral
  */
-
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
