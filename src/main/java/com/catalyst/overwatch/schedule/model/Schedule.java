@@ -114,6 +114,10 @@ public class Schedule implements Serializable {
     return templateName;
   }
 
+  public void setTemplateName(String templateName) {
+    this.templateName = templateName;
+  }
+
   @Override
   public String toString() {
     return "Schedule{" +
