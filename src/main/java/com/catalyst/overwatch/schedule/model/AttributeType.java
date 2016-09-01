@@ -51,11 +51,4 @@ public class AttributeType implements Serializable {
 
     return name.equals(that.name);
   }
-
-  @Override
-  public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + name.hashCode();
-    return result;
-  }
 }

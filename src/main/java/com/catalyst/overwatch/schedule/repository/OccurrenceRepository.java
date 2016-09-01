@@ -16,6 +16,7 @@ import java.util.List;
  * example: http://localhost:8090/occurrences/search/findById?id=1
  *
  * @author hmccardell
+ * @author bfutral
  */
 @Repository
 public interface OccurrenceRepository extends JpaRepository<Occurrence, Long> {

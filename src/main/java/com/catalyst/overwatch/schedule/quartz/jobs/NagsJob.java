@@ -62,6 +62,7 @@ public class NagsJob extends SchedulerBaseJob implements Job {
    * @param occurrence
    */
   void nagConstructor(final Occurrence occurrence) {
+
     Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
     String templateName = schedule.getTemplateName();
     String templateSuid = schedule.getTemplateUri();
@@ -69,11 +70,9 @@ public class NagsJob extends SchedulerBaseJob implements Job {
     String completeSurveyLink = buildSurveyLink(templateSuid, occurrence.getId());
 
     String body = buildNagBody(completeSurveyLink);
+    String subject = buildNagSubject(templateName);
 
-    generateNotification(emailAddress,
-            CustomNotificationParser.notificationBodyParser(templateName) + body,
-            CustomNotificationParser.notificationSubjectParser(templateName),
-            "Nags Job");
+    generateNotification(emailAddress, body, subject, "Nags Job");
   }
 
   /**
