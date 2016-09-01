@@ -136,25 +136,38 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     for (Occurrence occurrence : occurrences) {
       Schedule schedule =
           scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
-      for (Respondent respondent : schedule.getRespondents())
-        if (!sendTattleList.containsKey(respondent.getId())) {
-          sendTattleList.put(respondent.getId(), respondent);
-        }
+      if(schedule != null && schedule.getRespondents() != null) {
+          for (Respondent respondent : schedule.getRespondents())
+              if (!sendTattleList.containsKey(respondent.getId())) {
+                  sendTattleList.put(respondent.getId(), respondent);
+              }
+      }else {
+          logger.error("Invalid schedule returned from schedule repository");
+      }
     }
 
     String emailAddress = null;
+
     logger.info("SEND TATTLE TO: " + sendTattleList);
     for (Respondent respondent : sendTattleList.values()) {
-      emailAddress = respondent.getUser().getEmail();
-      logger.info("EMAIL: " + emailAddress);
+
+        if(respondent.getUser().getEmail() != null){
+            emailAddress = respondent.getUser().getEmail();
+            logger.info("EMAIL: " + emailAddress);
+
+            generateNotification(emailAddress,
+                    buildTattleBody(occurrences),
+                    NotificationConstants.TATTLE_SUBJECT,
+                    "Tattle Job");
+
+            logger.info("GENERATED!");
+        }
+        else{
+            logger.info("Respondent email is null.");
+        }
+
     }
 
-    generateNotification(emailAddress,
-            buildTattleBody(occurrences),
-            NotificationConstants.TATTLE_SUBJECT,
-            "Tattle Job");
-
-    logger.info("GENERATED!");
   }
 
   /**
