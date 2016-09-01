@@ -22,11 +22,11 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import static java.util.Collections.addAll;
 
 /**
  * This job executes daily, finding schedules with respondents who have not submitted responses
@@ -131,15 +131,20 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   }
 
   public void tattleConstructor(final List<Occurrence> occurrences) {
-    Set<Respondent> sendTattleList = new HashSet<>();
+  
+   Map<Long, Respondent> sendTattleList = new HashMap<>();
     for (Occurrence occurrence : occurrences) {
-      Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
-      sendTattleList.addAll(determineTattleRecipients(schedule));
+      Schedule schedule =
+          scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
+      for (Respondent respondent : schedule.getRespondents())
+        if (!sendTattleList.containsKey(respondent.getId())) {
+          sendTattleList.put(respondent.getId(), respondent);
+        }
     }
 
     String emailAddress = null;
     logger.info("SEND TATTLE TO: " + sendTattleList);
-    for(Respondent respondent : sendTattleList) {
+    for (Respondent respondent : sendTattleList.values()) {
       emailAddress = respondent.getUser().getEmail();
       logger.info("EMAIL: " + emailAddress);
     }
