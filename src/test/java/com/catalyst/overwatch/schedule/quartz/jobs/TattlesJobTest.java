@@ -1,6 +1,7 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
+import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.model.*;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
@@ -54,6 +55,9 @@ public class TattlesJobTest {
 
     @Mock
     private Occurrence mockOccurrence;
+    
+    @Mock
+    private Urls mockUrls;
 
     private List<Occurrence> testArrayOccurrences ;
     private List<Occurrence> testTattleOnList;
@@ -115,6 +119,10 @@ public class TattlesJobTest {
         when(mockScheduleRepository.findById(anyLong())).thenReturn(testSchedule);
 
         when(mockScheduleRepository.findByRespondentsId(TEST_LONG)).thenReturn(testSchedule);
+        
+        when(mockUrls.getNotificationEndpoint()).thenReturn(TEST_STRING);
+        
+        when(mockRestTemplate.getForObject(anyString(), any())).thenReturn(testRespondent);
     }
 
     @Test

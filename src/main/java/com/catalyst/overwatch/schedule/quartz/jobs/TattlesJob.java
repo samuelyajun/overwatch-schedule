@@ -126,10 +126,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flightRepository.save(flight);
 
       Schedule scheduleById = scheduleRepository.findById(id);
-      Object response;
-      response = restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class);
-
-      logger.info(response.toString());
+      
+      logger.info(restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class).toString());
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
