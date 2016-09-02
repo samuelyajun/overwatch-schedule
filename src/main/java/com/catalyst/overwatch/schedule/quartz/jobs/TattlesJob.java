@@ -1,9 +1,12 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
 import com.catalyst.overwatch.schedule.model.Flight;
 import com.catalyst.overwatch.schedule.model.Occurrence;
+import com.catalyst.overwatch.schedule.model.Respondent;
 import com.catalyst.overwatch.schedule.model.Schedule;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
@@ -19,11 +22,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * This job executes daily, finding schedules with respondents who have not submitted responses
@@ -69,7 +74,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     findAndUpdateOccurrences();
 
-    List<Flight> flightListToProcess = new ArrayList<>();
     flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
             .stream()
             .forEach(flight -> {
@@ -122,25 +126,93 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flightRepository.save(flight);
 
       Schedule scheduleById = scheduleRepository.findById(id);
-      Object response;
-      response = restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class);
-
-      logger.info(response.toString());
+      
+      logger.info(restTemplate.getForObject(urls.getReportEndpoint() + scheduleById.getTemplateUri(), Object.class).toString());
     }
     //Threshold not met, generate tattles for the delinquent respondents
     else {
       logger.info("Threshold has not been met");
       logger.info("Respondents in flight:  " + thresholdMark);
       logger.info("Number of responses: " + completeCounter);
-      for (Occurrence occurrence : sendList) {
-        logger.info("tattle on this respondent: " + occurrence.getRespondent().getUser().getEmail());
-      }
-      // TODO: 8/11/2016 construct and send tattles
+      tattleConstructor(sendList);
+    }
+  }
 
+  public void tattleConstructor(final List<Occurrence> occurrences) {
+  
+   Map<Long, Respondent> sendTattleList = new HashMap<>();
+    for (Occurrence occurrence : occurrences) {
+      Schedule schedule =
+          scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
+      if(schedule != null && schedule.getRespondents() != null) {
+          for (Respondent respondent : schedule.getRespondents())
+              if (!sendTattleList.containsKey(respondent.getId())) {
+                  sendTattleList.put(respondent.getId(), respondent);
+              }
+      }else {
+          logger.error("Invalid schedule returned from schedule repository");
+      }
+    }
+
+    String emailAddress = null;
+
+    logger.info("SEND TATTLE TO: " + sendTattleList);
+    for (Respondent respondent : sendTattleList.values()) {
+
+        if(respondent.getUser().getEmail() != null){
+            emailAddress = respondent.getUser().getEmail();
+            logger.info("EMAIL: " + emailAddress);
+
+            generateNotification(emailAddress,
+                    buildTattleBody(occurrences),
+                    NotificationConstants.TATTLE_SUBJECT,
+                    "Tattle Job");
+
+            logger.info("GENERATED!");
+        }
+        else{
+            logger.info("Respondent email is null.");
+        }
 
     }
 
   }
+
+  /**
+  * Builds the body of the Tattle email that is sent when a respondent in a given occurrence
+  * has not completed the survey.
+  *
+  * @return a string containing a pre-determined message and a list with the names of respondents to be "tattled" on.
+  * */
+  public String buildTattleBody(List<Occurrence> occurrences) {
+
+    checkNotNull(occurrences, "Occurrences cannot be empty");
+
+    StringBuilder usersString = new StringBuilder();
+    for (Occurrence occurrence : occurrences) {
+      if(occurrence.getRespondent() != null && occurrence.getRespondent().getUser() != null &&
+              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null) {
+
+        usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
+                occurrence.getRespondent().getUser().getLastName() + "\n");
+      } else {
+        logger.error("Respondents are null");
+      }
+    }
+
+    String surveyName = null;
+    Long scheduleId = occurrences.get(0).getScheduleId();
+    Schedule schedule = scheduleRepository.findById(scheduleId);
+
+    if(schedule != null) {
+      surveyName = schedule.getTemplateName();
+    } else {
+      logger.error("Schedule is null");
+    }
+
+    return new StringBuilder(NotificationConstants.TATTLE_BODY_BEGIN).append(" ").append(surveyName).append(": ").append("\n\n")
+            .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END).toString();
+    }
 
   /**
    * Finds all occurrences with response data and marks them complete by updating the
@@ -185,9 +257,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.error("Error occurred while contacting Survey Response service: ", e);
 
       throw new OverwatchScheduleException("Error occurred while contacting Survey Response service: ", e);
-
     }
-
     return extractedResponseData;
   }
 
