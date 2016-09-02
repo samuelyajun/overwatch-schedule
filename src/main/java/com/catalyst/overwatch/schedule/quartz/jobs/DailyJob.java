@@ -146,10 +146,10 @@ public class DailyJob extends SchedulerBaseJob implements Job {
     long daysBetween = ChronoUnit.DAYS.between(schedule.getStartDate(), LocalDate.now());
 
     if (schedule.getFrequency().getValue() == 0
-        && LocalDate.now().equals(schedule.getStartDate().plus(1, ChronoUnit.DAYS))) {
+        && LocalDate.now().equals(schedule.getStartDate())) {
       isOnFrequency = true;
       logger.info(
-          "Schedule frequency is ONE_TIME, start date was yesterday, should create occurrence.");
+          "Schedule frequency is ONE_TIME, start date is today, should create occurrence.");
     } else if (schedule.getFrequency().getValue() != 0 
         && daysBetween % weeksValueOfFrequency == 0) {
       isOnFrequency = true;
