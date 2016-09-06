@@ -146,4 +146,9 @@ public class TattlesJobTest {
         testTattlesJob.calculateThresholdForFlight(testFlight);
         verify(mockScheduleRepository,times(1)).findByRespondentsId((anyLong()));
     }
+
+    @Test
+    public void determineTattleRecipientIsEMTest
+
+
 }

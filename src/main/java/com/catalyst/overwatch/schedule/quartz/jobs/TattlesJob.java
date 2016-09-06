@@ -4,10 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
 import com.catalyst.overwatch.schedule.exceptions.OverwatchScheduleException;
-import com.catalyst.overwatch.schedule.model.Flight;
-import com.catalyst.overwatch.schedule.model.Occurrence;
-import com.catalyst.overwatch.schedule.model.Respondent;
-import com.catalyst.overwatch.schedule.model.Schedule;
+import com.catalyst.overwatch.schedule.model.*;
 import com.catalyst.overwatch.schedule.model.external.SurveyResponse;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
@@ -24,10 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -173,7 +167,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         else{
             logger.info("Respondent email is null.");
         }
-
     }
 
   }
@@ -231,7 +224,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
               occurrenceToUpdate.setIsComplete(true);
               occurrenceRepository.save(occurrenceToUpdate);
             });
-
   }
 
   /**
@@ -274,6 +266,34 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     extractedResponseData.addAll(responseData.getContent());
 
     return extractedResponseData;
+  }
+
+  /**
+  * Determines which respondent(s) will have tattles sent to them.
+  * Checks for respondents with a ROLE of Engagement Manager and/or Tech Lead AttributeValue,
+  * and adds them to a list.
+  *
+  * @param schedule
+  * @return List of respondents to receive tattles.
+  * */
+  private List<Respondent> determineTattleRecipients(Schedule schedule){
+    List<Respondent> tattleToList = new ArrayList<>();
+    Set<Respondent> checkList = new HashSet<>();
+    checkList.addAll(schedule.getRespondents());
+    logger.info("checkList: " + checkList);
+
+    if(!checkList.isEmpty()) {
+      for (Respondent respondent : checkList){
+        for(AllowedAttribute allowedAttribute : respondent.getAllowedAttributes()){
+          if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
+                  && allowedAttribute.getAttributeType().getName().equals("ROLE")){
+            logger.info("Sending Tattles to the following: " + respondent);
+            tattleToList.add(respondent);
+          }
+        }
+      }
+    }
+    return tattleToList;
   }
 
 }
