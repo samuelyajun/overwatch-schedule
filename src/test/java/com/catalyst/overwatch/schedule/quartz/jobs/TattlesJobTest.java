@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
+import sun.font.AttributeValues;
+
 
 import java.time.LocalDate;
 import java.util.*;
@@ -34,6 +36,8 @@ public class TattlesJobTest {
 
     private static final String TEST_STRING = "test";
     private static final long TEST_LONG = 1;
+    private static final String VALUE = "Engagement Manager";
+    //private static final String VALUE = "Developer";
 
     @InjectMocks
     private TattlesJob testTattlesJob;
@@ -59,6 +63,10 @@ public class TattlesJobTest {
     @Mock
     private Urls mockUrls;
 
+    @Mock
+    private AllowedAttribute mockAttribute;
+
+
     private List<Occurrence> testArrayOccurrences ;
     private List<Occurrence> testTattleOnList;
     private NotificationConstants notificationConstants;
@@ -67,9 +75,17 @@ public class TattlesJobTest {
     private Occurrence testOccurrence;
     private Schedule testSchedule;
     private Flight testFlight;
+    private Set<AllowedAttribute> testAllowedAttributes;
+    private AllowedAttribute  testAllowedAttribute;
+    private AttributeType testAttributeType;
+    private HashSet<Respondent> testSetRespondent;
+    private ArrayList<Respondent> testTattleToList;
+    private List<Respondent> testRespondentList;
+    private Set<Respondent> testCheckSet = new HashSet<>();
+    private Set<Respondent> manualRespondent = new HashSet<Respondent>();
 
     @Before
-    public void testSetup(){
+    public void testSetup() {
         MockitoAnnotations.initMocks(this);
         testArrayOccurrences = new ArrayList<Occurrence>();
         testUser = new User();
@@ -78,6 +94,21 @@ public class TattlesJobTest {
         testSchedule = new Schedule();
         testFlight = new Flight();
         testTattleOnList = new ArrayList<>();
+        testTattleToList = new ArrayList<>();
+        testCheckSet = new HashSet<>();
+        testAllowedAttributes = new HashSet<>();
+        testAllowedAttribute = new AllowedAttribute();
+        testAttributeType = new AttributeType();
+        testSetRespondent = new HashSet<>();
+
+
+        testAllowedAttribute.setId(TEST_LONG);
+        testAllowedAttribute.setAttributeValue(VALUE);
+        testAllowedAttribute.setAttributeType(testAttributeType);
+        testAttributeType.setAttributeTypeId(TEST_LONG);
+        testAttributeType.setName(TEST_STRING);
+        testAllowedAttributes.add(testAllowedAttribute);
+
 
         testUser.setLastName(TEST_STRING);
         testUser.setId(TEST_LONG);
@@ -92,12 +123,16 @@ public class TattlesJobTest {
         testOccurrence.setFlightNumber(TEST_LONG);
         testOccurrence.setFlightNumber(TEST_LONG);
 
+
         testRespondent.setUser(testUser);
-        testRespondent.setId(1);
-        testRespondent.setAllowedAttributes(new HashSet<>());
+        testRespondent.setId(TEST_LONG);
+        testRespondent.setAllowedAttributes(testAllowedAttributes);
+        testSetRespondent.add(testRespondent);
         testRespondent.setUser(testUser);
 
         testSchedule.setTemplateName(TEST_STRING);
+        testSchedule.setRespondents(testSetRespondent);
+        testSchedule.setRespondents(manualRespondent);
 
         testFlight.setScheduleId(TEST_LONG);
         testFlight.setFlightNumber(TEST_LONG);
@@ -110,18 +145,15 @@ public class TattlesJobTest {
         when(testOccurrenceRepository.findByScheduleIdAndFlightNumber(TEST_LONG,
                 TEST_LONG)).thenReturn(testArrayOccurrences);
 
-        Set<Respondent> manualRespondent = new HashSet<Respondent>();
-
         manualRespondent.add(testRespondent);
 
-        testSchedule.setRespondents(manualRespondent);
 
         when(mockScheduleRepository.findById(anyLong())).thenReturn(testSchedule);
 
         when(mockScheduleRepository.findByRespondentsId(TEST_LONG)).thenReturn(testSchedule);
-        
+
         when(mockUrls.getNotificationEndpoint()).thenReturn(TEST_STRING);
-        
+
         when(mockRestTemplate.getForObject(anyString(), any())).thenReturn(testRespondent);
     }
 
@@ -148,7 +180,26 @@ public class TattlesJobTest {
     }
 
     @Test
-    public void determineTattleRecipientIsEMTest
+    public void determineTattleRecipientIsEMTest(){
+         testRespondentList  = testTattlesJob.determineTattleRecipients(testSchedule);
+         testCheckSet.addAll(testRespondentList);
+        for (Respondent testRespondent: testCheckSet){
+            for(AllowedAttribute testAllowedAttribute: testRespondent.getAllowedAttributes() ){
+                Assert.assertEquals(testAllowedAttribute.getAttributeValue(),VALUE);
+            }
+        }
+    }
 
-
+   @Test
+    public void determineTattleRecipientIsNotEMTest(){
+       testRespondentList  = testTattlesJob.determineTattleRecipients(testSchedule);
+       System.out.println(testRespondentList);
+       testCheckSet.addAll(testRespondentList);
+       for (Respondent testRespondent: testCheckSet){
+           for(AllowedAttribute testAllowedAttribute: testRespondent.getAllowedAttributes() ){
+               Assert.assertNotEquals(testAllowedAttribute.getAttributeValue(),"Developer");
+               Assert.assertNotEquals(testAllowedAttribute.getAttributeValue(),"Business Analyst");
+           }
+       }
+    }
 }

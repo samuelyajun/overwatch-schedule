@@ -276,7 +276,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   * @param schedule
   * @return List of respondents to receive tattles.
   * */
-  private List<Respondent> determineTattleRecipients(Schedule schedule){
+  public List<Respondent> determineTattleRecipients(Schedule schedule){
+      checkNotNull(schedule, "Schedule cannot be empty");
+      checkNotNull(schedule.getRespondents(), "Respondents must exist");
     List<Respondent> tattleToList = new ArrayList<>();
     Set<Respondent> checkList = new HashSet<>();
     checkList.addAll(schedule.getRespondents());
@@ -285,8 +287,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     if(!checkList.isEmpty()) {
       for (Respondent respondent : checkList){
         for(AllowedAttribute allowedAttribute : respondent.getAllowedAttributes()){
-          if(allowedAttribute.getAttributeValue().equals("Engagement Manager") || allowedAttribute.getAttributeValue().equals("Tech Lead")
-                  && allowedAttribute.getAttributeType().getName().equals("ROLE")){
+          if(allowedAttribute.getAttributeValue().equals("Tech Lead") || allowedAttribute.getAttributeValue().equals("Engagement Manager")){
             logger.info("Sending Tattles to the following: " + respondent);
             tattleToList.add(respondent);
           }
