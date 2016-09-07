@@ -222,7 +222,7 @@ public class TattlesJobTest {
         testOccurrence3.setId(TEST_LONG);
         testOccurrence3.setRespondent(testRespondent3);
         testOccurrence3.setScheduleId(TEST_LONG);
-        testOccurrence3.setIsComplete(false);
+        testOccurrence3.setIsComplete(true);
         testOccurrence3.setGenerationDate(LocalDate.now());
         testOccurrence3.setFlightNumber(TEST_LONG);
 
@@ -230,7 +230,7 @@ public class TattlesJobTest {
         testOccurrence4.setId(TEST_LONG);
         testOccurrence4.setRespondent(testRespondent4);
         testOccurrence4.setScheduleId(TEST_LONG);
-        testOccurrence4.setIsComplete(false);
+        testOccurrence4.setIsComplete(true);
         testOccurrence4.setGenerationDate(LocalDate.now());
         testOccurrence4.setFlightNumber(TEST_LONG);
 
@@ -269,7 +269,7 @@ public class TattlesJobTest {
     @Test
     public void buildTattleBodyTest() {
         String actual =  testTattlesJob.buildTattleBody(testArrayOccurrences);
-        StringBuilder userString = new StringBuilder(testRespondentList.get(0).getUser().getFirstName() + " " + testRespondentList.get(0).getUser().getLastName() + "\n");
+        StringBuilder userString = new StringBuilder(testRespondentList.get(0).getUser().getFirstName()).append(" ").append(testRespondentList.get(0).getUser().getLastName()).append("\n");
         StringBuilder expected = new StringBuilder(notificationConstants.TATTLE_BODY_BEGIN).append(" ").append(testSchedule.getTemplateName())
                 .append(": ").append("\n\n").append(userString).append("\n").append(notificationConstants.TATTLE_BODY_END);
         Assert.assertEquals(expected.toString(), actual);
@@ -283,21 +283,22 @@ public class TattlesJobTest {
 
     @Test
     public void calculateThresholdForFlightTestFalse() {
-
-        testOccurrence1.setIsComplete(false);
+        testOccurrence4.setIsComplete(false);
         testTattlesJob.calculateThresholdForFlight(testFlight);
         verify(mockScheduleRepository,times(1)).findByRespondentsId((anyLong()));
     }
 
     @Test
-    public void determineTattleRecipientIsEMTest(){
+    public void determineTattleRecipientIsEMAndTLTest(){
          testRespondentList  = testTattlesJob.determineTattleRecipients(testSchedule);
          testCheckSet.addAll(testRespondentList);
         for (Respondent testRespondent: testCheckSet){
             for(AllowedAttribute testAllowedAttribute: testRespondent.getAllowedAttributes() ){
                 if(testAllowedAttribute.getAttributeValue().equals("Tech Lead")) {
+                    System.out.println("AR");
                     Assert.assertEquals(testAllowedAttribute.getAttributeValue(),"Tech Lead");
                 } else {
+                    System.out.println("56");
                     Assert.assertEquals(testAllowedAttribute.getAttributeValue(),"Engagement Manager");
                 }
 
