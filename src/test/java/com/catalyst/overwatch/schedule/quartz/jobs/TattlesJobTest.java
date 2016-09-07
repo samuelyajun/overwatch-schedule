@@ -110,10 +110,27 @@ public class TattlesJobTest {
         testAllowedAttributes.add(testAllowedAttribute);
 
 
-        testUser.setLastName(TEST_STRING);
-        testUser.setId(TEST_LONG);
-        testUser.setFirstName(TEST_STRING);
-        testUser.setEmail(TEST_STRING);
+        testUser.setId(1);
+        testUser.setFirstName("Brad");
+        testUser.setLastName("Larsen");
+        testUser.setEmail("blarsen@catalystdevworks.com");
+
+        testUser.setId(2);
+        testUser.setFirstName("Adam");
+        testUser.setLastName("Fields");
+        testUser.setEmail("afields@catalystdevworks.com");
+
+        testUser.setId(3);
+        testUser.setFirstName("Abby");
+        testUser.setLastName("Edwards");
+        testUser.setEmail("aedwards@catalystdevworks.com");
+
+        testUser.setId(4);
+        testUser.setFirstName("Kate");
+        testUser.setLastName("Slott");
+        testUser.setEmail("kslott@catalystdevworks.com");
+
+
 
         testOccurrence.setId(TEST_LONG);
         testOccurrence.setRespondent(testRespondent);
