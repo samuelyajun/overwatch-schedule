@@ -132,19 +132,20 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
       sendTattleList.addAll(determineTattleRecipients(schedule));
     }
-
+logger.info(sendTattleList + " send tattle list");
     String emailAddress = null;
 
     logger.info("SEND TATTLE TO: " + sendTattleList);
     for(Respondent respondent : sendTattleList) {
       emailAddress = respondent.getUser().getEmail();
       logger.info("EMAIL: " + emailAddress);
+
+      generateNotification(emailAddress,
+          buildTattleBody(occurrences),
+          NotificationConstants.TATTLE_SUBJECT,
+          "Tattle Job");
     }
 
-    generateNotification(emailAddress,
-            buildTattleBody(occurrences),
-            NotificationConstants.TATTLE_SUBJECT,
-            "Tattle Job");
 
     logger.info("GENERATED!");
   }
@@ -162,12 +163,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     StringBuilder usersString = new StringBuilder();
     for (Occurrence occurrence : occurrences) {
       if(occurrence.getRespondent() != null && occurrence.getRespondent().getUser() != null &&
-              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null) {
-
-        usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
+              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null &&
+              occurrence.getIsComplete() == false){
+                usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
                 occurrence.getRespondent().getUser().getLastName() + "\n");
       } else {
-        logger.error("Respondents are null");
+        logger.error("Respondents are null or complete");
       }
     }
 
@@ -182,7 +183,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     }
 
     return new StringBuilder(NotificationConstants.TATTLE_BODY_BEGIN).append(" ").append(surveyName).append(": ").append("\n\n")
-            .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END).toString();
+           .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END).toString();
     }
 
   /**

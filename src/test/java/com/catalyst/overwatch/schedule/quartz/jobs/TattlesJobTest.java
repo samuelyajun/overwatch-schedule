@@ -268,10 +268,22 @@ public class TattlesJobTest {
 
     @Test
     public void buildTattleBodyTest() {
+        testOccurrence1.setIsComplete(false);
+        testOccurrence4.setIsComplete(false);
         String actual =  testTattlesJob.buildTattleBody(testArrayOccurrences);
-        StringBuilder userString = new StringBuilder(testRespondentList.get(0).getUser().getFirstName()).append(" ").append(testRespondentList.get(0).getUser().getLastName()).append("\n");
+        StringBuilder testUsersString = new StringBuilder();
+        for (Occurrence occurrence : testArrayOccurrences) {
+            if(occurrence.getIsComplete() == false){
+                testUsersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
+                        occurrence.getRespondent().getUser().getLastName() + "\n");
+            } else {
+                System.out.println(occurrence.getRespondent().getUser().getFirstName() + " is complete");
+            }
+        }
+        System.out.println("actual  "  + actual);
+
         StringBuilder expected = new StringBuilder(notificationConstants.TATTLE_BODY_BEGIN).append(" ").append(testSchedule.getTemplateName())
-                .append(": ").append("\n\n").append(userString).append("\n").append(notificationConstants.TATTLE_BODY_END);
+               .append(": ").append("\n\n").append(testUsersString).append("\n").append(notificationConstants.TATTLE_BODY_END);
         Assert.assertEquals(expected.toString(), actual);
     }
 
