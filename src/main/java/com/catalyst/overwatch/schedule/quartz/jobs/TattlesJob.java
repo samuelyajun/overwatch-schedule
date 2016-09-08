@@ -139,12 +139,14 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     for(Respondent respondent : sendTattleList) {
       emailAddress = respondent.getUser().getEmail();
       logger.info("EMAIL: " + emailAddress);
+
+      generateNotification(emailAddress,
+              buildTattleBody(occurrences),
+              NotificationConstants.TATTLE_SUBJECT,
+              "Tattle Job");
     }
 
-    generateNotification(emailAddress,
-            buildTattleBody(occurrences),
-            NotificationConstants.TATTLE_SUBJECT,
-            "Tattle Job");
+
 
     logger.info("GENERATED!");
   }
