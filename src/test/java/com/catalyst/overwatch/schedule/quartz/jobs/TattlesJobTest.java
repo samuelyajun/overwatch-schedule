@@ -295,10 +295,8 @@ public class TattlesJobTest {
         for (Respondent testRespondent: testCheckSet){
             for(AllowedAttribute testAllowedAttribute: testRespondent.getAllowedAttributes() ){
                 if(testAllowedAttribute.getAttributeValue().equals("Tech Lead")) {
-                    System.out.println("AR");
                     Assert.assertEquals(testAllowedAttribute.getAttributeValue(),"Tech Lead");
                 } else {
-                    System.out.println("56");
                     Assert.assertEquals(testAllowedAttribute.getAttributeValue(),"Engagement Manager");
                 }
 
