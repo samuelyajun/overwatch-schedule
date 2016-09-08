@@ -35,121 +35,120 @@ import java.util.*;
  */
 public class TattlesJob extends SchedulerBaseJob implements Job {
 
-  @Autowired
-  private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-  @Autowired
-  private OccurrenceRepository occurrenceRepository;
+    @Autowired
+    private OccurrenceRepository occurrenceRepository;
 
-  @Autowired
-  private ScheduleRepository scheduleRepository;
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
-  @Autowired
-  private FlightRepository flightRepository;
+    @Autowired
+    private FlightRepository flightRepository;
 
-  @Autowired
-  private Urls urls;
+    @Autowired
+    private Urls urls;
 
-  Logger logger = LogManager.getRootLogger();
+    Logger logger = LogManager.getRootLogger();
 
-  /**
-   * The main function of the TattlesJob, which executes the needed tasks.
-   *
-   * @param context A context bundle containing handles to various environment information, that
-   *                is given to a quartz JobDetail instance as it is executed, and to a Trigger instance
-   *                after the execution completes.
-   * @throws JobExecutionException
-   */
-  @Override
-  public void execute(JobExecutionContext context) throws JobExecutionException {
+    /**
+     * The main function of the TattlesJob, which executes the needed tasks.
+     *
+     * @param context A context bundle containing handles to various environment information, that
+     *                is given to a quartz JobDetail instance as it is executed, and to a Trigger instance
+     *                after the execution completes.
+     * @throws JobExecutionException
+     */
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
 
-    logger.info("Tattles Job Begin... :");
+        logger.info("Tattles Job Begin... :");
 
-    findAndUpdateOccurrences();
+        findAndUpdateOccurrences();
 
-    flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
-            .stream()
-            .forEach(flight -> {
-              calculateThresholdForFlight(flight);
-            });
+        flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
+                .stream()
+                .forEach(flight -> {
+                    calculateThresholdForFlight(flight);
+                });
 
-    logger.info("Tattles Job End... :");
+        logger.info("Tattles Job End... :");
 
-  }
-
-  /**
-   * Calculates whether or not the response threshold has been met for a flight of occurrences.
-   *
-   * @param flight a flight of occurrences to calculate the threshold for.
-   */
-  public void calculateThresholdForFlight(Flight flight) {
-    logger.info(flight);
-
-    long thresholdMark = 0;
-    List<Occurrence> occurrenceList = new ArrayList<>();
-
-    int completeCounter = 0;
-
-    occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
-
-    List<Occurrence> tattleOnList = new ArrayList<>();
-    //Loop through each occurrence in this flight to see if it has met the threshold
-    for (Occurrence occurrence : occurrenceList) {
-      ++thresholdMark;
-      logger.info("flight number; " + occurrence.getFlightNumber());
-      logger.info("generation date: " + occurrence.getGenerationDate());
-      logger.info(occurrence.toString());
-      if (occurrence.getIsComplete() == true) {
-        ++completeCounter;
-        logger.info(occurrence.getRespondent().getUser().getEmail() + " has responded to the survey");
-
-      } else {
-        logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
-        tattleOnList.add(occurrence);
-        logger.info("THIS IS THE SENDLIST: " + tattleOnList);
-      }
     }
 
-    //Threshold met, generate reports and stakeholder notification
-    if (completeCounter == thresholdMark) {
-      logger.info("Threshold met");
-      logger.info("Updating the flight table");
-      flight.setIsClosed(true);
-      flightRepository.save(flight);
+    /**
+     * Calculates whether or not the response threshold has been met for a flight of occurrences.
+     *
+     * @param flight a flight of occurrences to calculate the threshold for.
+     */
+    public void calculateThresholdForFlight(Flight flight) {
+        logger.info(flight);
 
-      //Threshold not met, generate tattles for the delinquent respondents
-    } else {
-      logger.info("Threshold has not been met");
-      logger.info("Respondents in flight:  " + thresholdMark);
-      logger.info("Number of responses: " + completeCounter);
-      tattleConstructor(tattleOnList);
+        long thresholdMark = 0;
+        List<Occurrence> occurrenceList = new ArrayList<>();
+
+        int completeCounter = 0;
+
+        occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
+
+        List<Occurrence> tattleOnList = new ArrayList<>();
+        //Loop through each occurrence in this flight to see if it has met the threshold
+        for (Occurrence occurrence : occurrenceList) {
+            ++thresholdMark;
+            logger.info("flight number; " + occurrence.getFlightNumber());
+            logger.info("generation date: " + occurrence.getGenerationDate());
+            logger.info(occurrence.toString());
+            if (occurrence.getIsComplete() == true) {
+                ++completeCounter;
+                logger.info(occurrence.getRespondent().getUser().getEmail() + " has responded to the survey");
+
+            } else {
+                logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
+                tattleOnList.add(occurrence);
+                logger.info("THIS IS THE SENDLIST: " + tattleOnList);
+            }
+        }
+
+        //Threshold met, generate reports and stakeholder notification
+        if (completeCounter == thresholdMark) {
+            logger.info("Threshold met");
+            logger.info("Updating the flight table");
+            flight.setIsClosed(true);
+            flightRepository.save(flight);
+
+            //Threshold not met, generate tattles for the delinquent respondents
+        } else {
+            logger.info("Threshold has not been met");
+            logger.info("Respondents in flight:  " + thresholdMark);
+            logger.info("Number of responses: " + completeCounter);
+            tattleConstructor(tattleOnList);
+        }
     }
-  }
 
-  public void tattleConstructor(final List<Occurrence> occurrences) {
-    Set<Respondent> sendTattleList = new HashSet<>();
-    for (Occurrence occurrence : occurrences) {
-      Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
-      sendTattleList.addAll(determineTattleRecipients(schedule));
+    public void tattleConstructor(final List<Occurrence> occurrences) {
+        Set<Respondent> sendTattleList = new HashSet<>();
+        for (Occurrence occurrence : occurrences) {
+            Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
+            sendTattleList.addAll(determineTattleRecipients(schedule));
+        }
+
+        String emailAddress = null;
+
+        logger.info("SEND TATTLE TO: " + sendTattleList);
+        for (Respondent respondent : sendTattleList) {
+            emailAddress = respondent.getUser().getEmail();
+            logger.info("EMAIL: " + emailAddress);
+
+            generateNotification(emailAddress,
+                    buildTattleBody(occurrences),
+                    NotificationConstants.TATTLE_SUBJECT,
+                    "Tattle Job");
+        }
+
+
+        logger.info("GENERATED!");
     }
-logger.info(sendTattleList + " send tattle list");
-    String emailAddress = null;
-
-    logger.info("SEND TATTLE TO: " + sendTattleList);
-    for(Respondent respondent : sendTattleList) {
-      emailAddress = respondent.getUser().getEmail();
-      logger.info("EMAIL: " + emailAddress);
-
-      generateNotification(emailAddress,
-          buildTattleBody(occurrences),
-          NotificationConstants.TATTLE_SUBJECT,
-          "Tattle Job");
-    }
-
-
-    logger.info("GENERATED!");
-  }
-
   /**
   * Builds the body of the Tattle email that is sent when a respondent in a given occurrence
   * has not completed the survey.
