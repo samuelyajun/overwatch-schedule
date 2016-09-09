@@ -315,7 +315,7 @@ public class DailyJobTest {
     // One Time Schedule that should pass
     testOneTimeSchedule = new Schedule();
     testOneTimeSchedule.setFrequency(Frequency.ONE_TIME);
-    testOneTimeSchedule.setStartDate(YESTERDAY);
+    testOneTimeSchedule.setStartDate(NOW);
     testOneTimeSchedule.setRespondents(testRespondents);
     testOneTimeSchedule.setTemplateUri(TEST_STRING);
     testOneTimeSchedule.setTemplateName(TEST_STRING);
@@ -330,7 +330,7 @@ public class DailyJobTest {
     // One Time Schedule that should not get processed
     testOneTimeOffSchedule = new Schedule();
     testOneTimeOffSchedule.setFrequency(Frequency.ONE_TIME);
-    testOneTimeOffSchedule.setStartDate(NOW);
+    testOneTimeOffSchedule.setStartDate(YESTERDAY);
     testOneTimeOffSchedule.setRespondents(testRespondents);
     testOneTimeOffSchedule.setTemplateUri(TEST_STRING);
     testOneTimeOffSchedule.setTemplateName(TEST_STRING);
