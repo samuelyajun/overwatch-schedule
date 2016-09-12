@@ -133,21 +133,24 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
             sendTattleList.addAll(determineTattleRecipients(schedule));
         }
 
-        String emailAddress = null;
-
         logger.info("SEND TATTLE TO: " + sendTattleList);
         for (Respondent respondent : sendTattleList) {
-            emailAddress = respondent.getUser().getEmail();
-            logger.info("EMAIL: " + emailAddress);
+            String emailAddress = null;
+            if(respondent.getUser().getEmail() != null) {
+                emailAddress = respondent.getUser().getEmail();
+                logger.info("EMAIL: " + emailAddress);
 
-            generateNotification(emailAddress,
-                    buildTattleBody(occurrences),
-                    NotificationConstants.TATTLE_SUBJECT,
-                    "Tattle Job");
+                generateNotification(emailAddress,
+                        buildTattleBody(occurrences),
+                        NotificationConstants.TATTLE_SUBJECT,
+                        "Tattle Job");
+
+                logger.info("GENERATED!");
+            } else {
+                logger.error("Respondent email is null.");
+            }
         }
 
-
-        logger.info("GENERATED!");
     }
   /**
   * Builds the body of the Tattle email that is sent when a respondent in a given occurrence
@@ -167,7 +170,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
                 usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
                 occurrence.getRespondent().getUser().getLastName() + "\n");
       } else {
-        logger.error("Respondents are null or complete");
+        logger.error("Respondents are null.");
       }
     }
 
@@ -256,7 +259,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   * @return List of respondents to receive tattles.
   * */
   public List<Respondent> determineTattleRecipients(Schedule schedule){
-      checkNotNull(schedule, "Schedule cannot be empty");
+      checkNotNull(schedule, "Schedule cannot be null.");
       checkNotNull(schedule.getRespondents(), "Respondents must exist");
     List<Respondent> tattleToList = new ArrayList<>();
     Set<Respondent> checkList = new HashSet<>();
