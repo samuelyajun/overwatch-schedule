@@ -125,7 +125,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       flight.setIsClosed(true);
       flightRepository.save(flight);
 
-      logger.info("Retrieve a scheduling using id: " + id);
+      logger.info("Retrieve a schedule using id: " + id);
       Schedule scheduleById = scheduleRepository.findById(id);
 
       logger.info("Report endpoint url: " + urls.getReportEndpoint());
