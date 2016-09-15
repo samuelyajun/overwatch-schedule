@@ -120,7 +120,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
             Schedule scheduleById = scheduleRepository.findById(id);
             logger.info("Report endpoint url: " + urls.getReportEndpoint());
             logger.info("Schedule retrieved: " + scheduleById.toString());
-            logger.info(restTemplate.getForObject(urls.getReportEndpoint() + 
+            logger.info(restTemplate.getForObject(urls.getReportEndpoint() +
                     scheduleById.getTemplateUri(), Object.class).toString());
 
         //Threshold not met, generate tattles for the delinquent respondents
@@ -176,8 +176,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
               occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null &&
               occurrence.getIsComplete() == false) {
 
-                usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
-                occurrence.getRespondent().getUser().getLastName() + "\n");
+                usersString.append(occurrence.getRespondent().getUser().getFirstName()).append(" ")
+                        .append(occurrence.getRespondent().getUser().getLastName()).append("\n");
       } else {
         logger.error("Respondents are null");
       }
