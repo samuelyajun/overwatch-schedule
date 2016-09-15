@@ -37,7 +37,6 @@ public class TattlesJobTest {
     private static final String TEST_STRING = "test";
     private static final long TEST_LONG = 1;
     private static final String VALUE = "Engagement Manager";
-    //private static final String VALUE = "Developer";
 
     @InjectMocks
     private TattlesJob testTattlesJob;
