@@ -35,62 +35,65 @@ import java.util.*;
  */
 public class TattlesJob extends SchedulerBaseJob implements Job {
 
-    @Autowired
-    private RestTemplate restTemplate;
+  @Autowired
+  private RestTemplate restTemplate;
 
-    @Autowired
-    private OccurrenceRepository occurrenceRepository;
+  @Autowired
+  private OccurrenceRepository occurrenceRepository;
 
-    @Autowired
-    private ScheduleRepository scheduleRepository;
+  @Autowired
+  private ScheduleRepository scheduleRepository;
 
-    @Autowired
-    private FlightRepository flightRepository;
+  @Autowired
+  private FlightRepository flightRepository;
 
-    @Autowired
-    private Urls urls;
+  @Autowired
+  private Urls urls;
 
-    Logger logger = LogManager.getRootLogger();
+  Logger logger = LogManager.getRootLogger();
+  List<Occurrence> occurrencesList = new ArrayList<>();
 
-    /**
-     * The main function of the TattlesJob, which executes the needed tasks.
-     *
-     * @param context A context bundle containing handles to various environment information, that
-     *                is given to a quartz JobDetail instance as it is executed, and to a Trigger instance
-     *                after the execution completes.
-     * @throws JobExecutionException
-     */
-    @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+  /**
+   * The main function of the TattlesJob, which executes the needed tasks.
+   *
+   * @param context A context bundle containing handles to various environment information, that
+   *                is given to a quartz JobDetail instance as it is executed, and to a Trigger instance
+   *                after the execution completes.
+   * @throws JobExecutionException
+   */
+  @Override
+  public void execute(JobExecutionContext context) throws JobExecutionException {
 
-        logger.info("Tattles Job Begin... :");
+    logger.info("Tattles Job Begin... :");
 
-        findAndUpdateOccurrences();
+    findAndUpdateOccurrences();
 
-        flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
-                .stream()
-                .forEach(flight -> {
-                    calculateThresholdForFlight(flight);
-                });
+    flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
+            .stream()
+            .forEach(flight -> {
+              calculateThresholdForFlight(flight);
+            });
 
-        logger.info("Tattles Job End... :");
+    logger.info("Tattles Job End... :");
 
-    }
+  }
 
-    /**
-     * Calculates whether or not the response threshold has been met for a flight of occurrences.
-     *
-     * @param flight a flight of occurrences to calculate the threshold for.
-     */
-    public void calculateThresholdForFlight(Flight flight) {
-        logger.info(flight);
+  /**
+   * Calculates whether or not the response threshold has been met for a flight of occurrences.
+   *
+   * @param flight a flight of occurrences to calculate the threshold for.
+   */
+  public void calculateThresholdForFlight(Flight flight) {
 
-        long thresholdMark = 0;
-        List<Occurrence> occurrenceList = new ArrayList<>();
+    long thresholdMark = 0;
+    long id = 0;
 
-        int completeCounter = 0;
+    List<Occurrence> sendList = new ArrayList<>();
+    List<Occurrence> occurrenceList = new ArrayList<>();
 
-        occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
+    int completeCounter = 0;
+
+    occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
 
         List<Occurrence> tattleOnList = new ArrayList<>();
         //Loop through each occurrence in this flight to see if it has met the threshold
@@ -140,18 +143,21 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
                 emailAddress = respondent.getUser().getEmail();
                 logger.info("EMAIL: " + emailAddress);
 
-                generateNotification(emailAddress,
-                        buildTattleBody(occurrences),
-                        NotificationConstants.TATTLE_SUBJECT,
-                        "Tattle Job");
+            generateNotification(emailAddress,
+                    buildTattleBody(occurrences),
+                    NotificationConstants.TATTLE_SUBJECT,
+                    "Tattle Job");
 
-                logger.info("GENERATED!");
-            } else {
-                logger.error("Respondent email is null.");
-            }
+            logger.info("GENERATED!");
+        }
+        else{
+            logger.info("Respondent email is null.");
         }
 
     }
+
+  }
+
   /**
   * Builds the body of the Tattle email that is sent when a respondent in a given occurrence
   * has not completed the survey.
@@ -165,12 +171,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     StringBuilder usersString = new StringBuilder();
     for (Occurrence occurrence : occurrences) {
       if(occurrence.getRespondent() != null && occurrence.getRespondent().getUser() != null &&
-              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null &&
-              occurrence.getIsComplete() == false){
-                usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
+              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null) {
+
+        usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
                 occurrence.getRespondent().getUser().getLastName() + "\n");
       } else {
-        logger.error("Respondents are null.");
+        logger.error("Respondents are null");
       }
     }
 
@@ -185,7 +191,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     }
 
     return new StringBuilder(NotificationConstants.TATTLE_BODY_BEGIN).append(" ").append(surveyName).append(": ").append("\n\n")
-           .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END).toString();
+            .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END).toString();
     }
 
   /**
@@ -231,9 +237,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       logger.error("Error occurred while contacting Survey Response service: ", e);
 
       throw new OverwatchScheduleException("Error occurred while contacting Survey Response service: ", e);
-
     }
-
     return extractedResponseData;
   }
 
@@ -246,7 +250,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   private List<SurveyResponse> extractResponseData(final Resources<SurveyResponse> responseData) {
     List<SurveyResponse> extractedResponseData = new ArrayList<>();
+
     extractedResponseData.addAll(responseData.getContent());
+
     return extractedResponseData;
   }
 

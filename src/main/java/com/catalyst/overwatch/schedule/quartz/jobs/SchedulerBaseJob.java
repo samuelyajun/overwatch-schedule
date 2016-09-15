@@ -51,7 +51,7 @@ public abstract class SchedulerBaseJob {
     completedLink.append("&" + originator + originatorId);
 
     logger.info("Scheduler Base Job => Survey Display Link: " + completedLink.toString());
-
+    if()
     return completedLink.toString();
   }
 
