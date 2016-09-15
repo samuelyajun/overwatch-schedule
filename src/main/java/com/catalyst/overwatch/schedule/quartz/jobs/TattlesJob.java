@@ -85,6 +85,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   public void calculateThresholdForFlight(Flight flight) {
 
         long thresholdMark = 0;
+        long id = 0;
         List<Occurrence> occurrenceList = new ArrayList<>();
 
         int completeCounter = 0;
@@ -105,9 +106,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
             } else {
                 logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
                 tattleOnList.add(occurrence);
-                logger.info("THIS IS THE SENDLIST: " + tattleOnList);
             }
         }
+        logger.info("THIS IS THE SENDLIST: " + tattleOnList);
 
         //Threshold met, generate reports and stakeholder notification
         if (completeCounter == thresholdMark) {
@@ -115,8 +116,14 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
             logger.info("Updating the flight table");
             flight.setIsClosed(true);
             flightRepository.save(flight);
+            logger.info("Retrieve a schedule using id: " + id);
+            Schedule scheduleById = scheduleRepository.findById(id);
+            logger.info("Report endpoint url: " + urls.getReportEndpoint());
+            logger.info("Schedule retrieved: " + scheduleById.toString());
+            logger.info(restTemplate.getForObject(urls.getReportEndpoint() + 
+                    scheduleById.getTemplateUri(), Object.class).toString());
 
-            //Threshold not met, generate tattles for the delinquent respondents
+        //Threshold not met, generate tattles for the delinquent respondents
         } else {
             logger.info("Threshold has not been met");
             logger.info("Respondents in flight:  " + thresholdMark);
