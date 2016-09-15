@@ -51,7 +51,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   private Urls urls;
 
   Logger logger = LogManager.getRootLogger();
-  List<Occurrence> occurrencesList = new ArrayList<>();
 
   /**
    * The main function of the TattlesJob, which executes the needed tasks.
@@ -85,15 +84,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   public void calculateThresholdForFlight(Flight flight) {
 
-    long thresholdMark = 0;
-    long id = 0;
+        long thresholdMark = 0;
+        List<Occurrence> occurrenceList = new ArrayList<>();
 
-    List<Occurrence> sendList = new ArrayList<>();
-    List<Occurrence> occurrenceList = new ArrayList<>();
+        int completeCounter = 0;
 
-    int completeCounter = 0;
-
-    occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
+        occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
 
         List<Occurrence> tattleOnList = new ArrayList<>();
         //Loop through each occurrence in this flight to see if it has met the threshold
@@ -153,7 +149,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         else{
             logger.info("Respondent email is null.");
         }
-
     }
 
   }
@@ -171,9 +166,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     StringBuilder usersString = new StringBuilder();
     for (Occurrence occurrence : occurrences) {
       if(occurrence.getRespondent() != null && occurrence.getRespondent().getUser() != null &&
-              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null) {
+              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null &&
+              occurrence.getIsComplete() == false) {
 
-        usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
+                usersString.append(occurrence.getRespondent().getUser().getFirstName() + " " +
                 occurrence.getRespondent().getUser().getLastName() + "\n");
       } else {
         logger.error("Respondents are null");
@@ -250,9 +246,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   private List<SurveyResponse> extractResponseData(final Resources<SurveyResponse> responseData) {
     List<SurveyResponse> extractedResponseData = new ArrayList<>();
-
     extractedResponseData.addAll(responseData.getContent());
-
     return extractedResponseData;
   }
 
