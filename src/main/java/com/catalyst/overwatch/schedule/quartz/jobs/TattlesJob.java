@@ -1,5 +1,6 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
@@ -84,8 +85,11 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   public void calculateThresholdForFlight(Flight flight) {
 
+      checkNotNull(flight, "Flight cannot be Null");
+      checkArgument(flight.getFlightNumber() > 0, "FlightNumber for Flight cannot be less than 1");
+      checkArgument(flight.getScheduleId() > 0, "ScheduleId for Flight cannot be less than 1");
+
         long thresholdMark = 0;
-        long id = 0;
         List<Occurrence> occurrenceList = new ArrayList<>();
 
         int completeCounter = 0;
@@ -95,7 +99,6 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         List<Occurrence> tattleOnList = new ArrayList<>();
         //Loop through each occurrence in this flight to see if it has met the threshold
         for (Occurrence occurrence : occurrenceList) {
-            id = occurrence.getScheduleId();
             ++thresholdMark;
             logger.info("flight number; " + occurrence.getFlightNumber());
             logger.info("generation date: " + occurrence.getGenerationDate());
@@ -117,12 +120,19 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
             logger.info("Updating the flight table");
             flight.setIsClosed(true);
             flightRepository.save(flight);
-            logger.info("Retrieve a schedule using id: " + id);
-            Schedule scheduleById = scheduleRepository.findById(id);
-            logger.info("Report endpoint url: " + urls.getReportEndpoint());
-            logger.info("Schedule retrieved: " + scheduleById.toString());
-            logger.info(restTemplate.getForObject(urls.getReportEndpoint() +
-                    scheduleById.getTemplateUri(), Object.class).toString());
+
+            logger.info("Retrieve a schedule using id: " + flight.getScheduleId());
+            Schedule scheduleById = scheduleRepository.findById(flight.getScheduleId());
+
+            if(scheduleById != null) {
+                logger.info("Report endpoint url: " + urls.getReportEndpoint());
+                logger.info("Schedule retrieved: " + scheduleById.toString());
+                String reportGenerationResult = restTemplate.getForObject(urls.getReportEndpoint() +
+                        scheduleById.getTemplateUri(), Object.class).toString();
+                logger.info("Report Generation Result: " + reportGenerationResult);
+            } else {
+                logger.error("Schedule with id " + flight.getScheduleId() + " could not be found.");
+            }
 
         //Threshold not met, generate tattles for the delinquent respondents
         } else {
