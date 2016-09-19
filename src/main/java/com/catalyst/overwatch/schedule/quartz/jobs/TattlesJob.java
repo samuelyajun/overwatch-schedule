@@ -95,6 +95,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         List<Occurrence> tattleOnList = new ArrayList<>();
         //Loop through each occurrence in this flight to see if it has met the threshold
         for (Occurrence occurrence : occurrenceList) {
+            id = occurrence.getScheduleId();
             ++thresholdMark;
             logger.info("flight number; " + occurrence.getFlightNumber());
             logger.info("generation date: " + occurrence.getGenerationDate());
