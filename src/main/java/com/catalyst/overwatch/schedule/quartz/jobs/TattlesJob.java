@@ -88,6 +88,8 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
       checkNotNull(flight, "Flight cannot be Null");
       checkArgument(flight.getFlightNumber() > 0, "FlightNumber for Flight cannot be less than 1");
       checkArgument(flight.getScheduleId() > 0, "ScheduleId for Flight cannot be less than 1");
+      checkNotNull(urls, "URLS cannot be null");
+      checkNotNull(urls.getReportEndpoint(), "ReportEndpoint cannot be null");
 
         long thresholdMark = 0;
         List<Occurrence> occurrenceList = new ArrayList<>();
@@ -125,9 +127,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
             Schedule scheduleById = scheduleRepository.findById(flight.getScheduleId());
 
             if(scheduleById != null) {
-                logger.info("Report endpoint url: " + urls.getReportEndpoint());
-                logger.info("Schedule retrieved: " + scheduleById.toString());
-                if(urls.getReportEndpoint() != null && scheduleById.getTemplateUri() != null) {
+                if(scheduleById.getTemplateUri() != null) {
+                    logger.info("Report endpoint url: " + urls.getReportEndpoint());
+                    logger.info("Schedule retrieved: " + scheduleById.toString());
                     String reportGenerationResult = restTemplate.getForObject(urls.getReportEndpoint() +
                             scheduleById.getTemplateUri(), Object.class).toString();
                     if(reportGenerationResult != null) {
@@ -136,7 +138,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
                         logger.error("ReportGenerationResult is null.");
                     }
                 } else {
-                    logger.error("ReportEndpoint and/or TemplateURI are null");
+                    logger.error("TemplateURI is null");
                 }
             } else {
                 logger.error("Schedule with id " + flight.getScheduleId() + " could not be found.");
