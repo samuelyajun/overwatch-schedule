@@ -127,9 +127,17 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
             if(scheduleById != null) {
                 logger.info("Report endpoint url: " + urls.getReportEndpoint());
                 logger.info("Schedule retrieved: " + scheduleById.toString());
-                String reportGenerationResult = restTemplate.getForObject(urls.getReportEndpoint() +
-                        scheduleById.getTemplateUri(), Object.class).toString();
-                logger.info("Report Generation Result: " + reportGenerationResult);
+                if(urls.getReportEndpoint() != null && scheduleById.getTemplateUri() != null) {
+                    String reportGenerationResult = restTemplate.getForObject(urls.getReportEndpoint() +
+                            scheduleById.getTemplateUri(), Object.class).toString();
+                    if(reportGenerationResult != null) {
+                        logger.info("Report Generation Result: " + reportGenerationResult);
+                    } else {
+                        logger.error("ReportGenerationResult is null.");
+                    }
+                } else {
+                    logger.error("ReportEndpoint and/or TemplateURI are null");
+                }
             } else {
                 logger.error("Schedule with id " + flight.getScheduleId() + " could not be found.");
             }
