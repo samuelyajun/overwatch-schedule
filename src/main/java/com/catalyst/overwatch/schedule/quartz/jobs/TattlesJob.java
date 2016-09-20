@@ -101,9 +101,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
         //Loop through each occurrence in this flight to see if it has met the threshold
         for (Occurrence occurrence : occurrenceList) {
           ++thresholdMark;
-          logger.info("flight number; " + occurrence.getFlightNumber());
+          logger.info("flight number: " + occurrence.getFlightNumber());
+          logger.info("occurrence: " + occurrence.toString());
           logger.info("generation date: " + occurrence.getGenerationDate());
-          logger.info(occurrence.toString());
           if (occurrence.getIsComplete() == true) {
               ++completeCounter;
               logger.info(occurrence.getRespondent().getUser().getEmail() + " has responded to the survey");
@@ -158,6 +158,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
   public void tattleConstructor(final List<Occurrence> occurrences) {
     Set<Respondent> sendTattleList = new HashSet<>();
+    //TODO: This for loop is not needed because all the occurrences refer to the same schedule and determineTattleRecipients() filters through all the respondents of that schedule
     for (Occurrence occurrence : occurrences) {
         Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
         sendTattleList.addAll(determineTattleRecipients(schedule));
