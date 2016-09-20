@@ -1,5 +1,6 @@
 package com.catalyst.overwatch.schedule.quartz.jobs;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.catalyst.overwatch.schedule.constants.NotificationConstants;
 import com.catalyst.overwatch.schedule.constants.Urls;
@@ -68,10 +69,10 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     findAndUpdateOccurrences();
 
     flightRepository.findByScheduleIsActiveAndIsClosed(true, false)
-            .stream()
-            .forEach(flight -> {
-              calculateThresholdForFlight(flight);
-            });
+        .stream()
+        .forEach(flight -> {
+        calculateThresholdForFlight(flight);
+        });
 
     logger.info("Tattles Job End... :");
 
@@ -84,80 +85,100 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
    */
   public void calculateThresholdForFlight(Flight flight) {
 
+    checkNotNull(flight, "Flight cannot be Null");
+    checkArgument(flight.getFlightNumber() > 0, "FlightNumber for Flight cannot be less than 1");
+    checkArgument(flight.getScheduleId() > 0, "ScheduleId for Flight cannot be less than 1");
+    checkNotNull(urls, "URLS cannot be null");
+    checkNotNull(urls.getReportEndpoint(), "ReportEndpoint cannot be null");
+
+    List<Occurrence> occurrenceList = occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber());
+
+      if(occurrenceList != null && occurrenceList.size() > 0) {
         long thresholdMark = 0;
-        long id = 0;
-        List<Occurrence> occurrenceList = new ArrayList<>();
-
         int completeCounter = 0;
-
-        occurrenceList.addAll(occurrenceRepository.findByScheduleIdAndFlightNumber(flight.getScheduleId(), flight.getFlightNumber()));
-
         List<Occurrence> tattleOnList = new ArrayList<>();
+
         //Loop through each occurrence in this flight to see if it has met the threshold
         for (Occurrence occurrence : occurrenceList) {
-            ++thresholdMark;
-            logger.info("flight number; " + occurrence.getFlightNumber());
-            logger.info("generation date: " + occurrence.getGenerationDate());
-            logger.info(occurrence.toString());
-            if (occurrence.getIsComplete() == true) {
-                ++completeCounter;
-                logger.info(occurrence.getRespondent().getUser().getEmail() + " has responded to the survey");
+          ++thresholdMark;
+          logger.info("flight number: " + occurrence.getFlightNumber());
+          logger.info("occurrence: " + occurrence.toString());
+          logger.info("generation date: " + occurrence.getGenerationDate());
+          if (occurrence.getIsComplete() == true) {
+              ++completeCounter;
+              logger.info(occurrence.getRespondent().getUser().getEmail() + " has responded to the survey");
 
-            } else {
-                logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
-                tattleOnList.add(occurrence);
-            }
+          } else {
+              logger.info(occurrence.getRespondent().getUser().getEmail() + " did not respond to the survey");
+              tattleOnList.add(occurrence);
+          }
         }
-        logger.info("THIS IS THE SENDLIST: " + tattleOnList);
 
+        logger.info("THIS IS THE SENDLIST: " + tattleOnList);
         //Threshold met, generate reports and stakeholder notification
         if (completeCounter == thresholdMark) {
-            logger.info("Threshold met");
-            logger.info("Updating the flight table");
-            flight.setIsClosed(true);
-            flightRepository.save(flight);
-            logger.info("Retrieve a schedule using id: " + id);
-            Schedule scheduleById = scheduleRepository.findById(id);
-            logger.info("Report endpoint url: " + urls.getReportEndpoint());
-            logger.info("Schedule retrieved: " + scheduleById.toString());
-            logger.info(restTemplate.getForObject(urls.getReportEndpoint() +
-                    scheduleById.getTemplateUri(), Object.class).toString());
+          logger.info("Threshold met");
+          logger.info("Updating the flight table");
+          flight.setIsClosed(true);
+          flightRepository.save(flight);
 
-        //Threshold not met, generate tattles for the delinquent respondents
+          logger.info("Retrieve a schedule using id: " + flight.getScheduleId());
+          Schedule scheduleById = scheduleRepository.findById(flight.getScheduleId());
+
+          if (scheduleById != null) {
+            if (scheduleById.getTemplateUri() != null) {
+              logger.info("Report endpoint url: " + urls.getReportEndpoint());
+              logger.info("Schedule retrieved: " + scheduleById.toString());
+                String reportGenerationResult = restTemplate.getForObject(urls.getReportEndpoint() +
+                    scheduleById.getTemplateUri(), Object.class).toString();
+                if (reportGenerationResult != null) {
+                      logger.info("Report Generation Result: " + reportGenerationResult);
+                } else {
+                  logger.error("ReportGenerationResult is null.");
+                }
+            } else {
+              logger.error("TemplateURI is null");
+            }
+          } else {
+            logger.error("Schedule with id " + flight.getScheduleId() + " could not be found.");
+          }
+
+          //Threshold not met, generate tattles for the delinquent respondents
         } else {
-            logger.info("Threshold has not been met");
-            logger.info("Respondents in flight:  " + thresholdMark);
-            logger.info("Number of responses: " + completeCounter);
-            tattleConstructor(tattleOnList);
+          logger.info("Threshold has not been met");
+          logger.info("Respondents in flight:  " + thresholdMark);
+          logger.info("Number of responses: " + completeCounter);
+          tattleConstructor(tattleOnList);
         }
+
+      } else {
+          logger.error("no occurrences were found with scheduleId " + flight.getScheduleId() + " and flight number " + flight.getFlightNumber());
+      }
+  }
+
+  public void tattleConstructor(final List<Occurrence> occurrences) {
+    Set<Respondent> sendTattleList = new HashSet<>();
+    //TODO: This for loop is not needed because all the occurrences refer to the same schedule and determineTattleRecipients() filters through all the respondents of that schedule
+    for (Occurrence occurrence : occurrences) {
+        Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
+        sendTattleList.addAll(determineTattleRecipients(schedule));
     }
+      logger.info("SEND TATTLE TO: " + sendTattleList);
+      for (Respondent respondent : sendTattleList) {
+        String emailAddress = null;
+        if(respondent.getUser().getEmail() != null) {
+          emailAddress = respondent.getUser().getEmail();
+          logger.info("EMAIL: " + emailAddress);
 
-    public void tattleConstructor(final List<Occurrence> occurrences) {
-        Set<Respondent> sendTattleList = new HashSet<>();
-        for (Occurrence occurrence : occurrences) {
-            Schedule schedule = scheduleRepository.findByRespondentsId(occurrence.getRespondent().getId());
-            sendTattleList.addAll(determineTattleRecipients(schedule));
+          generateNotification(emailAddress,
+                buildTattleBody(occurrences),
+                NotificationConstants.TATTLE_SUBJECT,
+                "Tattle Job");
+          logger.info("GENERATED!");
+        } else {
+          logger.info("Respondent email is null.");
         }
-
-        logger.info("SEND TATTLE TO: " + sendTattleList);
-        for (Respondent respondent : sendTattleList) {
-            String emailAddress = null;
-            if(respondent.getUser().getEmail() != null) {
-                emailAddress = respondent.getUser().getEmail();
-                logger.info("EMAIL: " + emailAddress);
-
-            generateNotification(emailAddress,
-                    buildTattleBody(occurrences),
-                    NotificationConstants.TATTLE_SUBJECT,
-                    "Tattle Job");
-
-            logger.info("GENERATED!");
-        }
-        else{
-            logger.info("Respondent email is null.");
-        }
-    }
-
+      }
   }
 
   /**
@@ -173,11 +194,12 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
     StringBuilder usersString = new StringBuilder();
     for (Occurrence occurrence : occurrences) {
       if(occurrence.getRespondent() != null && occurrence.getRespondent().getUser() != null &&
-              occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null &&
-              occurrence.getIsComplete() == false) {
+        occurrence.getRespondent().getUser().getFirstName() != null && occurrence.getRespondent().getUser().getLastName() != null &&
+        occurrence.getIsComplete() == false) {
 
-                usersString.append(occurrence.getRespondent().getUser().getFirstName()).append(" ")
-                        .append(occurrence.getRespondent().getUser().getLastName()).append("\n");
+          usersString.append(occurrence.getRespondent().getUser().getFirstName()).append(" ")
+            .append(occurrence.getRespondent().getUser().getLastName()).append("\n");
+
       } else {
         logger.error("Respondents are null");
       }
@@ -195,7 +217,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     return new StringBuilder(NotificationConstants.TATTLE_BODY_BEGIN).append(" ").append(surveyName).append(": ").append("\n\n")
             .append(usersString.toString()).append("\n").append(NotificationConstants.TATTLE_BODY_END).toString();
-    }
+  }
 
   /**
    * Finds all occurrences with response data and marks them complete by updating the
@@ -204,16 +226,16 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   public void findAndUpdateOccurrences() {
 
     getOccurrenceResponses()
-            .stream()
-            .forEach(o -> {
-              Occurrence occurrenceToUpdate = new Occurrence();
-              long occurrenceId = Long.parseLong(o.getOriginatorId());
-              logger.info("occurrenceId: " + occurrenceId);
-              occurrenceToUpdate = occurrenceRepository.findById(occurrenceId);
-              logger.info("occurrence: " + occurrenceToUpdate.toString());
-              occurrenceToUpdate.setIsComplete(true);
-              occurrenceRepository.save(occurrenceToUpdate);
-            });
+        .stream()
+        .forEach(o -> {
+          Occurrence occurrenceToUpdate = new Occurrence();
+          long occurrenceId = Long.parseLong(o.getOriginatorId());
+          logger.info("occurrenceId: " + occurrenceId);
+          occurrenceToUpdate = occurrenceRepository.findById(occurrenceId);
+          logger.info("occurrence: " + occurrenceToUpdate.toString());
+          occurrenceToUpdate.setIsComplete(true);
+          occurrenceRepository.save(occurrenceToUpdate);
+        });
 
   }
 
@@ -228,11 +250,11 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
 
     try {
       Resources<SurveyResponse> surveyResponses = restTemplate.exchange(
-              urls.getSearchSurveyResponseByDate() + LocalDate.now().minus(1, ChronoUnit.DAYS),
-              HttpMethod.GET,
-              null,
-              new ParameterizedTypeReference<Resources<SurveyResponse>>() {
-              }).getBody();
+          urls.getSearchSurveyResponseByDate() + LocalDate.now().minus(1, ChronoUnit.DAYS),
+          HttpMethod.GET,
+          null,
+          new ParameterizedTypeReference<Resources<SurveyResponse>>() {
+      }).getBody();
 
       extractedResponseData.addAll(extractResponseData(surveyResponses));
 
@@ -254,6 +276,7 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   private List<SurveyResponse> extractResponseData(final Resources<SurveyResponse> responseData) {
     List<SurveyResponse> extractedResponseData = new ArrayList<>();
     extractedResponseData.addAll(responseData.getContent());
+
     return extractedResponseData;
   }
 
@@ -266,8 +289,9 @@ public class TattlesJob extends SchedulerBaseJob implements Job {
   * @return List of respondents to receive tattles.
   * */
   public List<Respondent> determineTattleRecipients(Schedule schedule){
-      checkNotNull(schedule, "Schedule cannot be null.");
-      checkNotNull(schedule.getRespondents(), "Respondents must exist");
+    checkNotNull(schedule, "Schedule cannot be null.");
+    checkNotNull(schedule.getRespondents(), "Respondents must exist");
+
     List<Respondent> tattleToList = new ArrayList<>();
     Set<Respondent> checkList = new HashSet<>();
     checkList.addAll(schedule.getRespondents());

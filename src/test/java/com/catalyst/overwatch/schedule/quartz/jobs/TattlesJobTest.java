@@ -6,21 +6,21 @@ import com.catalyst.overwatch.schedule.model.*;
 import com.catalyst.overwatch.schedule.repository.FlightRepository;
 import com.catalyst.overwatch.schedule.repository.OccurrenceRepository;
 import com.catalyst.overwatch.schedule.repository.ScheduleRepository;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import org.junit.Assert;
-import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
-import sun.font.AttributeValues;
-
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -65,6 +65,8 @@ public class TattlesJobTest {
     @Mock
     private AllowedAttribute mockAttribute;
 
+    @Mock
+    private Urls urls;
 
     private List<Occurrence> testArrayOccurrences ;
     private List<Occurrence> testTattleOnList;
@@ -288,12 +290,14 @@ public class TattlesJobTest {
 
     @Test
     public void calculateThresholdForFlightTestTrue() {
+        when(urls.getReportEndpoint()).thenReturn("fake url");
         testTattlesJob.calculateThresholdForFlight(testFlight);
         verify(mockFlightRepository,times(1)).save(any(Flight.class));
     }
 
     @Test
     public void calculateThresholdForFlightTestFalse() {
+        when(urls.getReportEndpoint()).thenReturn("fake url");
         testOccurrence4.setIsComplete(false);
         testTattlesJob.calculateThresholdForFlight(testFlight);
         verify(mockScheduleRepository,times(1)).findByRespondentsId((anyLong()));
